@@ -6,6 +6,6 @@ export class CoreState {
   
     constructor() {
       // set initial state
-      this.surveys = undefined;
+      this.surveys = "ciao";
     }
 }

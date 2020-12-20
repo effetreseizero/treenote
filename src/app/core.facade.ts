@@ -4,6 +4,7 @@ import { CoreState } from './core.state';
 import { CoreStore } from './core.store';
 
 import { Injectable } from '@angular/core';
+import { Observable } from 'rxjs';
 
 @Injectable({
     providedIn: 'root'
@@ -12,16 +13,13 @@ export class CoreFacade {
     
   constructor(private _store: CoreStore) { }
 
-  public getSurveys(): string {
-    return this._store.state.surveys;
+  public getSurveys(): Observable<string> {
+    return this._store.select(x=>x.surveys);
   }
 
   public addSurvey(survey:string): void{
-    this._store.readSurveys().then(surveys => {
-      console.log(surveys);
-      this._store.setSurveys(survey)
-        .finally(() => console.log('survey added'));
-    });
+    this._store.setSurveys(survey)
+        .finally(() => console.log("corefacade: "+this._store.state.surveys));
   }
 
 }

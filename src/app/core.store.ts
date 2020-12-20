@@ -44,8 +44,8 @@ export class CoreStore extends Store<CoreState> {
   private initValue(prop: keyof CoreState): Promise<any> {
     const keyval = `${this._prefix}-${prop}`;
     return Storage.get({key:keyval}).then(value => {
-      this.setStateValue(prop, value);
-      return value;
+      this.setStateValue(prop, value.value);
+      return value.value;
     }).catch(_ => {
       this.setStateValue(prop, undefined);
       return undefined;
