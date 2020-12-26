@@ -3,6 +3,8 @@ import { FormGroup, FormBuilder, Validators } from "@angular/forms";
 import { CoreFacade} from '../../services/storage/core.facade';
 import { Observable } from 'rxjs';
 
+import { Router, RouterEvent } from '@angular/router';
+
 @Component({
   selector: 'app-home',
   templateUrl: 'home.page.html',
@@ -14,7 +16,7 @@ export class HomePage {
 
   surveys: string[];
 
-  constructor(public _fb: FormBuilder, private _cf: CoreFacade) {}
+  constructor(public _fb: FormBuilder, private _cf: CoreFacade, private router: Router) {}
 
   ngOnInit() {
     console.log("homepage ngoninit");
@@ -31,6 +33,10 @@ export class HomePage {
   public formSubmit(): void {
     this._cf.addSurvey(this.formGroup.get('name').value);
     console.log("homepage formsubmit: "+this.surveys);
+  }
+
+  public logIn(): void{
+    this.router.navigate(['/menu/login']);
   }
 
 }

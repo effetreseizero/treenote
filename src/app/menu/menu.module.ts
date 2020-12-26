@@ -11,6 +11,7 @@ import { Routes, RouterModule } from '@angular/router';
 
 import { MenuPage } from './menu.page';
 
+import { AuthGuard } from '../services/user/auth.guard';
 
 const routes: Routes = [
   {
@@ -23,12 +24,21 @@ const routes: Routes = [
       },
       {
         path: 'export',
-        loadChildren: () => import('../pages/export/export.module').then(m => m.ExportPageModule)
+        loadChildren: () => import('../pages/export/export.module').then(m => m.ExportPageModule),
+        canActivate: [AuthGuard]
       },
       {
         path: 'contact',
         loadChildren: () => import('../pages/contact/contact.module').then(m => m.ContactPageModule)
       },
+      {
+        path: 'login',
+        loadChildren: () => import('../pages/login/login.module').then(m => m.LoginPageModule)
+      },
+      {
+        path: 'registration',
+        loadChildren: () => import('../pages/registration/registration.module').then(m => m.RegistrationPageModule)
+      }
       
     ]
   },
