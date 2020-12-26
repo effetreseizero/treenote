@@ -16,7 +16,7 @@ export class CoreStore extends Store<CoreState> {
   private readonly _prefix: string;
   
   private readonly SURVEYS = 'surveys';
-
+  private readonly SURVEYS_INIT = "[]";
   public ready$: Promise<any[]>;
 
   constructor() {
@@ -29,12 +29,12 @@ export class CoreStore extends Store<CoreState> {
     ]);
   }
 
-  public setSurveys(value: string): Promise<any> {
-    return this.setValue(this.SURVEYS, value);
+  public readSurveys(): Promise<string[]> {
+    return this.readValue(this.SURVEYS);
   }
 
-  public readSurveys(): Promise<string> {
-    return this.readValue(this.SURVEYS);
+  public setSurveys(value: string[]): Promise<any> {
+    return this.setValue(this.SURVEYS, value);
   }
 
   public removeSurveys(): Promise<any> {
@@ -42,10 +42,12 @@ export class CoreStore extends Store<CoreState> {
   }
 
   private initValue(prop: keyof CoreState): Promise<any> {
+  
     const keyval = `${this._prefix}-${prop}`;
-    return Storage.get({key:keyval}).then(value => {
-      this.setStateValue(prop, value.value);
-      return value.value;
+    return Storage.get({key:keyval}).then(record => {
+      //record.value poichè leggo dallo Storage
+      this.setStateValue(prop, JSON.parse(record.value));
+      return record;
     }).catch(_ => {
       this.setStateValue(prop, undefined);
       return undefined;
@@ -53,14 +55,17 @@ export class CoreStore extends Store<CoreState> {
   }
 
   private setValue(prop: keyof CoreState, value: any): Promise<any> {
+    //solo value perchè arriva da form
     this.setStateValue(prop, value);
     const keyval = `${this._prefix}-${prop}`;
-    return Storage.set({key: keyval,value: value});
+    return Storage.set({key: keyval,value: JSON.stringify(value)});
   }
 
   private readValue(prop: keyof CoreState): Promise<any> {
     const keyval = `${this._prefix}-${prop}`;
-    return Storage.get({key: keyval});
+    return Storage.get({key: keyval}).then((record)=>{
+      return JSON.parse(record.value);
+    });
   }
 
   private removeValue(prop: keyof CoreState): Promise<any> {

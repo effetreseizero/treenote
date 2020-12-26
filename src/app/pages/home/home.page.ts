@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
 import { FormGroup, FormBuilder, Validators } from "@angular/forms";
-import { CoreFacade} from '../core.facade';
+import { CoreFacade} from '../../services/storage/core.facade';
 import { Observable } from 'rxjs';
 
 @Component({
@@ -12,7 +12,7 @@ export class HomePage {
 
   public formGroup: FormGroup;
 
-  surveys: string;
+  surveys: string[];
 
   constructor(public _fb: FormBuilder, private _cf: CoreFacade) {}
 

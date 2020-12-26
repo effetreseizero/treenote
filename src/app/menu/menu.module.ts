@@ -1,11 +1,12 @@
+//Menu https://www.positronx.io/add-dynamic-side-menu-in-ionic-with-active-class/
+//Guard https://jsmobiledev.com/article/angular-guard
+
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 
 import { IonicModule } from '@ionic/angular';
 
-//import { MenuPageRoutingModule } from './menu-routing.module';
-//https://www.positronx.io/add-dynamic-side-menu-in-ionic-with-active-class/
 import { Routes, RouterModule } from '@angular/router';
 
 import { MenuPage } from './menu.page';
@@ -17,17 +18,18 @@ const routes: Routes = [
     component: MenuPage,
     children: [
       {
-        path: 'contact',
-        loadChildren: '../contact/contact.module#ContactPageModule'
+        path: 'home',
+        loadChildren: () => import('../pages/home/home.module').then(m => m.HomePageModule)
       },
       {
         path: 'export',
-        loadChildren: '../export/export.module#ExportPageModule'
+        loadChildren: () => import('../pages/export/export.module').then(m => m.ExportPageModule)
       },
       {
-        path: 'home',
-        loadChildren: '../home/home.module#HomePageModule'
+        path: 'contact',
+        loadChildren: () => import('../pages/contact/contact.module').then(m => m.ContactPageModule)
       },
+      
     ]
   },
   {

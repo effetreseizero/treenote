@@ -28,8 +28,8 @@
         </ion-col>
       </ion-row>
     </form>
-    <div>
-      <p>{{surveys}}</p>
+    <div *ngFor="let survey of surveys">
+      <p>{{survey}}</p>
    </div>
   </div>
 </ion-content>

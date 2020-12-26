@@ -2,10 +2,10 @@
 
 export class CoreState {
 
-    public readonly surveys: string;
+    public readonly surveys: string[];
   
     constructor() {
       // set initial state
-      this.surveys = "ciao";
+      this.surveys = [];
     }
 }
