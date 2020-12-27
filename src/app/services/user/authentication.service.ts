@@ -7,6 +7,9 @@ import { AngularFireAuth } from "@angular/fire/auth";
 import firebase from 'firebase/app';
 import { AngularFirestore, AngularFirestoreDocument } from '@angular/fire/firestore';
 
+//ionic storage service
+import { CoreStore } from '../storage/core.store';
+
 @Injectable({
   providedIn: 'root'
 })
@@ -18,16 +21,22 @@ export class AuthenticationService {
     public afStore: AngularFirestore,
     public ngFireAuth: AngularFireAuth,
     public router: Router,  
-    public ngZone: NgZone 
+    public ngZone: NgZone,
+    public coreStore: CoreStore
   ) {
     this.ngFireAuth.authState.subscribe(user => {
       if (user) {
-        this.userData = user;
+        this.userData = this.coreStore.setUser(JSON.stringify(user));
+        /*
         localStorage.setItem('user', JSON.stringify(this.userData));
         JSON.parse(localStorage.getItem('user'));
+        */
       } else {
+        this.coreStore.removeUser();
+        /*
         localStorage.setItem('user', null);
         JSON.parse(localStorage.getItem('user'));
+        */
       }
     })
   }
@@ -47,10 +56,8 @@ export class AuthenticationService {
   SendVerificationMail() {
     return this.ngFireAuth.currentUser.then(u => {
       u.sendEmailVerification()
-    })
-    .then(() => {
-      
-      this.router.navigate(['verify-email']);
+    }).then(() => {
+      this.router.navigate(['/menu/verify-email']);
     })
   }
 
@@ -65,16 +72,21 @@ export class AuthenticationService {
   }
 
   // Returns true when user is looged in
-  get isLoggedIn(): boolean {
-    const user = JSON.parse(localStorage.getItem('user'));
-    return (user !== null && user.emailVerified !== false) ? true : false;
+  get isLoggedIn(): Promise<boolean> {
+    return this.coreStore.readUser().then((res)=>{
+      let user =  JSON.parse(res);
+      debugger;
+      return (user !== null && user.emailVerified !== false) ? true : false;
+    });
+    
   }
 
   // Returns true when user's email is verified
-  get isEmailVerified(): boolean {
-    debugger;
-    const user = JSON.parse(localStorage.getItem('user'));
-    return (user.emailVerified !== false) ? true : false;
+  get isEmailVerified(): Promise<boolean>{
+    return this.coreStore.readUser().then((res)=>{
+      let user =  JSON.parse(res);
+      return (user.emailVerified !== false) ? true : false;
+    });    
   }
 
   // Sign in with Gmail
@@ -116,8 +128,9 @@ export class AuthenticationService {
   // Sign-out 
   SignOut() {
     return this.ngFireAuth.signOut().then(() => {
-      localStorage.removeItem('user');
-      this.router.navigate(['/menu/home']);
+      this.coreStore.removeUser().then((user)=>{
+        this.router.navigate(['/menu/home']);    
+      });      
     })
   }
 

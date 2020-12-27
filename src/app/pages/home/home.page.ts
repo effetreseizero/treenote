@@ -30,15 +30,16 @@ export class HomePage {
     this.formGroup = this._fb.group({
       name:[''],
     })
-    this._cf.getSurveys().subscribe((surveys)=>{
+    this.surveys=[];
+    /*this._cf.getSurveys().subscribe((surveys)=>{
       this.surveys=surveys;
       console.log("homepage ngoninit: "+this.surveys);
-    });
+    });*/
     
   }
 
   public formSubmit(): void {
-    this._cf.addSurvey(this.formGroup.get('name').value);
+    /*this._cf.addSurvey(this.formGroup.get('name').value);*/
     console.log("homepage formsubmit: "+this.surveys);
   }
 

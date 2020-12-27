@@ -43,6 +43,10 @@ const routes: Routes = [
         path: 'user-account',
         loadChildren: () => import('../pages/user-account/user-account.module').then( m => m.UserAccountPageModule),
         canActivate: [AuthGuard]
+      },
+      {
+        path: 'verify-email',
+        loadChildren: () => import('../pages/verify-email/verify-email.module').then( m => m.VerifyEmailPageModule)
       }
       
     ]
