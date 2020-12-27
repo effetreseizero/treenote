@@ -15,8 +15,8 @@ export class CoreStore extends Store<CoreState> {
 
   private readonly _prefix: string;
   
-  private readonly SURVEYS = 'surveys';
-  private readonly SURVEYS_INIT = "[]";
+  private readonly USER = 'user';
+  private readonly USER_INIT = "";
   public ready$: Promise<any[]>;
 
   constructor() {
@@ -25,20 +25,20 @@ export class CoreStore extends Store<CoreState> {
 
     // read initial values from storage
     this.ready$ = Promise.all([
-      this.initValue(this.SURVEYS)
+      this.initValue(this.USER)
     ]);
   }
 
-  public readSurveys(): Promise<string[]> {
-    return this.readValue(this.SURVEYS);
+  public readUser(): Promise<string> {
+    return this.readValue(this.USER);
   }
 
-  public setSurveys(value: string[]): Promise<any> {
-    return this.setValue(this.SURVEYS, value);
+  public setUser(value: string): Promise<any> {
+    return this.setValue(this.USER, value);
   }
 
-  public removeSurveys(): Promise<any> {
-    return this.removeValue(this.SURVEYS);
+  public removeUser(): Promise<any> {
+    return this.removeValue(this.USER);
   }
 
   private initValue(prop: keyof CoreState): Promise<any> {

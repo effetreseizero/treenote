@@ -18,10 +18,10 @@ export class LoginPage implements OnInit {
   ngOnInit() {
   }
 
-  logIn(email, password) {
+  emailLogin(email, password) {
     this.authService.SignIn(email.value, password.value)
       .then((res) => {
-        if(this.authService.isEmailVerified) {
+        if(res.user.emailVerified) {
           this.router.navigate(['/menu/home']);          
         } else {
           window.alert('Email is not verified')
@@ -42,7 +42,7 @@ export class LoginPage implements OnInit {
       if(res.user) {
         this.router.navigate(['/menu/home']);          
       } else {
-        window.alert('Login faliled')
+        window.alert('Login failed')
         return false;
       }
     }).catch((error) => {

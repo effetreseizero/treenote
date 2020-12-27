@@ -38,6 +38,11 @@ const routes: Routes = [
       {
         path: 'registration',
         loadChildren: () => import('../pages/registration/registration.module').then(m => m.RegistrationPageModule)
+      },
+      {
+        path: 'user-account',
+        loadChildren: () => import('../pages/user-account/user-account.module').then( m => m.UserAccountPageModule),
+        canActivate: [AuthGuard]
       }
       
     ]

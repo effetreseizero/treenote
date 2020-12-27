@@ -13,19 +13,18 @@ export class CoreFacade {
     
   constructor(private _store: CoreStore) { }
 
-  public getSurveys(): Observable<string[]> {
-    return this._store.select(x=>x.surveys);
+  public getUser(): Observable<string> {
+    return this._store.select(x=>x.user);
   }
 
-  public addSurvey(survey:string): void{
-    this._store.readSurveys().then((surveys)=>{
+  public setUser(user:string): void{
+    this._store.readUser().then((user)=>{
       //manage initial missing array (no key on Storage)
-      if(surveys==null){
-        surveys = [];
+      if(user==null){
+        user = "";
       }
-      surveys.push(survey);
-      this._store.setSurveys(surveys)
-        .finally(() => console.log("corefacade: "+this._store.state.surveys));
+      this._store.setUser(user)
+        .finally(() => console.log("corefacade: "+this._store.state.user));
     });
     
   }

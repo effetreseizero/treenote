@@ -5,6 +5,9 @@ import { Observable } from 'rxjs';
 
 import { Router, RouterEvent } from '@angular/router';
 
+import { AuthenticationService } from "../../services/user/authentication.service";
+
+
 @Component({
   selector: 'app-home',
   templateUrl: 'home.page.html',
@@ -16,7 +19,11 @@ export class HomePage {
 
   surveys: string[];
 
-  constructor(public _fb: FormBuilder, private _cf: CoreFacade, private router: Router) {}
+  constructor(public _fb: FormBuilder,
+    private _cf: CoreFacade, 
+    private router: Router,
+    public authService: AuthenticationService
+  ) {}
 
   ngOnInit() {
     console.log("homepage ngoninit");
@@ -36,7 +43,11 @@ export class HomePage {
   }
 
   public logIn(): void{
-    this.router.navigate(['/menu/login']);
+    if(!this.authService.isLoggedIn){
+      this.router.navigate(['/menu/login']);
+    }else{
+      this.router.navigate(['/menu/user-account']);
+    }
   }
 
 }

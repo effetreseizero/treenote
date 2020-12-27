@@ -72,6 +72,7 @@ export class AuthenticationService {
 
   // Returns true when user's email is verified
   get isEmailVerified(): boolean {
+    debugger;
     const user = JSON.parse(localStorage.getItem('user'));
     return (user.emailVerified !== false) ? true : false;
   }
@@ -81,6 +82,7 @@ export class AuthenticationService {
     //https://github.com/angular/angularfire/blob/master/docs/auth/getting-started.md
     return this.ngFireAuth.signInWithPopup(new firebase.auth.GoogleAuthProvider);
   }
+  
   // Auth providers
   AuthLogin(provider) {
     return this.ngFireAuth.signInWithPopup(provider)
@@ -96,6 +98,7 @@ export class AuthenticationService {
 
   // Store user in localStorage
   SetUserData(user) {
+    debugger;
     const userRef: AngularFirestoreDocument<any> = this.afStore.doc(`users/${user.uid}`);
     const userData: User = {
       uid: user.uid,
@@ -109,11 +112,12 @@ export class AuthenticationService {
     })
   }
 
+
   // Sign-out 
   SignOut() {
     return this.ngFireAuth.signOut().then(() => {
       localStorage.removeItem('user');
-      this.router.navigate(['login']);
+      this.router.navigate(['/menu/home']);
     })
   }
 
