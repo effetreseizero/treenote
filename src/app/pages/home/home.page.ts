@@ -26,7 +26,7 @@ export class HomePage {
   ) {}
 
   ngOnInit() {
-    console.log("homepage ngoninit");
+ 
     this.formGroup = this._fb.group({
       name:[''],
     })

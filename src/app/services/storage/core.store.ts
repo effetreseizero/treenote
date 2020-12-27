@@ -8,6 +8,8 @@ import { Injectable } from '@angular/core';
 import { Plugins } from '@capacitor/core';
 const { Storage } = Plugins;
 
+import {User} from './user';
+
 @Injectable({
   providedIn: 'root'
 })
@@ -16,12 +18,12 @@ export class CoreStore extends Store<CoreState> {
   private readonly _prefix: string;
   
   private readonly USER = 'user';
-  private readonly USER_INIT = "";
+  private readonly USER_INIT = null;
   public ready$: Promise<any[]>;
 
   constructor() {
     super(new CoreState());
-    this._prefix = 'argosF360';
+    this._prefix = 'argos360';
 
     // read initial values from storage
     this.ready$ = Promise.all([
@@ -29,11 +31,11 @@ export class CoreStore extends Store<CoreState> {
     ]);
   }
 
-  public readUser(): Promise<string> {
+  public getUser(): Promise<User> {
     return this.readValue(this.USER);
   }
 
-  public setUser(value: string): Promise<any> {
+  public setUser(value: User): Promise<any> {
     return this.setValue(this.USER, value);
   }
 
@@ -64,6 +66,7 @@ export class CoreStore extends Store<CoreState> {
   private readValue(prop: keyof CoreState): Promise<any> {
     const keyval = `${this._prefix}-${prop}`;
     return Storage.get({key: keyval}).then((record)=>{
+      debugger;
       return JSON.parse(record.value);
     });
   }

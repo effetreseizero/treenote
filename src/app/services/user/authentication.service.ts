@@ -1,6 +1,6 @@
 //https://www.positronx.io/ionic-firebase-authentication-tutorial-with-examples/
 import { Injectable, NgZone } from '@angular/core';
-import { User } from "./user";
+import { User } from "../storage/user";
 import { Router } from "@angular/router";
 import { AngularFireAuth } from "@angular/fire/auth";
 //https://github.com/angular/angularfire/blob/master/docs/auth/getting-started.md
@@ -26,7 +26,7 @@ export class AuthenticationService {
   ) {
     this.ngFireAuth.authState.subscribe(user => {
       if (user) {
-        this.userData = this.coreStore.setUser(JSON.stringify(user));
+        this.userData = this.coreStore.setUser(user);
         /*
         localStorage.setItem('user', JSON.stringify(this.userData));
         JSON.parse(localStorage.getItem('user'));
@@ -73,9 +73,7 @@ export class AuthenticationService {
 
   // Returns true when user is looged in
   get isLoggedIn(): Promise<boolean> {
-    return this.coreStore.readUser().then((res)=>{
-      let user =  JSON.parse(res);
-      debugger;
+    return this.coreStore.getUser().then((user)=>{
       return (user !== null && user.emailVerified !== false) ? true : false;
     });
     
@@ -83,8 +81,7 @@ export class AuthenticationService {
 
   // Returns true when user's email is verified
   get isEmailVerified(): Promise<boolean>{
-    return this.coreStore.readUser().then((res)=>{
-      let user =  JSON.parse(res);
+    return this.coreStore.getUser().then((user)=>{
       return (user.emailVerified !== false) ? true : false;
     });    
   }
@@ -94,7 +91,17 @@ export class AuthenticationService {
     //https://github.com/angular/angularfire/blob/master/docs/auth/getting-started.md
     return this.ngFireAuth.signInWithPopup(new firebase.auth.GoogleAuthProvider);
   }
+
+    // Sign-out 
+    SignOut() {
+      return this.ngFireAuth.signOut().then(() => {
+        this.coreStore.removeUser().then((user)=>{
+          this.router.navigate(['/menu/home']);    
+        });      
+      })
+    }
   
+  /*
   // Auth providers
   AuthLogin(provider) {
     return this.ngFireAuth.signInWithPopup(provider)
@@ -123,15 +130,6 @@ export class AuthenticationService {
       merge: true
     })
   }
-
-
-  // Sign-out 
-  SignOut() {
-    return this.ngFireAuth.signOut().then(() => {
-      this.coreStore.removeUser().then((user)=>{
-        this.router.navigate(['/menu/home']);    
-      });      
-    })
-  }
+  */
 
 }

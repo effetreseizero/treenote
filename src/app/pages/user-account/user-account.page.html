@@ -14,10 +14,20 @@
 
 <ion-content [fullscreen]="true">
   <div id="container">
-      <ion-row>
-        <ion-col> 
-          <ion-button (click)="logout()" expand="block" color="dark">Logout</ion-button>
-        </ion-col>
-      </ion-row>
+    <ion-row>
+      <ion-col> 
+        <p>Email: {{user.email}}</p>
+        <p>Name: {{user.displayName}}</p>
+        <p>Email verified: {{user.emailVerified}}</p>
+        <p>ID: {{user.uid}}</p>
+
+      </ion-col>
+    </ion-row>
+    
+    <ion-row>
+      <ion-col> 
+        <ion-button (click)="logout()" expand="block" color="dark">Logout</ion-button>
+      </ion-col>
+    </ion-row>
   </div>
 </ion-content>

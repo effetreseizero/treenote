@@ -6,6 +6,8 @@ import { CoreStore } from './core.store';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 
+import {User} from './user';
+
 @Injectable({
     providedIn: 'root'
 })
@@ -13,19 +15,14 @@ export class CoreFacade {
     
   constructor(private _store: CoreStore) { }
 
-  public getUser(): Observable<string> {
+  public getUser(): Observable<User> {
     return this._store.select(x=>x.user);
   }
 
-  public setUser(user:string): void{
-    this._store.readUser().then((user)=>{
-      //manage initial missing array (no key on Storage)
-      if(user==null){
-        user = "";
-      }
-      this._store.setUser(user)
+  public setUser(user:User): void{
+    this._store.setUser(user)
         .finally(() => console.log("corefacade: "+this._store.state.user));
-    });
+  
     
   }
 
