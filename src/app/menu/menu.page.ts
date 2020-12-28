@@ -18,6 +18,10 @@ export class MenuPage implements OnInit {
       path: '/menu/home'
     },
     {
+      name: 'Surveys',
+      path: '/menu/surveys'
+    },
+    {
       name: 'Export',
       path: '/menu/export'
     },

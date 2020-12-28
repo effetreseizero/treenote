@@ -1,5 +1,4 @@
 import { Component } from '@angular/core';
-import { FormGroup, FormBuilder, Validators } from "@angular/forms";
 import { CoreFacade} from '../../services/storage/core.facade';
 import { Observable } from 'rxjs';
 
@@ -15,32 +14,13 @@ import { AuthenticationService } from "../../services/auth/authentication.servic
 })
 export class HomePage {
 
-  public formGroup: FormGroup;
-
-  surveys: string[];
-
-  constructor(public _fb: FormBuilder,
-    private _cf: CoreFacade, 
+  constructor(
     private router: Router,
     public authService: AuthenticationService
   ) {}
 
   ngOnInit() {
- 
-    this.formGroup = this._fb.group({
-      name:[''],
-    })
-    this.surveys=[];
-    /*this._cf.getSurveys().subscribe((surveys)=>{
-      this.surveys=surveys;
-      console.log("homepage ngoninit: "+this.surveys);
-    });*/
     
-  }
-
-  public formSubmit(): void {
-    /*this._cf.addSurvey(this.formGroup.get('name').value);*/
-    console.log("homepage formsubmit: "+this.surveys);
   }
 
   public logIn(): void{

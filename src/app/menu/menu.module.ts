@@ -47,7 +47,12 @@ const routes: Routes = [
       {
         path: 'verify-email',
         loadChildren: () => import('../pages/verify-email/verify-email.module').then( m => m.VerifyEmailPageModule)
-      }
+      },
+      {
+        path: 'surveys',
+        loadChildren: () => import('../pages/surveys/surveys.module').then( m => m.SurveysPageModule),
+        canActivate: [AuthGuard]
+      },
       
     ]
   },
