@@ -66,7 +66,7 @@ export class CoreStore extends Store<CoreState> {
   private readValue(prop: keyof CoreState): Promise<any> {
     const keyval = `${this._prefix}-${prop}`;
     return Storage.get({key: keyval}).then((record)=>{
-      debugger;
+      
       return JSON.parse(record.value);
     });
   }
