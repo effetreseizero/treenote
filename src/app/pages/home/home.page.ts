@@ -5,7 +5,7 @@ import { Observable } from 'rxjs';
 
 import { Router, RouterEvent } from '@angular/router';
 
-import { AuthenticationService } from "../../services/user/authentication.service";
+import { AuthenticationService } from "../../services/auth/authentication.service";
 
 
 @Component({

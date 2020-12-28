@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 
 import { Router } from "@angular/router";
 
-import { AuthenticationService } from "../../services/user/authentication.service";
+import { AuthenticationService } from "../../services/auth/authentication.service";
 
 import { CoreFacade } from "../../services/storage/core.facade";
 import { User } from 'src/app/services/storage/user';

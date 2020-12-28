@@ -11,7 +11,7 @@ import { Routes, RouterModule } from '@angular/router';
 
 import { MenuPage } from './menu.page';
 
-import { AuthGuard } from '../services/user/auth.guard';
+import { AuthGuard } from '../services/auth/auth.guard';
 
 const routes: Routes = [
   {
