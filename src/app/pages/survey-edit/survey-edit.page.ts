@@ -13,7 +13,8 @@ import { Survey} from '../../services/data/survey';
 })
 export class SurveyEditPage implements OnInit {
 
-  public surveyId = null;
+  private surveyId = null;
+  private survey=null;
 
   constructor(
     private activatedRoute:ActivatedRoute,
@@ -24,11 +25,16 @@ export class SurveyEditPage implements OnInit {
     this.activatedRoute.queryParams.subscribe(params => {
       if (this.router.getCurrentNavigation().extras.state) {
         this.surveyId = this.router.getCurrentNavigation().extras.state.id;
+        this.survey = this.firebaseService.read_survey(this.surveyId).subscribe((data)=>{
+          this.survey=data.payload.data();
+        });
+        
       }
     });
   }
 
   ngOnInit() {
+    
     
   }
 

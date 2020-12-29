@@ -1,6 +1,7 @@
 // firebase.service.ts
 import { Injectable } from '@angular/core';
 
+//https://www.freakyjolly.com/ionic-firebase-crud-operations/#.X-mQOulKiEI
 import { AngularFirestore } from '@angular/fire/firestore';
 
 import { CoreFacade } from "../../services/storage/core.facade";
@@ -37,7 +38,7 @@ export class FirebaseService {
     record['userUID']=this.user.uid;
     return this.firestore.collection(this.collectionName).add(record);
   }
-
+  //https://www.freakyjolly.com/ionic-firebase-crud-operations/#.X-mQOulKiEI
   read_surveys() {
     
     return this.firestore.collection(
@@ -47,6 +48,10 @@ export class FirebaseService {
       ref => ref.where("userUID", "==", this.user.uid)
       )
       .snapshotChanges();
+  }
+
+  read_survey(recordID) {
+    return this.firestore.doc(this.collectionName + '/' + recordID).snapshotChanges();
   }
 
   update_survey(recordID, record) {

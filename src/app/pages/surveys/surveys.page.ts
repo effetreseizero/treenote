@@ -34,7 +34,7 @@ export class SurveysPage implements OnInit {
     })
 
     this.firebaseService.read_surveys().subscribe(data => {
-
+      
       this.surveyList = data.map(e => {
         return {
           id: e.payload.doc.id,
@@ -42,8 +42,10 @@ export class SurveysPage implements OnInit {
           name: e.payload.doc.data()['name'],
           location: e.payload.doc.data()['location'],
           notes: e.payload.doc.data()['notes'],
+
         };
-      })
+      });
+      console.log("surveyList: ");
       console.log(this.surveyList);
 
     });
