@@ -33,7 +33,7 @@ export class SurveysPage implements OnInit {
       notes: ['', [Validators.required]]
     })
 
-    this.surveysService.read_collection().subscribe(data => {
+    this.surveysService.read_surveys_collection().subscribe(data => {
       
       this.surveyList = data.map(e => {
         return {
@@ -53,19 +53,19 @@ export class SurveysPage implements OnInit {
 
   createSurvey() {
     console.log(this.surveyForm.value);
-    this.surveysService.create_document(this.surveyForm.value).then(resp => {
-      this.surveyForm.reset();
+    this.surveysService.create_survey_document(this.surveyForm.value).then(resp => {
+      this.surveyForm.reset(); 
     })
       .catch(error => {
         console.log(error);
       });
   }
 
-  RemoveSurvey(rowID) {
-    this.surveysService.delete_document(rowID);
+  deleteSurvey(recordID) {
+    this.surveysService.delete_surveys_document(recordID);
   }
 
-  EditSurvey(record){
+  updateSurvey(record){
     //https://ionicacademy.com/pass-data-angular-router-ionic-4/
     let navigationExtras: NavigationExtras = {
       state: {
@@ -74,22 +74,5 @@ export class SurveysPage implements OnInit {
     };
       this.router.navigate(['/menu/survey-edit'],navigationExtras);
   }
-  /* moved to survey-edit
-  EditRecord(record) {
-    record.isEdit = true;
-    record.editName = record.name;
-    record.editLocation= record.location;
-    record.editNotes = record.notes;
-  }
-
-  UpdateRecord(recordRow) {
-    let record = {};
-    record['name'] = recordRow.editName;
-    record['location'] = recordRow.editLocation;
-    record['notes'] = recordRow.editNotes;
-    this.surveysService.update_survey(recordRow.id, record);
-    recordRow.isEdit = false;
-  }
-  */
 
 }
