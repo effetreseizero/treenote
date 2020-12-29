@@ -1,9 +1,11 @@
 import { Component, OnInit } from '@angular/core';
 
 import { SurveysService} from '../../services/firestore/surveys.service';
-import { FormGroup, Validators, FormBuilder } from '@angular/forms';
 
 import { Router, NavigationExtras } from "@angular/router";
+
+import { AlertController } from '@ionic/angular';
+
 
 @Component({
   selector: 'app-surveys',
@@ -13,13 +15,12 @@ import { Router, NavigationExtras } from "@angular/router";
 export class SurveysPage implements OnInit {
 
   surveyList = [];
-  
-  surveyForm: FormGroup;
 
   constructor(
     private surveysService: SurveysService,
-    public fb: FormBuilder,
-    private router: Router
+    private router: Router,
+    private alertController: AlertController
+    
   )
   {
    
@@ -27,12 +28,7 @@ export class SurveysPage implements OnInit {
 
   ngOnInit()
   {
-    this.surveyForm = this.fb.group({
-      name: ['', [Validators.required]],
-      location: ['', [Validators.required]],
-      notes: ['', [Validators.required]]
-    })
-
+    
     this.surveysService.read_surveys_collection().subscribe(data => {
       
       this.surveyList = data.map(e => {
@@ -51,14 +47,34 @@ export class SurveysPage implements OnInit {
     });
   }
 
-  createSurvey() {
-    console.log(this.surveyForm.value);
-    this.surveysService.create_survey_document(this.surveyForm.value).then(resp => {
-      this.surveyForm.reset(); 
-    })
-      .catch(error => {
-        console.log(error);
-      });
+
+  async createSurvey() {
+    const alert = await this.alertController.create({
+      header: 'Crea',
+      inputs: [
+        {name: 'name',type: 'text',placeholder: 'Nome'}
+      ],
+      buttons: [
+        {text: 'Cancel',role: 'cancel',cssClass: 'secondary',handler: () => {console.log('Confirm Cancel');}
+        },
+        {
+          text: 'Ok',
+          handler: (data) => {
+            if (data.name.length>0) {
+              this.surveysService.create_survey_document(data).then(resp => {
+                this.updateSurvey(resp);
+              })
+              .catch(error => {
+                console.log(error);
+              });
+            }
+            console.log('Confirm Ok');
+          }
+        }
+      ]
+    });
+
+    await alert.present();
   }
 
   deleteSurvey(recordID) {

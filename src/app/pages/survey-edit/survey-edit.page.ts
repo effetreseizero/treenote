@@ -17,7 +17,7 @@ export class SurveyEditPage implements OnInit {
   private survey=null;
   private treeList = null;
 
-  treeForm: FormGroup;
+  public treeForm: FormGroup;
 
 
   constructor(
@@ -31,7 +31,7 @@ export class SurveyEditPage implements OnInit {
       specie: ['', [Validators.required]],
       d1: ['', [Validators.required]],
       d2: ['', [Validators.required]]
-    })
+    });
 
     
 
