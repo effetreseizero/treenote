@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 
-import { FirebaseService} from '../../services/data/firestore.service';
+import { SurveysService} from '../../services/firestore/surveys.service';
 import { FormGroup, Validators, FormBuilder } from '@angular/forms';
 
 import { Router, NavigationExtras } from "@angular/router";
@@ -17,7 +17,7 @@ export class SurveysPage implements OnInit {
   surveyForm: FormGroup;
 
   constructor(
-    private firebaseService: FirebaseService,
+    private surveysService: SurveysService,
     public fb: FormBuilder,
     private router: Router
   )
@@ -33,7 +33,7 @@ export class SurveysPage implements OnInit {
       notes: ['', [Validators.required]]
     })
 
-    this.firebaseService.read_surveys().subscribe(data => {
+    this.surveysService.read_collection().subscribe(data => {
       
       this.surveyList = data.map(e => {
         return {
@@ -51,9 +51,9 @@ export class SurveysPage implements OnInit {
     });
   }
 
-  createRecord() {
+  createSurvey() {
     console.log(this.surveyForm.value);
-    this.firebaseService.create_survey(this.surveyForm.value).then(resp => {
+    this.surveysService.create_document(this.surveyForm.value).then(resp => {
       this.surveyForm.reset();
     })
       .catch(error => {
@@ -61,8 +61,8 @@ export class SurveysPage implements OnInit {
       });
   }
 
-  RemoveRecord(rowID) {
-    this.firebaseService.delete_survey(rowID);
+  RemoveSurvey(rowID) {
+    this.surveysService.delete_document(rowID);
   }
 
   EditSurvey(record){
@@ -87,7 +87,7 @@ export class SurveysPage implements OnInit {
     record['name'] = recordRow.editName;
     record['location'] = recordRow.editLocation;
     record['notes'] = recordRow.editNotes;
-    this.firebaseService.update_survey(recordRow.id, record);
+    this.surveysService.update_survey(recordRow.id, record);
     recordRow.isEdit = false;
   }
   */
