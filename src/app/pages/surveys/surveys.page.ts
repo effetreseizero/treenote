@@ -1,9 +1,9 @@
 import { Component, OnInit } from '@angular/core';
 
 import { FirebaseService} from '../../services/data/firestore.service';
-import { Survey} from '../../services/data/survey';
 import { FormGroup, Validators, FormBuilder } from '@angular/forms';
 
+import { Router, NavigationExtras } from "@angular/router";
 
 @Component({
   selector: 'app-surveys',
@@ -13,15 +13,16 @@ import { FormGroup, Validators, FormBuilder } from '@angular/forms';
 export class SurveysPage implements OnInit {
 
   surveyList = [];
-  surveyData: Survey;
+  
   surveyForm: FormGroup;
 
   constructor(
     private firebaseService: FirebaseService,
-    public fb: FormBuilder
+    public fb: FormBuilder,
+    private router: Router
   )
   {
-    this.surveyData = {} as Survey;
+   
   }
 
   ngOnInit()
@@ -62,6 +63,16 @@ export class SurveysPage implements OnInit {
     this.firebaseService.delete_survey(rowID);
   }
 
+  EditSurvey(record){
+    //https://ionicacademy.com/pass-data-angular-router-ionic-4/
+    let navigationExtras: NavigationExtras = {
+      state: {
+        id: record.id 
+      }
+    };
+      this.router.navigate(['/menu/survey-edit'],navigationExtras);
+  }
+  /* moved to survey-edit
   EditRecord(record) {
     record.isEdit = true;
     record.editName = record.name;
@@ -77,5 +88,6 @@ export class SurveysPage implements OnInit {
     this.firebaseService.update_survey(recordRow.id, record);
     recordRow.isEdit = false;
   }
+  */
 
 }

@@ -37,8 +37,27 @@
 
   </form>
 
-
   <ion-card *ngFor="let item of surveyList" color="primary">
+    <ion-card-header>
+      <ion-card-title>{{item.name}}</ion-card-title>
+      <ion-card-subtitle>Location: {{item.location}}</ion-card-subtitle>
+    </ion-card-header>
+    <ion-card-content>
+
+      <ion-button shape="round" color="secondary" size="small" (click)="EditSurvey(item)">
+        <ion-icon size="small" slot="icon-only" name="create"></ion-icon>
+      </ion-button>
+
+      <ion-button shape="round" color="danger" size="small" (click)="RemoveRecord(item.id)">
+        <ion-icon size="small" slot="icon-only" name="trash"></ion-icon>
+
+      </ion-button>
+    </ion-card-content>
+  </ion-card>
+
+
+
+  <!--ion-card *ngFor="let item of surveyList" color="primary">
     <span *ngIf="!item.isEdit; else elseBlock">
       <ion-card-header>
         <ion-card-title>Survey: {{item.name}}</ion-card-title>
@@ -48,10 +67,14 @@
         
         <p>Notes: {{item.notes}}</p>
 
-        <ion-button shape="round" color="secondary" size="small" (click)="EditRecord(item)">
+        <ion-button shape="round" color="secondary" size="small" (click)="EditSurvey(item)">
           <ion-icon size="small" slot="icon-only" name="create"></ion-icon>
-
         </ion-button>
+
+        <ion-button shape="round" color="secondary" size="small" (click)="EditRecord(item)">
+          <ion-icon size="small" slot="icon-only" name="menu-outline"></ion-icon>
+        </ion-button>
+
         <ion-button shape="round" color="danger" size="small" (click)="RemoveRecord(item.id)">
           <ion-icon size="small" slot="icon-only" name="trash"></ion-icon>
 
@@ -95,6 +118,6 @@
         </ion-item>
       </ion-card-content>
     </ng-template>
-  </ion-card>
+  </ion-card-->
 
 </ion-content>
