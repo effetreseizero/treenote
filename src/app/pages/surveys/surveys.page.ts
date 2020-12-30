@@ -77,8 +77,24 @@ export class SurveysPage implements OnInit {
     await alert.present();
   }
 
-  deleteSurvey(recordID) {
-    this.surveysService.delete_surveys_document(recordID);
+  async deleteSurvey(recordID) {
+    const alert = await this.alertController.create({
+      header: 'Sei sicuro?',
+      inputs: [
+      ],
+      buttons: [
+        {text: 'Annulla',role: 'cancel',cssClass: 'secondary',handler: () => {console.log('Annulla');}
+        },
+        {
+          text: 'Ok',
+          handler: () => {
+            this.surveysService.delete_surveys_document(recordID);
+            console.log('Confirm Ok');
+          }
+        }
+      ]
+    });
+    await alert.present();
   }
 
   updateSurvey(record){
