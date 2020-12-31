@@ -7,6 +7,10 @@ import { AngularFirestore } from '@angular/fire/firestore';
 import { CoreFacade } from "../storage/core.facade";
 import { User } from 'src/app/services/storage/user';
 
+import * as firebase from 'firebase/app';
+import 'firebase/firestore';
+import { TimeoutError } from 'rxjs';
+
 
 @Injectable({
   providedIn: 'root'
@@ -35,8 +39,10 @@ export class SurveysService {
   }
 
   create_survey_document(data) {
-    
     data['userUID']=this.user.uid;
+    data['deleted']=false;
+    //https://www.nuomiphp.com/eplan/en/2152.html
+    data['createdTime']=firebase.default.firestore.FieldValue.serverTimestamp();
     return this.firestore.collection(this.collectionName).add(data);
   }
   //https://www.freakyjolly.com/ionic-firebase-crud-operations/#.X-mQOulKiEI
@@ -46,9 +52,10 @@ export class SurveysService {
       this.collectionName,
       //https://stackoverflow.com/questions/49026589/angular-firestore-where-query-returning-error-property-does-not-exist-on
       //.where("userUID", "==", firebase.auth().currentUser.uid)
-      ref => ref.where("userUID", "==", this.user.uid)
+      ref => ref.where("userUID", "==", this.user.uid).where("deleted","!=",true)
       )
       .snapshotChanges();
+
   }
 
   read_suveys_document(surveyID) {
@@ -60,12 +67,19 @@ export class SurveysService {
   }
 
   delete_surveys_document(surveyID) {
-    this.firestore.doc(this.collectionName + '/' + surveyID).delete();
+    //https://www.nuomiphp.com/eplan/en/2152.html
+    let data =
+    {
+      deleted: true,
+      deletedTime: firebase.default.firestore.FieldValue.serverTimestamp()
+
+    }
+    this.firestore.doc(this.collectionName + '/' + surveyID).update(data);
     
   }
 
   /*
-  TREES
+  TREES SUBCOLLECTION
   */
 
   create_tree_document(surveyID,data) {

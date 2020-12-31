@@ -38,6 +38,7 @@ export class SurveysPage implements OnInit {
           name: e.payload.doc.data()['name'],
           location: e.payload.doc.data()['location'],
           notes: e.payload.doc.data()['notes'],
+          deleted: e.payload.doc.data()['deleted'],
 
         };
       });
@@ -49,6 +50,7 @@ export class SurveysPage implements OnInit {
 
 
   async createSurvey() {
+    debugger;
     const alert = await this.alertController.create({
       header: 'Crea',
       inputs: [
@@ -62,7 +64,7 @@ export class SurveysPage implements OnInit {
           handler: (data) => {
             if (data.name.length>0) {
               this.surveysService.create_survey_document(data).then(resp => {
-                this.updateSurvey(resp);
+                this.editSurvey(resp);
               })
               .catch(error => {
                 console.log(error);
@@ -97,7 +99,7 @@ export class SurveysPage implements OnInit {
     await alert.present();
   }
 
-  updateSurvey(record){
+  editSurvey(record){
     //https://ionicacademy.com/pass-data-angular-router-ionic-4/
     let navigationExtras: NavigationExtras = {
       state: {
@@ -106,5 +108,9 @@ export class SurveysPage implements OnInit {
     };
       this.router.navigate(['/menu/survey-edit'],navigationExtras);
   }
+
+  activeSurveys(){
+    return this.surveyList.filter(x => x.deleted == false);
+}
 
 }
