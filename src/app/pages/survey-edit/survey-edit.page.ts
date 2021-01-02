@@ -7,7 +7,7 @@
 import { Component, OnInit,ViewChild } from '@angular/core';
 
 import { Router, ActivatedRoute, RouteReuseStrategy } from '@angular/router';
-import { NavController } from '@ionic/angular';
+import { IonSlides, NavController } from '@ionic/angular';
 
 import { FormGroup, Validators, FormBuilder } from '@angular/forms';
 
@@ -31,8 +31,9 @@ export class SurveyEditPage implements OnInit {
   public surveyForm: FormGroup;
   public submitAttempt: boolean = false;
 
-  @ViewChild('surveySlider') surveySlider;
-
+  //https://gist.github.com/mdorchain/90ee6a0b391b6c51b2e27c2b000f9bdd
+  @ViewChild('surveySlider', { static: true }) surveySlider: IonSlides;
+  segment = 0;
 
   constructor(
     private activatedRoute:ActivatedRoute,
@@ -153,5 +154,12 @@ export class SurveyEditPage implements OnInit {
     item.isEdit = false;
   }
 
+  //https://gist.github.com/mdorchain/90ee6a0b391b6c51b2e27c2b000f9bdd
+  async segmentChanged($event){
+    this.surveySlider.slideTo(this.segment);
+  }
+  async slideChanged($event) {
+    this.segment = await this.surveySlider.getActiveIndex();
+  }
 
 }

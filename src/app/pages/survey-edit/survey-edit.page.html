@@ -14,7 +14,7 @@
 
 <ion-content  [fullscreen]="true" class="ion-padding" >
 
-  <ion-slides pager="true" #surveySlider>
+  <ion-slides #surveySlider (ionSlideDidChange)="slideChanged($event)">
     <!--survey slide-->
     <ion-slide>
       <p>ID: {{surveyId}}</p>
@@ -110,6 +110,19 @@
     </ion-slide>
   </ion-slides>
   
-
-  
 </ion-content>
+<ion-footer class="ion-no-border">
+  <ion-toolbar>
+    <ion-segment [(ngModel)]="segment" (ionChange)="segmentChanged($event)">
+      <ion-segment-button value="0">
+        <ion-label>Rilievo</ion-label>
+      </ion-segment-button>
+      <ion-segment-button value="1">
+        <ion-label>Piante</ion-label>
+      </ion-segment-button>
+      <ion-segment-button value="2">
+        <ion-label>Mappa</ion-label>
+      </ion-segment-button>
+    </ion-segment>
+  </ion-toolbar>
+</ion-footer>
