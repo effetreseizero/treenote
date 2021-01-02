@@ -4,10 +4,10 @@
 
 
 
-import { Component, OnInit,ViewChild } from '@angular/core';
+import { Component, OnInit,ViewChild, ElementRef } from '@angular/core';
 
 import { Router, ActivatedRoute, RouteReuseStrategy } from '@angular/router';
-import { IonSlides, NavController } from '@ionic/angular';
+import { IonSlides, NavController,Platform  } from '@ionic/angular';
 
 import { FormGroup, Validators, FormBuilder } from '@angular/forms';
 
@@ -15,6 +15,15 @@ import { SurveysService} from '../../services/firestore/surveys.service';
 import { Survey} from '../../services/firestore/survey';
 
 import { AlertController } from '@ionic/angular';
+
+//https://forum.ionicframework.com/t/generating-a-openlayers-map-as-a-component/161373/4
+
+import Map from 'ol/Map';
+import View from 'ol/View';
+import TileLayer from 'ol/layer/Tile';
+import { OSM } from 'ol/source';
+
+
 
 
 @Component({
@@ -35,20 +44,31 @@ export class SurveyEditPage implements OnInit {
   @ViewChild('surveySlider', { static: true }) surveySlider: IonSlides;
   segment = 0;
 
+  map: Map;
+
   constructor(
     private activatedRoute:ActivatedRoute,
     private navController: NavController,
     private router:Router,
     public formBuilder: FormBuilder,
     private surveysService:SurveysService,
-    private alertController:AlertController
+    private alertController:AlertController,
+    private elementRef:ElementRef,
+    private platform:Platform
   ) {
 
     this.surveyForm = this.formBuilder.group({
       name: ['', [Validators.required]],
       location: ['', ],
       notes: ['', ]
-    });    
+    });
+
+    platform.ready().then(() => {
+      console.log("Platform is ready");
+      setTimeout(() => {
+         
+       }, 1000);
+    })
 
   }
 
@@ -88,6 +108,27 @@ export class SurveyEditPage implements OnInit {
       }
     });
 
+    this.initMap();
+    
+  }
+
+
+  initMap() {
+    //https://forum.ionicframework.com/t/generating-a-openlayers-map-as-a-component/161373/4
+    this.map = new Map({
+      layers: [
+        new TileLayer({
+          source: new OSM()
+        })],
+      target: document.getElementById('map'),
+      view: new View({
+        center: [0, 0],
+        zoom: 3
+      })
+    });
+    setTimeout(() => {
+      this.map.updateSize();
+    }, 500);
   }
 
   saveSurvey() {

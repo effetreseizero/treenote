@@ -10,9 +10,11 @@
     </ion-buttons>
 
   </ion-toolbar>
+  <link rel="stylesheet" href="https://cdn.rawgit.com/openlayers/openlayers.github.io/master/en/v6.5.0/css/ol.css">
+	
 </ion-header>
 
-<ion-content  [fullscreen]="true" class="ion-padding" >
+<ion-content  >
 
   <ion-fab *ngIf="segment==1" vertical="top" edge horizontal="end" slot="fixed" (click)="addTree()">
     <ion-fab-button color="danger" >
@@ -112,6 +114,7 @@
     <!--map slide-->
 
     <ion-slide>
+      <div id="map" class="map"></div>
     </ion-slide>
 
   </ion-slides>
