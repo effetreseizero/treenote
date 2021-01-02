@@ -21,17 +21,17 @@
       <form [formGroup]="surveyForm" (ngSubmit)="saveSurvey()">
 
         <ion-item>
-          <ion-label position="floating">Nome</ion-label>
+          <ion-label type="text" position="floating">Nome</ion-label>
           <ion-input formControlName="name" ></ion-input>
         </ion-item>
     
         <ion-item>
-          <ion-label position="floating">Località</ion-label>
+          <ion-label type="text" position="floating">Località</ion-label>
           <ion-input formControlName="location" [class.invalid]="!surveyForm.controls.location.valid && (surveyForm.controls.location.dirty || submitAttempt)"></ion-input>
         </ion-item>
     
         <ion-item>
-          <ion-label position="floating">Note</ion-label>
+          <ion-label type="text" position="floating">Note</ion-label>
           <ion-input formControlName="notes" ></ion-input>
         </ion-item>
     

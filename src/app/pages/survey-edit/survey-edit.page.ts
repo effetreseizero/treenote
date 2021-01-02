@@ -35,17 +35,15 @@ export class SurveyEditPage implements OnInit {
     private activatedRoute:ActivatedRoute,
     private navController: NavController,
     private router:Router,
-    public fb: FormBuilder,
+    public formBuilder: FormBuilder,
     private surveysService:SurveysService
   ) {
 
-    this.surveyForm = this.fb.group({
+    this.surveyForm = this.formBuilder.group({
       name: ['', [Validators.required]],
       location: ['', ],
       notes: ['', ]
-    });
-
-    
+    });    
 
   }
 
@@ -58,12 +56,12 @@ export class SurveyEditPage implements OnInit {
         this.surveyId = this.router.getCurrentNavigation().extras.state.id;
 
         //read survey data
+
         this.surveysService.read_surveys_document(this.surveyId).subscribe((data)=>{
           this.survey=data.payload.data();
           //https://angular.io/guide/deprecations#ngmodel-with-reactive-forms
-          this.surveyForm.controls['name'].setValue(this.survey.name);
-          this.surveyForm.controls['location'].setValue(this.survey.location);
-          this.surveyForm.controls['notes'].setValue(this.survey.notes);
+          //https://ultimatecourses.com/blog/angular-2-form-controls-patch-value-set-value
+          this.surveyForm.patchValue(this.survey);
         });
 
         //read survey trees data
@@ -79,9 +77,6 @@ export class SurveyEditPage implements OnInit {
               specie: e.payload.doc.data()['specie']
             };
           });
-
-          console.log("treeList: ");
-          console.log(this.treeList);
       
         });
 
