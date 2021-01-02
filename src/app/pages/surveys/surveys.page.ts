@@ -50,7 +50,6 @@ export class SurveysPage implements OnInit {
 
 
   async createSurvey() {
-    debugger;
     const alert = await this.alertController.create({
       header: 'Crea',
       inputs: [

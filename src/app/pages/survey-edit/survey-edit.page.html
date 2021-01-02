@@ -12,9 +12,9 @@
   </ion-toolbar>
 </ion-header>
 
-<ion-content  >
+<ion-content  [fullscreen]="true" class="ion-padding" >
 
-  <ion-slides #surveySlider>
+  <ion-slides pager="true" #surveySlider>
     <!--survey slide-->
     <ion-slide>
       <p>ID: {{surveyId}}</p>
@@ -41,6 +41,13 @@
     <!--trees slide-->
 
     <ion-slide>
+
+      <ion-fab vertical="top" horizontal="end" slot="fixed" (click)="addTree()">
+        <ion-fab-button color="danger" >
+          <ion-icon name="add"></ion-icon>
+        </ion-fab-button>
+      </ion-fab>
+
       <ion-card *ngFor="let item of treeList" color="primary">
         <span *ngIf="!item.isEdit; else elseBlock">
           <ion-card-header>

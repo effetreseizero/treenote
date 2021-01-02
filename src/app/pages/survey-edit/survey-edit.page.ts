@@ -14,6 +14,9 @@ import { FormGroup, Validators, FormBuilder } from '@angular/forms';
 import { SurveysService} from '../../services/firestore/surveys.service';
 import { Survey} from '../../services/firestore/survey';
 
+import { AlertController } from '@ionic/angular';
+
+
 @Component({
   selector: 'app-survey-edit',
   templateUrl: './survey-edit.page.html',
@@ -36,7 +39,8 @@ export class SurveyEditPage implements OnInit {
     private navController: NavController,
     private router:Router,
     public formBuilder: FormBuilder,
-    private surveysService:SurveysService
+    private surveysService:SurveysService,
+    private alertController:AlertController
   ) {
 
     this.surveyForm = this.formBuilder.group({
@@ -95,6 +99,37 @@ export class SurveyEditPage implements OnInit {
       this.surveysService.update_surveys_document(this.surveyId, this.surveyForm.value);
       this.navController.back();
     }
+  }
+
+  async addTree()
+  {
+    const alert = await this.alertController.create({
+      header: 'Crea',
+      inputs: [
+        {name: 'specie',type: 'text',placeholder: 'Specie'},
+        {name: 'd1',type: 'number',placeholder: 'D1'},
+        {name: 'd2',type: 'number',placeholder: 'D2'}
+      ],
+      buttons: [
+        {text: 'Cancel',role: 'cancel',cssClass: 'secondary',handler: () => {console.log('Confirm Cancel');}
+        },
+        {
+          text: 'Ok',
+          handler: (data) => {
+            if (data.specie.length>0 && data.d1>0 && data.d2>0) {
+              this.surveysService.create_tree_document(this.surveyId,data).then(resp => {
+              })
+              .catch(error => {
+                console.log(error);
+              });
+            }
+            console.log('Confirm Ok');
+          }
+        }
+      ]
+    });
+
+    await alert.present();
   }
 
   deleteTree(treeID) {
