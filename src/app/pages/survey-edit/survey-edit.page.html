@@ -1,107 +1,108 @@
+<!-- https://www.joshmorony.com/advanced-forms-validation-in-ionic-2/-->
 <ion-header [translucent]="true">
   <ion-toolbar>
     <ion-title>
       Survey Edit
     </ion-title>
 
-    <!-- Side menu button https://www.positronx.io/add-dynamic-side-menu-in-ionic-with-active-class/ -->
-    <ion-buttons slot="start">
-      <ion-back-button></ion-back-button>
+    <ion-buttons slot="end">
+      <ion-button (click)="saveSurvey()"><ion-icon size="large" name="checkmark-circle-outline"></ion-icon></ion-button>
     </ion-buttons>
 
   </ion-toolbar>
 </ion-header>
 
-<ion-content [fullscreen]="true" class="ion-padding">
-  <p>ID: {{surveyId}}</p>
-  <p>Name: {{survey.name}}</p>
-  <p>Location: {{survey.location}}</p>
-  <p>Notes: {{survey.notes}}</p>
+<ion-content  >
 
+  <ion-slides #surveySlider>
+    <!--survey slide-->
+    <ion-slide>
+      <p>ID: {{surveyId}}</p>
+      <form [formGroup]="surveyForm" (ngSubmit)="saveSurvey()">
 
-  <form [formGroup]="treeForm" (ngSubmit)="createTree()">
-
-    <ion-item>
-      <ion-label position="floating">Specie</ion-label>
-      <ion-input formControlName="specie"></ion-input>
-    </ion-item>
-
-    <ion-item>
-      <ion-label position="floating">D1</ion-label>
-      <ion-input formControlName="d1"></ion-input>
-    </ion-item>
-
-    <ion-item>
-      <ion-label position="floating">D2</ion-label>
-      <ion-input formControlName="d2"></ion-input>
-    </ion-item>
-
-    <ion-item>
-      <ion-button (click)="createTree()" [disabled]="treeForm.invalid">
-        <ion-icon size="small" slot="icon-only" name="add"></ion-icon>
-        &nbsp;Create Tree
-      </ion-button>
-    </ion-item>
-
-  </form>
-
-  <ion-card *ngFor="let item of treeList" color="primary">
-    <span *ngIf="!item.isEdit; else elseBlock">
-      <ion-card-header>
-        <ion-card-title>Tree: {{item.number}}</ion-card-title>
-        <ion-card-subtitle>Specie: {{item.specie}}</ion-card-subtitle>
-      </ion-card-header>
-      <ion-card-content>
-
-        <p>D1: {{item.d1}}</p>
-        <p>D2: {{item.d2}}</p>
-
-        <ion-button shape="round" color="secondary" size="small" (click)="editTree(item)">
-          <ion-icon size="small" slot="icon-only" name="menu-outline"></ion-icon>
-        </ion-button>
-
-        <ion-button shape="round" color="danger" size="small" (click)="deleteTree(item.id)">
-          <ion-icon size="small" slot="icon-only" name="trash"></ion-icon>
-        </ion-button>
-
-      </ion-card-content>
-    </span>
-    <ng-template #elseBlock>
-      <ion-card-header>
-        <ion-card-title>
-          <ion-grid>
-            <ion-row>
-              <ion-col>
-                Edit
-              </ion-col>
-              <ion-col>
-                <ion-button fill="solid" color="medium" size="small" (click)="item.isEdit = false">
-                  Cancel
-                </ion-button>
-              </ion-col>
-              <ion-col>
-                <ion-button fill="solid" color="success" size="small" (click)="updateTree(item)">
-                  Update
-                </ion-button>
-              </ion-col>
-            </ion-row>
-          </ion-grid>
-        </ion-card-title>
-      </ion-card-header>
-      <ion-card-content>
         <ion-item>
-          <ion-label><strong>Specie</strong></ion-label>
-          <ion-input type="text" [(ngModel)]="item.editSpecie"></ion-input>
+          <ion-label position="floating">Nome</ion-label>
+          <ion-input formControlName="name" ></ion-input>
         </ion-item>
+    
         <ion-item>
-          <ion-label><strong>D1</strong></ion-label>
-          <ion-input type="text" [(ngModel)]="item.editD1"></ion-input>
+          <ion-label position="floating">Località</ion-label>
+          <ion-input formControlName="location" [class.invalid]="!surveyForm.controls.location.valid && (surveyForm.controls.location.dirty || submitAttempt)"></ion-input>
         </ion-item>
+    
         <ion-item>
-          <ion-label><strong>D2</strong></ion-label>
-          <ion-input type="text" [(ngModel)]="item.editD2"></ion-input>
+          <ion-label position="floating">Note</ion-label>
+          <ion-input formControlName="notes" ></ion-input>
         </ion-item>
-      </ion-card-content>
-    </ng-template>
-  </ion-card>
+    
+      </form>
+    </ion-slide>
+
+    <!--trees slide-->
+
+    <ion-slide>
+      <ion-card *ngFor="let item of treeList" color="primary">
+        <span *ngIf="!item.isEdit; else elseBlock">
+          <ion-card-header>
+            <ion-card-title>Tree: {{item.number}}</ion-card-title>
+            <ion-card-subtitle>Specie: {{item.specie}}</ion-card-subtitle>
+          </ion-card-header>
+          <ion-card-content>
+    
+            <p>D1: {{item.d1}}</p>
+            <p>D2: {{item.d2}}</p>
+    
+            <ion-button shape="round" color="secondary" size="small" (click)="editTree(item)">
+              <ion-icon size="small" slot="icon-only" name="menu-outline"></ion-icon>
+            </ion-button>
+    
+            <ion-button shape="round" color="danger" size="small" (click)="deleteTree(item.id)">
+              <ion-icon size="small" slot="icon-only" name="trash"></ion-icon>
+            </ion-button>
+    
+          </ion-card-content>
+        </span>
+        <ng-template #elseBlock>
+          <ion-card-header>
+            <ion-card-title>
+              <ion-grid>
+                <ion-row>
+                  <ion-col>
+                    Edit
+                  </ion-col>
+                  <ion-col>
+                    <ion-button fill="solid" color="medium" size="small" (click)="item.isEdit = false">
+                      Cancel
+                    </ion-button>
+                  </ion-col>
+                  <ion-col>
+                    <ion-button fill="solid" color="success" size="small" (click)="updateTree(item)">
+                      Update
+                    </ion-button>
+                  </ion-col>
+                </ion-row>
+              </ion-grid>
+            </ion-card-title>
+          </ion-card-header>
+          <ion-card-content>
+            <ion-item>
+              <ion-label><strong>Specie</strong></ion-label>
+              <ion-input type="text" [(ngModel)]="item.editSpecie"></ion-input>
+            </ion-item>
+            <ion-item>
+              <ion-label><strong>D1</strong></ion-label>
+              <ion-input type="text" [(ngModel)]="item.editD1"></ion-input>
+            </ion-item>
+            <ion-item>
+              <ion-label><strong>D2</strong></ion-label>
+              <ion-input type="text" [(ngModel)]="item.editD2"></ion-input>
+            </ion-item>
+          </ion-card-content>
+        </ng-template>
+      </ion-card>
+    </ion-slide>
+  </ion-slides>
+  
+
+  
 </ion-content>

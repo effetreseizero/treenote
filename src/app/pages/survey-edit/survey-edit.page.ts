@@ -1,6 +1,14 @@
-import { Component, OnInit } from '@angular/core';
+//https://www.freakyjolly.com/ionic-firebase-crud-operations/#.X-2m2On0mEJ
+
+//https://www.joshmorony.com/advanced-forms-validation-in-ionic-2/
+
+
+
+import { Component, OnInit,ViewChild } from '@angular/core';
 
 import { Router, ActivatedRoute, RouteReuseStrategy } from '@angular/router';
+import { NavController } from '@ionic/angular';
+
 import { FormGroup, Validators, FormBuilder } from '@angular/forms';
 
 import { SurveysService} from '../../services/firestore/surveys.service';
@@ -17,20 +25,24 @@ export class SurveyEditPage implements OnInit {
   private survey=null;
   private treeList = null;
 
-  public treeForm: FormGroup;
+  public surveyForm: FormGroup;
+  public submitAttempt: boolean = false;
+
+  @ViewChild('surveySlider') surveySlider;
 
 
   constructor(
     private activatedRoute:ActivatedRoute,
+    private navController: NavController,
     private router:Router,
     public fb: FormBuilder,
     private surveysService:SurveysService
   ) {
 
-    this.treeForm = this.fb.group({
-      specie: ['', [Validators.required]],
-      d1: ['', [Validators.required]],
-      d2: ['', [Validators.required]]
+    this.surveyForm = this.fb.group({
+      name: ['', [Validators.required]],
+      location: ['', ],
+      notes: ['', ]
     });
 
     
@@ -45,42 +57,49 @@ export class SurveyEditPage implements OnInit {
 
         this.surveyId = this.router.getCurrentNavigation().extras.state.id;
 
-        this.survey = this.surveysService.read_suveys_document(this.surveyId).subscribe((data)=>{
+        //read survey data
+        this.surveysService.read_surveys_document(this.surveyId).subscribe((data)=>{
           this.survey=data.payload.data();
+          //https://angular.io/guide/deprecations#ngmodel-with-reactive-forms
+          this.surveyForm.controls['name'].setValue(this.survey.name);
+          this.surveyForm.controls['location'].setValue(this.survey.location);
+          this.surveyForm.controls['notes'].setValue(this.survey.notes);
+        });
 
-          this.surveysService.read_trees_subcollection(this.surveyId).subscribe(data => {
-      
-            this.treeList = data.map(e => {
-              return {
-                id: e.payload.doc.id,
-                isEdit: false,
-                d1: e.payload.doc.data()['d1'],
-                d2: e.payload.doc.data()['d2'],
-                number: e.payload.doc.data()['number'],
-                specie: e.payload.doc.data()['specie']
-              };
-            });
-
-            console.log("treeList: ");
-            console.log(this.treeList);
-      
+        //read survey trees data
+        this.surveysService.read_trees_subcollection(this.surveyId).subscribe(data => {
+    
+          this.treeList = data.map(e => {
+            return {
+              id: e.payload.doc.id,
+              isEdit: false,
+              d1: e.payload.doc.data()['d1'],
+              d2: e.payload.doc.data()['d2'],
+              number: e.payload.doc.data()['number'],
+              specie: e.payload.doc.data()['specie']
+            };
           });
 
+          console.log("treeList: ");
+          console.log(this.treeList);
+      
         });
-        
+
       }
     });
 
   }
 
-  createTree() {
-    console.log(this.treeForm.value);
-    this.surveysService.create_tree_document(this.surveyId,this.treeForm.value).then(resp => {
-      this.treeForm.reset();
-    })
-      .catch(error => {
-        console.log(error);
-      });
+  saveSurvey() {
+    this.submitAttempt = true;
+
+    if(!this.surveyForm.valid){
+        this.surveySlider.slideTo(0);
+    } 
+    else{
+      this.surveysService.update_surveys_document(this.surveyId, this.surveyForm.value);
+      this.navController.back();
+    }
   }
 
   deleteTree(treeID) {

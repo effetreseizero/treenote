@@ -38,6 +38,18 @@ export class SurveysService {
 
   }
 
+  //https://www.freakyjolly.com/ionic-firebase-crud-operations/#.X-mQOulKiEI
+  read_surveys_collection() {
+    return this.firestore.collection(
+      this.collectionName,
+      //https://stackoverflow.com/questions/49026589/angular-firestore-where-query-returning-error-property-does-not-exist-on
+      //.where("userUID", "==", firebase.auth().currentUser.uid)
+      ref => ref.where("userUID", "==", this.user.uid)
+      )
+      .snapshotChanges();
+
+  }
+
   create_survey_document(data) {
     data['userUID']=this.user.uid;
     data['deleted']=false;
@@ -45,20 +57,8 @@ export class SurveysService {
     data['createdTime']=firebase.default.firestore.FieldValue.serverTimestamp();
     return this.firestore.collection(this.collectionName).add(data);
   }
-  //https://www.freakyjolly.com/ionic-firebase-crud-operations/#.X-mQOulKiEI
-  read_surveys_collection() {
-    
-    return this.firestore.collection(
-      this.collectionName,
-      //https://stackoverflow.com/questions/49026589/angular-firestore-where-query-returning-error-property-does-not-exist-on
-      //.where("userUID", "==", firebase.auth().currentUser.uid)
-      ref => ref.where("userUID", "==", this.user.uid).where("deleted","!=",true)
-      )
-      .snapshotChanges();
 
-  }
-
-  read_suveys_document(surveyID) {
+  read_surveys_document(surveyID) {
     return this.firestore.doc(this.collectionName + '/' + surveyID).snapshotChanges();
   }
 
@@ -82,12 +82,6 @@ export class SurveysService {
   TREES SUBCOLLECTION
   */
 
-  create_tree_document(surveyID,data) {
-    
-    data['userUID']=this.user.uid;
-      return this.firestore.collection(this.collectionName+'/'+surveyID+'/'+this.subcollectionName).add(data);
-  }
-
   //https://www.freakyjolly.com/ionic-firebase-crud-operations/#.X-mQOulKiEI
   read_trees_subcollection(surveyID) {
     
@@ -99,6 +93,13 @@ export class SurveysService {
       )
       .snapshotChanges();
   }
+
+  create_tree_document(surveyID,data) {
+    data['userUID']=this.user.uid;
+      return this.firestore.collection(this.collectionName+'/'+surveyID+'/'+this.subcollectionName).add(data);
+  }
+
+  
 
   update_tree_document(surveyID,treeID, data) {
     this.firestore.collection(this.collectionName+'/'+surveyID+'/'+this.subcollectionName).doc(treeID).update(data);

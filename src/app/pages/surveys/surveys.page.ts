@@ -1,3 +1,5 @@
+//https://www.freakyjolly.com/ionic-firebase-crud-operations/#.X-2m2On0mEJ
+
 import { Component, OnInit } from '@angular/core';
 
 import { SurveysService} from '../../services/firestore/surveys.service';
@@ -42,8 +44,6 @@ export class SurveysPage implements OnInit {
 
         };
       });
-      console.log("surveyList: ");
-      console.log(this.surveyList);
 
     });
   }
