@@ -7,7 +7,7 @@
 import { Component, OnInit,ViewChild, ElementRef } from '@angular/core';
 
 import { Router, ActivatedRoute, RouteReuseStrategy } from '@angular/router';
-import { IonSlides, NavController,Platform  } from '@ionic/angular';
+import { IonSlides, NavController,Platform, ToastController  } from '@ionic/angular';
 
 import { FormGroup, Validators, FormBuilder } from '@angular/forms';
 
@@ -22,6 +22,13 @@ import Map from 'ol/Map';
 import View from 'ol/View';
 import TileLayer from 'ol/layer/Tile';
 import { OSM } from 'ol/source';
+
+//https://medium.com/runic-software/a-simple-guide-to-openlayers-in-angular-b10f6feb3df1
+import {OlMapComponent} from '../../components/ol-map/ol-map.component';
+
+//https://dev.to/saviosantos0808/real-time-localization-using-ionic-framework-and-google-spreadsheets-35pe
+import { Geolocation } from '@ionic-native/geolocation/ngx';
+import{ geohashForLocation } from 'geofire-common';
 
 
 
@@ -42,9 +49,15 @@ export class SurveyEditPage implements OnInit {
 
   //https://gist.github.com/mdorchain/90ee6a0b391b6c51b2e27c2b000f9bdd
   @ViewChild('surveySlider', { static: true }) surveySlider: IonSlides;
-  segment = 0;
+  slideOptsSurveySlider = {
+    initialSlide: 0,
+    autoHeight: true
+  };
+  segmentSelected = 0;
 
   map: Map;
+
+  coords: any = [];
 
   constructor(
     private activatedRoute:ActivatedRoute,
@@ -54,7 +67,10 @@ export class SurveyEditPage implements OnInit {
     private surveysService:SurveysService,
     private alertController:AlertController,
     private elementRef:ElementRef,
-    private platform:Platform
+    private platform:Platform,
+    private toastController:ToastController,
+    private geolocation: Geolocation,
+    private olMapComponent:OlMapComponent
   ) {
 
     this.surveyForm = this.formBuilder.group({
@@ -63,12 +79,11 @@ export class SurveyEditPage implements OnInit {
       notes: ['', ]
     });
 
-    platform.ready().then(() => {
-      console.log("Platform is ready");
-      setTimeout(() => {
-         
-       }, 1000);
-    })
+    this.geolocation.watchPosition().subscribe(async(response: any)=>{
+      this.coords = response.coords;
+      console.log(this.coords);
+    });
+
 
   }
 
@@ -159,13 +174,22 @@ export class SurveyEditPage implements OnInit {
           text: 'Ok',
           handler: (data) => {
             if (data.specie.length>0 && data.d1>0 && data.d2>0) {
+              data.lat = this.coords.latitude;
+              data.lng = this.coords.longitude;
+              data.hash = geohashForLocation([this.coords.latitude, this.coords.longitude]);
+              
               this.surveysService.create_tree_document(this.surveyId,data).then(resp => {
               })
               .catch(error => {
                 console.log(error);
               });
+              return true;
+            //https://stackoverflow.com/questions/45969821/alert-controller-input-box-validation
+            } else{
+              this.showErrorToast('Dati errati');
+              return false;
             }
-            console.log('Confirm Ok');
+            
           }
         }
       ]
@@ -173,6 +197,17 @@ export class SurveyEditPage implements OnInit {
 
     await alert.present();
   }
+
+  async showErrorToast(data: any) {
+    let toast = await this.toastController.create({
+      message: data,
+      duration: 3000,
+      position: 'top'
+    });
+
+    toast.present();
+  }
+
 
   deleteTree(treeID) {
     this.surveysService.delete_tree_document(this.surveyId,treeID);
@@ -197,10 +232,15 @@ export class SurveyEditPage implements OnInit {
 
   //https://gist.github.com/mdorchain/90ee6a0b391b6c51b2e27c2b000f9bdd
   async segmentChanged($event){
-    this.surveySlider.slideTo(this.segment);
+    this.surveySlider.slideTo(this.segmentSelected);
   }
   async slideChanged($event) {
-    this.segment = await this.surveySlider.getActiveIndex();
+    this.segmentSelected = await this.surveySlider.getActiveIndex();
+  }
+
+
+  public onMapReady(event) {
+    console.log("Map Ready")
   }
 
 }

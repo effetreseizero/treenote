@@ -16,6 +16,12 @@ import { AngularFirestoreModule } from '@angular/fire/firestore';
 import { AngularFireDatabaseModule } from '@angular/fire/database';
 import { AngularFireAuthModule } from '@angular/fire/auth';
 
+//https://dev.to/saviosantos0808/real-time-localization-using-ionic-framework-and-google-spreadsheets-35pe
+import { Geolocation } from '@ionic-native/geolocation/ngx';
+
+//https://medium.com/runic-software/a-simple-guide-to-openlayers-in-angular-b10f6feb3df1
+import {OlMapComponent} from './components/ol-map/ol-map.component';
+
 
 @NgModule({
   declarations: [AppComponent],
@@ -29,12 +35,15 @@ import { AngularFireAuthModule } from '@angular/fire/auth';
     AngularFireModule.initializeApp(firebaseConfig),
     AngularFireDatabaseModule,
     AngularFirestoreModule,
-    AngularFireAuthModule
+    AngularFireAuthModule,
   ],
   providers: [
     StatusBar,
     SplashScreen,
-    { provide: RouteReuseStrategy, useClass: IonicRouteStrategy }
+    { provide: RouteReuseStrategy, useClass: IonicRouteStrategy },
+    Geolocation,
+    OlMapComponent
+
   ],
   bootstrap: [AppComponent]
 })
