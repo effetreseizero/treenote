@@ -40,6 +40,8 @@ export class SurveysService {
 
   //https://www.freakyjolly.com/ionic-firebase-crud-operations/#.X-mQOulKiEI
   read_surveys_collection() {
+    console.log("fsurveysService.read_surveys_collection")
+
     return this.firestore.collection(
       this.collectionName,
       //https://stackoverflow.com/questions/49026589/angular-firestore-where-query-returning-error-property-does-not-exist-on
@@ -84,7 +86,7 @@ export class SurveysService {
 
   //https://www.freakyjolly.com/ionic-firebase-crud-operations/#.X-mQOulKiEI
   read_trees_subcollection(surveyID) {
-    
+    console.log("fsurveysService.read_trees_subcollection")
     return this.firestore.collection(
       this.collectionName+'/'+surveyID+'/'+this.subcollectionName,
       //https://stackoverflow.com/questions/49026589/angular-firestore-where-query-returning-error-property-does-not-exist-on

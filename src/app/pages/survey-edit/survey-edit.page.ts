@@ -19,16 +19,16 @@ import { AlertController } from '@ionic/angular';
 //https://forum.ionicframework.com/t/generating-a-openlayers-map-as-a-component/161373/4
 
 import Map from 'ol/Map';
-import View from 'ol/View';
-import TileLayer from 'ol/layer/Tile';
-import { OSM } from 'ol/source';
 
 //https://medium.com/runic-software/a-simple-guide-to-openlayers-in-angular-b10f6feb3df1
 import {OlMapComponent} from '../../components/ol-map/ol-map.component';
 
 //https://dev.to/saviosantos0808/real-time-localization-using-ionic-framework-and-google-spreadsheets-35pe
 import { Geolocation } from '@ionic-native/geolocation/ngx';
+
+//https://firebase.google.com/docs/firestore/solutions/geoqueries
 import{ geohashForLocation } from 'geofire-common';
+import { coordinateRelationship } from 'ol/extent';
 
 
 
@@ -44,20 +44,24 @@ export class SurveyEditPage implements OnInit {
   private survey=null;
   private treeList = null;
 
+  private random_coords = true;
+
   public surveyForm: FormGroup;
   public submitAttempt: boolean = false;
 
   //https://gist.github.com/mdorchain/90ee6a0b391b6c51b2e27c2b000f9bdd
   @ViewChild('surveySlider', { static: true }) surveySlider: IonSlides;
   slideOptsSurveySlider = {
-    initialSlide: 0,
+    initialSlide: 0,  
     autoHeight: true
   };
   segmentSelected = 0;
 
-  map: Map;
-
   coords: any = [];
+
+  //https://www.pluralsight.com/guides/using-template-reference-variables-to-interact-with-nested-components
+  @ViewChild('app_ol_map') olMapComponent:OlMapComponent;
+  map: Map;
 
   constructor(
     private activatedRoute:ActivatedRoute,
@@ -69,8 +73,7 @@ export class SurveyEditPage implements OnInit {
     private elementRef:ElementRef,
     private platform:Platform,
     private toastController:ToastController,
-    private geolocation: Geolocation,
-    private olMapComponent:OlMapComponent
+    private geolocation: Geolocation
   ) {
 
     this.surveyForm = this.formBuilder.group({
@@ -79,9 +82,9 @@ export class SurveyEditPage implements OnInit {
       notes: ['', ]
     });
 
+    ////https://dev.to/saviosantos0808/real-time-localization-using-ionic-framework-and-google-spreadsheets-35pe
     this.geolocation.watchPosition().subscribe(async(response: any)=>{
       this.coords = response.coords;
-      console.log(this.coords);
     });
 
 
@@ -106,7 +109,7 @@ export class SurveyEditPage implements OnInit {
 
         //read survey trees data
         this.surveysService.read_trees_subcollection(this.surveyId).subscribe(data => {
-    
+
           this.treeList = data.map(e => {
             return {
               id: e.payload.doc.id,
@@ -114,37 +117,21 @@ export class SurveyEditPage implements OnInit {
               d1: e.payload.doc.data()['d1'],
               d2: e.payload.doc.data()['d2'],
               number: e.payload.doc.data()['number'],
-              specie: e.payload.doc.data()['specie']
+              specie: e.payload.doc.data()['specie'],
+              lat: e.payload.doc.data()['lat'],
+              lng: e.payload.doc.data()['lng'],
+              geohash: e.payload.doc.data()['geohash'],
             };
           });
-      
+          this.olMapComponent.updateTreesLayer(this.treeList);
         });
 
       }
     });
-
-    this.initMap();
     
   }
 
 
-  initMap() {
-    //https://forum.ionicframework.com/t/generating-a-openlayers-map-as-a-component/161373/4
-    this.map = new Map({
-      layers: [
-        new TileLayer({
-          source: new OSM()
-        })],
-      target: document.getElementById('map'),
-      view: new View({
-        center: [0, 0],
-        zoom: 3
-      })
-    });
-    setTimeout(() => {
-      this.map.updateSize();
-    }, 500);
-  }
 
   saveSurvey() {
     this.submitAttempt = true;
@@ -174,9 +161,21 @@ export class SurveyEditPage implements OnInit {
           text: 'Ok',
           handler: (data) => {
             if (data.specie.length>0 && data.d1>0 && data.d2>0) {
+              debugger;
               data.lat = this.coords.latitude;
               data.lng = this.coords.longitude;
-              data.hash = geohashForLocation([this.coords.latitude, this.coords.longitude]);
+              if (this.random_coords){
+                function getRandomInRange(from, to, fixed) {
+                  return (Math.random() * (to - from) + from).toFixed(fixed) * 1;
+                }
+                var lat_dev = getRandomInRange(-0.001, 0.001, 6);
+                var lng_dev =  getRandomInRange(-0.001, 0.001, 6);
+                data.lat += lat_dev;
+                data.lng += lng_dev;
+              }
+
+              //https://firebase.google.com/docs/firestore/solutions/geoqueries
+              data.geohash = geohashForLocation([data.lat, data.lng]);
               
               this.surveysService.create_tree_document(this.surveyId,data).then(resp => {
               })
@@ -240,7 +239,10 @@ export class SurveyEditPage implements OnInit {
 
 
   public onMapReady(event) {
-    console.log("Map Ready")
+    console.log("Map Ready");
+    this.map = event;
+    this.olMapComponent.updateTreesLayer(this.treeList);
+    this.olMapComponent.zoomTreesLayer();
   }
 
 }

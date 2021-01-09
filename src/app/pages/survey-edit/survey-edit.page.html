@@ -9,11 +9,16 @@
       <ion-button (click)="saveSurvey()"><ion-icon size="large" name="checkmark-circle-outline"></ion-icon></ion-button>
     </ion-buttons>
 
+   
+      <ion-toggle slot="end" [(ngModel)]="random_coords" checked>random_coords</ion-toggle>
+    
   </ion-toolbar>
  
 </ion-header>
 
 <ion-content  [fullscreen]="true">
+
+
 
   <ion-fab *ngIf="segmentSelected==1" vertical="top" edge horizontal="end" slot="fixed" (click)="addTree()">
     <ion-fab-button color="danger" >
@@ -48,12 +53,6 @@
     <!--trees slide-->
 
     <ion-slide>
-      <ion-scroll style="height: 200px">
-        <ion-list>
-           <ion-item ng-repeat="item in items">{{item}}</ion-item>
-        </ion-list>
-      </ion-scroll>
-    
       <ion-card *ngFor="let item of treeList" color="primary">
         <span *ngIf="!item.isEdit; else elseBlock">
           <ion-card-header>
@@ -121,6 +120,7 @@
       [center]="[-483281,6904172]"
       [zoom]="8.5"
       (mapReady)="onMapReady($event)"
+      #app_ol_map
       ></app-ol-map>
     </ion-slide>
 
