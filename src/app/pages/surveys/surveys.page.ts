@@ -41,9 +41,14 @@ export class SurveysPage implements OnInit {
           location: e.payload.doc.data()['location'],
           notes: e.payload.doc.data()['notes'],
           deleted: e.payload.doc.data()['deleted'],
-
+          createdTime: e.payload.doc.data()['createdTime'],
         };
-      });
+      })
+      .sort(
+        (itemA, itemB) => {
+          return itemB.createdTime - itemA.createdTime;
+        }
+      );
 
     });
   }

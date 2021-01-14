@@ -26,7 +26,7 @@
     </ion-fab-button>
   </ion-fab>
 
-  <ion-slides [options]="slideOptsSurveySlider" #surveySlider (ionSlideDidChange)="slideChanged($event)">
+  <ion-slides [options]="slideOptsSurveySlider"  #surveySlider (ionSlideDidChange)="slideChanged($event)">
     <!--survey slide-->
     <ion-slide>
       <p>ID: {{surveyId}}</p>
@@ -53,65 +53,45 @@
     <!--trees slide-->
 
     <ion-slide>
-      <ion-card *ngFor="let item of treeList" color="primary">
-        <span *ngIf="!item.isEdit; else elseBlock">
-          <ion-card-header>
-            <ion-card-title>Tree: {{item.number}}</ion-card-title>
-          </ion-card-header>
-          <ion-card-content>
-            <p>D1: {{item.specie}}</p>
-            <p>D1: {{item.d1}}</p>
-            <p>D2: {{item.d2}}</p>
-    
-            <ion-button shape="round" color="secondary" size="small" (click)="editTree(item)">
-              <ion-icon size="small" slot="icon-only" name="menu-outline"></ion-icon>
-            </ion-button>
-    
-            <ion-button shape="round" color="danger" size="small" (click)="deleteTree(item.id)">
-              <ion-icon size="small" slot="icon-only" name="trash"></ion-icon>
-            </ion-button>
-    
-          </ion-card-content>
-        </span>
-        <ng-template #elseBlock>
-          <ion-card-header>
-            <ion-card-title>
-              <ion-grid>
-                <ion-row>
-                  <ion-col>
-                    Edit
-                  </ion-col>
-                  <ion-col>
-                    <ion-button fill="solid" color="medium" size="small" (click)="item.isEdit = false">
-                      Cancel
-                    </ion-button>
-                  </ion-col>
-                  <ion-col>
-                    <ion-button fill="solid" color="success" size="small" (click)="updateTree(item)">
-                      Update
-                    </ion-button>
-                  </ion-col>
-                </ion-row>
-              </ion-grid>
-            </ion-card-title>
-          </ion-card-header>
-          <ion-card-content>
-            <ion-item>
-              <ion-label><strong>Specie</strong></ion-label>
-              <ion-input type="text" [(ngModel)]="item.editSpecie"></ion-input>
+
+      <div class="container">
+        <div class="scroll" scrollY="true">
+          <!-- //https://www.freakyjolly.com/ionic-firebase-crud-operations/#.X-2m2On0mEJ -->
+          <ion-list>
+            <ion-item *ngFor="let item of treeList ; let i=index">
+              <span *ngIf="!item.isEdit; else elseBlock">
+
+                <ion-label>{{item.specie}} {{item.d1}} {{item.d2}}</ion-label>
+                <ion-button shape="round" slot="end" color="secondary" size="small" (click)="editTree(item)">
+                  <ion-icon size="small" slot="icon-only" name="menu-outline"></ion-icon>
+                </ion-button>
+                <ion-button shape="round" slot="end" color="danger" size="small" (click)="deleteTree(item.id)">
+                  <ion-icon size="small" slot="icon-only" name="trash"></ion-icon>
+                </ion-button>
+                
+
+              </span>
+              <ng-template #elseBlock>
+
+                <ion-label><strong>Specie</strong></ion-label>
+                <ion-input type="text" [(ngModel)]="item.editSpecie"></ion-input>
+                <ion-label><strong>D1</strong></ion-label>
+                <ion-input type="text" [(ngModel)]="item.editD1"></ion-input>
+                <ion-label><strong>D2</strong></ion-label>
+                <ion-input type="text" [(ngModel)]="item.editD2"></ion-input>
+                <ion-button shape="round" color="danger" size="small" (click)="item.isEdit = false">
+                  <ion-icon size="small" slot="icon-only" name="close-outline"></ion-icon>
+                </ion-button>
+                <ion-button shape="round" color="secondary" size="small" (click)="updateTree(item)">
+                  <ion-icon size="small" slot="icon-only" name="checkmark-outline"></ion-icon>
+                </ion-button>
+
+              </ng-template>
             </ion-item>
-            <ion-item>
-              <ion-label><strong>D1</strong></ion-label>
-              <ion-input type="text" [(ngModel)]="item.editD1"></ion-input>
-            </ion-item>
-            <ion-item>
-              <ion-label><strong>D2</strong></ion-label>
-              <ion-input type="text" [(ngModel)]="item.editD2"></ion-input>
-            </ion-item>
-          </ion-card-content>
-        </ng-template>
-      </ion-card>
-    </ion-slide>
+          </ion-list>
+        </div>
+      </div>
+    </ion-slide>    
 
     <!--map slide-->
 

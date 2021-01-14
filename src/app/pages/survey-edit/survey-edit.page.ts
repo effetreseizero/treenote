@@ -121,8 +121,15 @@ export class SurveyEditPage implements OnInit {
               lat: e.payload.doc.data()['lat'],
               lng: e.payload.doc.data()['lng'],
               geohash: e.payload.doc.data()['geohash'],
+              createdTime: e.payload.doc.data()['createdTime'],
             };
-          });
+          })
+          //https://www.w3schools.com/js/js_array_sort.asp
+          .sort(
+            (itemA, itemB) => {
+              return itemB.createdTime - itemA.createdTime;
+            }
+          );
           this.olMapComponent.updateTreesLayer(this.treeList);
         });
 
@@ -130,8 +137,6 @@ export class SurveyEditPage implements OnInit {
     });
     
   }
-
-
 
   saveSurvey() {
     this.submitAttempt = true;
@@ -161,7 +166,6 @@ export class SurveyEditPage implements OnInit {
           text: 'Ok',
           handler: (data) => {
             if (data.specie.length>0 && data.d1>0 && data.d2>0) {
-              debugger;
               data.lat = this.coords.latitude;
               data.lng = this.coords.longitude;
               if (this.random_coords){

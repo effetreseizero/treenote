@@ -56,7 +56,7 @@ export class SurveysService {
     data['userUID']=this.user.uid;
     data['deleted']=false;
     //https://www.nuomiphp.com/eplan/en/2152.html
-    data['createdTime']=firebase.default.firestore.FieldValue.serverTimestamp();
+    data['createdTime']=Date.now();
     return this.firestore.collection(this.collectionName).add(data);
   }
 
@@ -73,7 +73,7 @@ export class SurveysService {
     let data =
     {
       deleted: true,
-      deletedTime: firebase.default.firestore.FieldValue.serverTimestamp()
+      deletedTime: Date.now()
 
     }
     this.firestore.doc(this.collectionName + '/' + surveyID).update(data);
@@ -98,7 +98,8 @@ export class SurveysService {
 
   create_tree_document(surveyID,data) {
     data['userUID']=this.user.uid;
-      return this.firestore.collection(this.collectionName+'/'+surveyID+'/'+this.subcollectionName).add(data);
+    data['createdTime']=Date.now();
+    return this.firestore.collection(this.collectionName+'/'+surveyID+'/'+this.subcollectionName).add(data);
   }
 
   

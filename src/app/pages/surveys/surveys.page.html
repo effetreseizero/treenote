@@ -16,10 +16,11 @@
     </ion-fab-button>
   </ion-fab>
 
+  <!-- //https://www.freakyjolly.com/ionic-firebase-crud-operations/#.X-2m2On0mEJ -->
   <ion-card *ngFor="let item of activeSurveys()" color="primary">
     <ion-card-header>
       <ion-card-title>{{item.name}}</ion-card-title>
-      <ion-card-subtitle>Location: {{item.location}}</ion-card-subtitle>
+      <ion-card-subtitle>Location: {{item.location} Date: {{Date.item.createdTime}}}</ion-card-subtitle>
     </ion-card-header>
     <ion-card-content>
 
