@@ -55,7 +55,8 @@ const routes: Routes = [
       },
       {
         path: 'survey-edit',
-        loadChildren: () => import('../pages/survey-edit/survey-edit.module').then( m => m.SurveyEditPageModule)
+        loadChildren: () => import('../pages/survey-edit/survey-edit.module').then( m => m.SurveyEditPageModule),
+        canActivate: [AuthGuard]
       }
       
     ]

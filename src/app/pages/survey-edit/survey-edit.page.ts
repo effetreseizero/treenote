@@ -14,6 +14,8 @@ import { FormGroup, Validators, FormBuilder } from '@angular/forms';
 import { SurveysService} from '../../services/firestore/surveys.service';
 import { Survey} from '../../services/firestore/survey';
 
+import * as tf from '@tensorflow/tfjs';
+
 import { AlertController } from '@ionic/angular';
 
 //https://forum.ionicframework.com/t/generating-a-openlayers-map-as-a-component/161373/4
@@ -57,7 +59,10 @@ export class SurveyEditPage implements OnInit {
   };
   segmentSelected = 0;
 
+  geoLocationWatch:any;
+  geoLocationWatchStarted = false;
   coords: any = [];
+  lastcoords:any = {latitude:0,longitude:0,accuracy:0};
 
   //https://www.pluralsight.com/guides/using-template-reference-variables-to-interact-with-nested-components
   @ViewChild('app_ol_map') olMapComponent:OlMapComponent;
@@ -82,15 +87,59 @@ export class SurveyEditPage implements OnInit {
       notes: ['', ]
     });
 
-    ////https://dev.to/saviosantos0808/real-time-localization-using-ionic-framework-and-google-spreadsheets-35pe
-    this.geolocation.watchPosition().subscribe(async(response: any)=>{
-      this.coords = response.coords;
-    });
-
 
   }
 
   ngOnInit() {
+
+    this.geolocation.getCurrentPosition().then((resp) => {
+      debugger;
+      this.coords.push({
+        latitude:resp.coords.latitude,
+        longitude:resp.coords.latitude,
+        accuracy:resp.coords.accuracy,
+        timestamp:resp.timestamp
+      });
+      this.lastcoords = this.coords[this.coords.length-1];
+    }).catch((error) => {
+      console.log('Error getting location', error);
+    });
+
+    this.geoLocationWatch = this.geolocation.watchPosition({maximumAge: 1000, timeout: 5000, enableHighAccuracy: true});
+    this.geoLocationWatch.subscribe((resp) => {
+      debugger;
+      this.geoLocationWatchStarted = true;
+      if("coords" in resp){
+        this.coords.push({
+          latitude:resp.coords.latitude,
+          longitude:resp.coords.longitude,
+          accuracy:resp.coords.accuracy,
+          timestamp:resp.timestamp
+        });
+        this.lastcoords = this.coords[this.coords.length-1];
+      }
+    });
+
+    //https://ionicframework.com/docs/native/geolocation
+    /*this.geoLocationWatch = this.geolocation.watchPosition({maximumAge:1000});
+    this.geoLocationWatch.subscribe(
+      (data: any) => {
+        // data can be a set of coordinates, or an error (if an error occurred).
+        // data.coords.latitude
+        // data.coords.longitude
+        debugger;
+        this.coords = data.coords;
+        console.log(this.coords);
+      },
+      (error) => {
+        console.log(error); //error handling
+      } 
+    );*/
+    ////https://dev.to/saviosantos0808/real-time-localization-using-ionic-framework-and-google-spreadsheets-35pe
+    /*this.geolocation.watchPosition(options).subscribe(async(response: any)=>{
+      this.coords = response.coords;
+      console.log(this.coords);
+    });*/
     
     //https://ionicacademy.com/pass-data-angular-router-ionic-4/
     this.activatedRoute.queryParams.subscribe(params => {
@@ -130,7 +179,9 @@ export class SurveyEditPage implements OnInit {
               return itemB.createdTime - itemA.createdTime;
             }
           );
-          this.olMapComponent.updateTreesLayer(this.treeList);
+          if(this.treeList.length>0){
+            this.olMapComponent.updateTreesLayer(this.treeList);
+          }
         });
 
       }
@@ -166,8 +217,9 @@ export class SurveyEditPage implements OnInit {
           text: 'Ok',
           handler: (data) => {
             if (data.specie.length>0 && data.d1>0 && data.d2>0) {
-              data.lat = this.coords.latitude;
-              data.lng = this.coords.longitude;
+              debugger;
+              data.lat = this.coords[this.coords.length-1].latitude;
+              data.lng = this.coords[this.coords.length-1].longitude;
               if (this.random_coords){
                 function getRandomInRange(from, to, fixed) {
                   return (Math.random() * (to - from) + from).toFixed(fixed) * 1;
@@ -182,11 +234,12 @@ export class SurveyEditPage implements OnInit {
               data.geohash = geohashForLocation([data.lat, data.lng]);
               
               this.surveysService.create_tree_document(this.surveyId,data).then(resp => {
+                return true;
               })
               .catch(error => {
                 console.log(error);
               });
-              return true;
+              
             //https://stackoverflow.com/questions/45969821/alert-controller-input-box-validation
             } else{
               this.showErrorToast('Dati errati');
@@ -199,6 +252,13 @@ export class SurveyEditPage implements OnInit {
     });
 
     await alert.present();
+  }
+
+  async addTreeVoice()
+  {
+    debugger;
+    const model = await tf.loadGraphModel('../../../assets/model.json');
+
   }
 
   async showErrorToast(data: any) {
@@ -245,8 +305,10 @@ export class SurveyEditPage implements OnInit {
   public onMapReady(event) {
     console.log("Map Ready");
     this.map = event;
-    this.olMapComponent.updateTreesLayer(this.treeList);
-    this.olMapComponent.zoomTreesLayer();
+    if(this.treeList.length>0){
+      this.olMapComponent.updateTreesLayer(this.treeList);
+      this.olMapComponent.zoomTreesLayer();
+    }
   }
 
 }
