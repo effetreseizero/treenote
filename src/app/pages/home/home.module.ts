@@ -7,12 +7,18 @@ import { HomePage } from './home.page';
 
 import { HomePageRoutingModule } from './home-routing.module';
 
+//https://medium.com/runic-software/a-simple-guide-to-openlayers-in-angular-b10f6feb3df1
+import {OlMapComponent} from '../../components/ol-map/ol-map.component';
+
 @NgModule({
   imports: [
     CommonModule,
     IonicModule,
     HomePageRoutingModule
   ],
-  declarations: [HomePage]
+  declarations: [
+    HomePage,
+    OlMapComponent
+  ]
 })
 export class HomePageModule {}

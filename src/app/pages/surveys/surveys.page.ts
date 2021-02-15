@@ -32,7 +32,6 @@ export class SurveysPage implements OnInit {
   {
     
     this.surveysService.read_surveys_collection().subscribe(data => {
-      debugger;
       this.surveyList = data.map(e => {
         return {
           id: e.payload.doc.id,

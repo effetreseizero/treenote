@@ -23,11 +23,6 @@ const routes: Routes = [
         loadChildren: () => import('../pages/home/home.module').then(m => m.HomePageModule)
       },
       {
-        path: 'export',
-        loadChildren: () => import('../pages/export/export.module').then(m => m.ExportPageModule),
-        canActivate: [AuthGuard]
-      },
-      {
         path: 'contact',
         loadChildren: () => import('../pages/contact/contact.module').then(m => m.ContactPageModule)
       },

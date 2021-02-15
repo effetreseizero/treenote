@@ -1,10 +1,15 @@
-import { Component } from '@angular/core';
+import { Component, ViewChild } from '@angular/core';
 import { CoreFacade} from '../../services/storage/core.facade';
 import { Observable } from 'rxjs';
 
 import { Router, RouterEvent } from '@angular/router';
 
 import { AuthenticationService } from "../../services/auth/authentication.service";
+
+import Map from 'ol/Map';
+
+//https://medium.com/runic-software/a-simple-guide-to-openlayers-in-angular-b10f6feb3df1
+import {OlMapComponent} from '../../components/ol-map/ol-map.component';
 
 
 @Component({
@@ -13,6 +18,10 @@ import { AuthenticationService } from "../../services/auth/authentication.servic
   styleUrls: ['home.page.scss'],
 })
 export class HomePage {
+
+  //https://www.pluralsight.com/guides/using-template-reference-variables-to-interact-with-nested-components
+  @ViewChild('app_ol_map') olMapComponent:OlMapComponent;
+  map: Map;
 
   constructor(
     private router: Router,
@@ -23,7 +32,6 @@ export class HomePage {
 
   ngOnInit() {
     this.authService.isLoggedIn.then((resp)=>{
-      debugger;
       this.userLoggedIn=resp;
     });
   }
@@ -34,6 +42,12 @@ export class HomePage {
     }else{
       this.router.navigate(['/menu/user-account']);
     }
+  }
+
+  public onMapReady(event) {
+    console.log("Map Ready");
+    this.map = event;
+    
   }
 
 }

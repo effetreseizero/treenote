@@ -20,5 +20,12 @@
 </ion-header>
 
 <ion-content [fullscreen]="true" class="background">
-  
+  <app-ol-map
+      class="map"
+      [center]="[-483281,6904172]"
+      [zoom]="8.5"
+      (mapReady)="onMapReady($event)"
+      #app_ol_map
+  >
+  </app-ol-map>
 </ion-content>

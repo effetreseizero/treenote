@@ -18,15 +18,11 @@ export class MenuPage implements OnInit {
       path: '/menu/home'
     },
     {
-      name: 'Surveys',
+      name: 'Segnalazioni',
       path: '/menu/surveys'
     },
     {
-      name: 'Export',
-      path: '/menu/export'
-    },
-    {
-      name: 'Contact',
+      name: 'Contattaci',
       path: '/menu/contact'
     },
   ]
