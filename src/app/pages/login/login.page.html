@@ -5,14 +5,14 @@
     </ion-title>
 
     <!-- Side menu button https://www.positronx.io/add-dynamic-side-menu-in-ionic-with-active-class/ -->
-    <ion-buttons slot="start">
+    <!--ion-buttons slot="start">
       <ion-menu-button autoHide="false"></ion-menu-button>
-    </ion-buttons>
+    </ion-buttons-->
 
   </ion-toolbar>
 </ion-header>
 
-<ion-content [fullscreen]="true">
+<ion-content [fullscreen]="true" class="background">
   <div id="container">
     <form>    
       <ion-item lines="full">
@@ -27,17 +27,17 @@
   
       <ion-row>
         <ion-col> 
-        <ion-button type="submit" (click)="emailLogin(email, password)" expand="block">Login</ion-button>
+        <ion-button type="submit" (click)="emailLogin(email, password)" expand="block">Accedi</ion-button>
         </ion-col>
       </ion-row>
       <ion-row>
         <ion-col> 
-          <ion-button (click)="registration()" expand="block" color="light">Register</ion-button>
+          <ion-button (click)="registration()" expand="block" color="light">Registrati con Email</ion-button>
         </ion-col>
       </ion-row>
       <ion-row>
         <ion-col> 
-          <ion-button (click)="googleLogin()" expand="block" color="dark">Log In with Google</ion-button>
+          <ion-button (click)="googleLogin()" expand="block" color="dark">Login con Google</ion-button>
         </ion-col>
       </ion-row>
       

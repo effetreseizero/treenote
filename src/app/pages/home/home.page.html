@@ -1,23 +1,42 @@
 <ion-header [translucent]="true">
   <ion-toolbar>
     <ion-title>
-      Home
+      
     </ion-title>
 
     <!-- Side menu button https://www.positronx.io/add-dynamic-side-menu-in-ionic-with-active-class/ -->
-    <ion-buttons slot="start">
+    <!--ion-buttons slot="start">
       <ion-menu-button autoHide="false"></ion-menu-button>
     </ion-buttons>
 
     <ion-buttons slot="secondary">
-      <ion-button (click)="logIn()"><ion-icon size="large" name="person-circle-outline"></ion-icon></ion-button>
-    </ion-buttons>
+      <ion-button (click)="logIn()">
+        <ion-icon size="large" name="person-circle-outline"></ion-icon>
+      </ion-button>
+    </ion-buttons-->
 
   </ion-toolbar>
 </ion-header>
 
-<ion-content [fullscreen]="true">
+<ion-content [fullscreen]="true" class="background">
+  <div>
+
+  </div>
   <div id="container">
-    <strong>Ready to create a survey?</strong>
+    <ion-grid>
+      <ion-row>
+        <ion-col>
+          <ion-text color="light">
+            <h1 class="title">Treenote</h1>
+          </ion-text>
+        </ion-col>
+      </ion-row>
+      <ion-row>
+        <ion-col>
+          <ion-button (click)="logIn()" fill="outline" color="danger">Login</ion-button>
+        </ion-col>
+      </ion-row>
+    </ion-grid>
+
   </div>
 </ion-content>

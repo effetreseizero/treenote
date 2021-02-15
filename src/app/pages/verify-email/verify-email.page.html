@@ -1,7 +1,7 @@
 <ion-header [translucent]="true">
   <ion-toolbar>
     <ion-title>
-      Verify Email
+      Verifica Email
     </ion-title>
 
     <!-- Side menu button https://www.positronx.io/add-dynamic-side-menu-in-ionic-with-active-class/ -->
@@ -12,17 +12,17 @@
   </ion-toolbar>
 </ion-header>
 
-<ion-content [fullscreen]="true">
+<ion-content [fullscreen]="true" class="background">
   <div id="container">
 
       <ion-grid>
         <ion-row>
-          <h2>Verify Email</h2>
+          <h2>Verifica Email</h2>
           <p>
-            Please check your email and click on the link to verfiy your email address.
+            Perfavore controlla la tua mail e segui il link di conferma registrazione.
           </p>
           <ion-button type="submit" (click)="authService.SendVerificationMail()" expand="block">
-            Resend Verification Email
+            Invia nuovamnte Email di verifica
           </ion-button>
         </ion-row>
       </ion-grid>

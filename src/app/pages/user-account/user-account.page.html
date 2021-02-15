@@ -1,7 +1,7 @@
 <ion-header [translucent]="true">
   <ion-toolbar>
     <ion-title>
-      User account
+      Dati registrazione
     </ion-title>
 
     <!-- Side menu button https://www.positronx.io/add-dynamic-side-menu-in-ionic-with-active-class/ -->
@@ -12,13 +12,13 @@
   </ion-toolbar>
 </ion-header>
 
-<ion-content [fullscreen]="true">
+<ion-content [fullscreen]="true" class="background">
   <div id="container">
     <ion-row>
       <ion-col> 
         <p>Email: {{user.email}}</p>
-        <p>Name: {{user.displayName}}</p>
-        <p>Email verified: {{user.emailVerified}}</p>
+        <p>Nome: {{user.displayName}}</p>
+        <p>Email verificata: {{user.emailVerified}}</p>
         <p>ID: {{user.uid}}</p>
 
       </ion-col>

@@ -32,14 +32,14 @@ export class SurveysPage implements OnInit {
   {
     
     this.surveysService.read_surveys_collection().subscribe(data => {
-      
+      debugger;
       this.surveyList = data.map(e => {
         return {
           id: e.payload.doc.id,
           isEdit: false,
-          name: e.payload.doc.data()['name'],
-          location: e.payload.doc.data()['location'],
-          notes: e.payload.doc.data()['notes'],
+          nome: e.payload.doc.data()['nome'],
+          localizzazione: e.payload.doc.data()['localizzazione'],
+          note: e.payload.doc.data()['note'],
           deleted: e.payload.doc.data()['deleted'],
           createdTime: e.payload.doc.data()['createdTime'],
         };
@@ -56,9 +56,9 @@ export class SurveysPage implements OnInit {
 
   async createSurvey() {
     const alert = await this.alertController.create({
-      header: 'Crea',
+      header: 'Inserisci segnalazione',
       inputs: [
-        {name: 'name',type: 'text',placeholder: 'Nome'}
+        {name: 'nome',type: 'text',placeholder: 'Nome'}
       ],
       buttons: [
         {text: 'Cancel',role: 'cancel',cssClass: 'secondary',handler: () => {console.log('Confirm Cancel');}
@@ -66,7 +66,7 @@ export class SurveysPage implements OnInit {
         {
           text: 'Ok',
           handler: (data) => {
-            if (data.name.length>0) {
+            if (data.nome.length>0) {
               this.surveysService.create_survey_document(data).then(resp => {
                 this.editSurvey(resp);
               })

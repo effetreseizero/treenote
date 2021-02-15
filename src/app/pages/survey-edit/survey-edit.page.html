@@ -2,7 +2,7 @@
 <ion-header [translucent]="true">
   <ion-toolbar>
     <ion-title>
-      Survey Edit
+      Segnalazione
     </ion-title>
 
     <ion-buttons slot="start">
@@ -16,7 +16,7 @@
  
 </ion-header>
 
-<ion-content  [fullscreen]="true">
+<ion-content  [fullscreen]="true" class="background">
 
 
 
@@ -24,10 +24,6 @@
     <ion-fab-button color="danger" >
       <ion-icon name="add"></ion-icon>
     </ion-fab-button>
-    <ion-fab-list side="bottom">
-      <ion-fab-button (click)="addTree()"><ion-icon name="reorder-three-outline"></ion-icon></ion-fab-button>
-      <ion-fab-button (click)="addTreeVoice()"><ion-icon name="mic-outline"></ion-icon></ion-fab-button>
-    </ion-fab-list>
   </ion-fab>
 
   <ion-slides [options]="slideOptsSurveySlider"  #surveySlider (ionSlideDidChange)="slideChanged($event)">
@@ -37,64 +33,54 @@
       <form [formGroup]="surveyForm" (ngSubmit)="saveSurvey()">
 
         <ion-item>
-          <ion-label type="text" position="floating">Nome</ion-label>
-          <ion-input formControlName="name" ></ion-input>
+          <ion-label type="text" position="floating">Nome segnalazione</ion-label>
+          <ion-input formControlName="nome" ></ion-input>
         </ion-item>
     
         <ion-item>
-          <ion-label type="text" position="floating">Località</ion-label>
-          <ion-input formControlName="location" [class.invalid]="!surveyForm.controls.location.valid && (surveyForm.controls.location.dirty || submitAttempt)"></ion-input>
+          <ion-label type="text" position="floating">Localizzazione</ion-label>
+          <ion-input formControlName="localizzazione" [class.invalid]="!surveyForm.controls.localizzazione.valid && (surveyForm.controls.localizzazione.dirty || submitAttempt)"></ion-input>
         </ion-item>
     
+        <ion-item>
+          <ion-label>Tipo Forestale</ion-label>
+          <ion-select formControlName="tipo_forestale"  okText="Okay" cancelText="Dismiss">
+            <ion-select-option value="C1">Boschi di larice e cembro</ion-select-option>
+            <ion-select-option value="C2">Boschi di abete rosso</ion-select-option>
+            <ion-select-option value="L1">Faggete</ion-select-option>
+            <ion-select-option value="L2">Castagneti</ion-select-option>
+          </ion-select>
+        </ion-item>
+
+        <ion-item>
+          <ion-label>Localizzazione del problema</ion-label>
+          <ion-select formControlName="loc_problema">
+            <ion-select-option value="fusto">Fusto</ion-select-option>
+            <ion-select-option value="chioma">Chioma</ion-select-option>
+          </ion-select>
+        </ion-item>
+
+        <ion-item>
+          <ion-label>Natura dei sintomi</ion-label>
+          <ion-select formControlName="nat_sintomi"  okText="Okay" cancelText="Dismiss">
+            <ion-select-option value="insetti">Insetti</ion-select-option>
+            <ion-select-option value="funghi">Funghi</ion-select-option>
+            <ion-select-option value="altro">Altri parassiti</ion-select-option>
+          </ion-select>
+        </ion-item>        
+
         <ion-item>
           <ion-label type="text" position="floating">Note</ion-label>
-          <ion-input formControlName="notes" ></ion-input>
+          <ion-input formControlName="note" ></ion-input>
         </ion-item>
     
       </form>
     </ion-slide>
 
-    <!--trees slide-->
+    <!--photo slide-->
 
     <ion-slide>
-
-      <div class="container">
-        <div class="scroll" scrollY="true">
-          <!-- //https://www.freakyjolly.com/ionic-firebase-crud-operations/#.X-2m2On0mEJ -->
-          <ion-list>
-            <ion-item *ngFor="let item of treeList ; let i=index">
-              <span *ngIf="!item.isEdit; else elseBlock">
-
-                <ion-label>{{item.specie}} {{item.d1}} {{item.d2}}</ion-label>
-                <ion-button shape="round" slot="end" color="secondary" size="small" (click)="editTree(item)">
-                  <ion-icon size="small" slot="icon-only" name="menu-outline"></ion-icon>
-                </ion-button>
-                <ion-button shape="round" slot="end" color="danger" size="small" (click)="deleteTree(item.id)">
-                  <ion-icon size="small" slot="icon-only" name="trash"></ion-icon>
-                </ion-button>
-                
-
-              </span>
-              <ng-template #elseBlock>
-
-                <ion-label><strong>Specie</strong></ion-label>
-                <ion-input type="text" [(ngModel)]="item.editSpecie"></ion-input>
-                <ion-label><strong>D1</strong></ion-label>
-                <ion-input type="text" [(ngModel)]="item.editD1"></ion-input>
-                <ion-label><strong>D2</strong></ion-label>
-                <ion-input type="text" [(ngModel)]="item.editD2"></ion-input>
-                <ion-button shape="round" color="danger" size="small" (click)="item.isEdit = false">
-                  <ion-icon size="small" slot="icon-only" name="close-outline"></ion-icon>
-                </ion-button>
-                <ion-button shape="round" color="secondary" size="small" (click)="updateTree(item)">
-                  <ion-icon size="small" slot="icon-only" name="checkmark-outline"></ion-icon>
-                </ion-button>
-
-              </ng-template>
-            </ion-item>
-          </ion-list>
-        </div>
-      </div>
+      
     </ion-slide>    
 
     <!--map slide-->
@@ -128,10 +114,10 @@
   <ion-toolbar>
     <ion-segment [(ngModel)]="segmentSelected" (ionChange)="segmentChanged($event)">
       <ion-segment-button value="0">
-        <ion-label>Rilievo</ion-label>
+        <ion-label>Dati</ion-label>
       </ion-segment-button>
       <ion-segment-button value="1">
-        <ion-label>Piante</ion-label>
+        <ion-label>Foto</ion-label>
       </ion-segment-button>
       <ion-segment-button value="2">
         <ion-label>Mappa</ion-label>

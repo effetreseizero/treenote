@@ -1,6 +1,9 @@
 export interface Survey {
-    name: string;
-    location: string;
-    notes: string;
+    nome:string;
+    localizzazione: string;
+    tipo_forestale: string;
+    loc_problema: string;
+    nat_sintomi: string
+    note: string,
     userUID: string;
 }

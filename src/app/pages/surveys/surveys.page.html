@@ -1,15 +1,15 @@
 <ion-header>
   <ion-toolbar>
-    <ion-title>Surveys</ion-title>
+    <ion-title>Segnalazioni</ion-title>
 
     <!-- Side menu button -->
-    <ion-buttons slot="start">
+    <!--ion-buttons slot="start">
       <ion-menu-button autoHide="false"></ion-menu-button>
-    </ion-buttons>
+    </ion-buttons-->
   </ion-toolbar>
 </ion-header>
 
-<ion-content [fullscreen]="true" class="ion-padding">
+<ion-content [fullscreen]="true" class="ion-padding background">
   <ion-fab vertical="top" horizontal="end" edge slot="fixed" (click)="createSurvey()">
     <ion-fab-button color="danger" >
       <ion-icon name="add"></ion-icon>
@@ -19,8 +19,8 @@
   <!-- //https://www.freakyjolly.com/ionic-firebase-crud-operations/#.X-2m2On0mEJ -->
   <ion-card *ngFor="let item of activeSurveys()" color="primary">
     <ion-card-header>
-      <ion-card-title>{{item.name}}</ion-card-title>
-      <ion-card-subtitle>Location: {{item.location}} Date: {{item.createdTime}}}</ion-card-subtitle>
+      <ion-card-title>{{item.nome}}</ion-card-title>
+      <ion-card-subtitle>Localizzazione: {{item.localizzazione}}</ion-card-subtitle>
     </ion-card-header>
     <ion-card-content>
 

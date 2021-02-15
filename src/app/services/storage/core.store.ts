@@ -23,7 +23,7 @@ export class CoreStore extends Store<CoreState> {
 
   constructor() {
     super(new CoreState());
-    this._prefix = 'argos360';
+    this._prefix = 'treenote';
 
     // read initial values from storage
     this.ready$ = Promise.all([
