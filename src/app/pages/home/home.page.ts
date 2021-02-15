@@ -19,8 +19,13 @@ export class HomePage {
     public authService: AuthenticationService
   ) {}
 
+  userLoggedIn = false;
+
   ngOnInit() {
-    
+    this.authService.isLoggedIn.then((resp)=>{
+      debugger;
+      this.userLoggedIn=resp;
+    });
   }
 
   public logIn(): void{
