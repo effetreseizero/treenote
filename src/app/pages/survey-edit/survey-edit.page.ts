@@ -14,8 +14,6 @@ import { FormGroup, Validators, FormBuilder } from '@angular/forms';
 import { SurveysService} from '../../services/firestore/surveys.service';
 import { Survey} from '../../services/firestore/survey';
 
-import * as tf from '@tensorflow/tfjs';
-
 import { AlertController } from '@ionic/angular';
 
 //https://forum.ionicframework.com/t/generating-a-openlayers-map-as-a-component/161373/4
@@ -44,7 +42,6 @@ export class SurveyEditPage implements OnInit {
 
   private surveyId = null;
   private survey=null;
-  private treeList = null;
 
   private random_coords = true;
 
@@ -55,7 +52,9 @@ export class SurveyEditPage implements OnInit {
   @ViewChild('surveySlider', { static: true }) surveySlider: IonSlides;
   slideOptsSurveySlider = {
     initialSlide: 0,  
-    autoHeight: true
+
+    //woth autoHeigth Map is not correctly resized, even if map.autoSize() is called onSlideChanged
+    //autoHeight: true
   };
   segmentSelected = 0;
 
@@ -81,14 +80,6 @@ export class SurveyEditPage implements OnInit {
     private geolocation: Geolocation
   ) {
 
-    /*
-        nome:string;
-        localizzazione: string;
-        tipo_forestale: string;
-        loc_problema: string;
-        nat_sintomi: string
-        userUID: string;
-    */
 
     this.surveyForm = this.formBuilder.group({
       nome: ['', [Validators.required]],
@@ -105,7 +96,6 @@ export class SurveyEditPage implements OnInit {
   ngOnInit() {
 
     this.geolocation.getCurrentPosition().then((resp) => {
-      debugger;
       this.coords.push({
         latitude:resp.coords.latitude,
         longitude:resp.coords.latitude,
@@ -119,7 +109,6 @@ export class SurveyEditPage implements OnInit {
 
     this.geoLocationWatch = this.geolocation.watchPosition({maximumAge: 1000, timeout: 5000, enableHighAccuracy: true});
     this.geoLocationWatch.subscribe((resp) => {
-      debugger;
       this.geoLocationWatchStarted = true;
       if("coords" in resp){
         this.coords.push({
@@ -167,11 +156,9 @@ export class SurveyEditPage implements OnInit {
           //https://ultimatecourses.com/blog/angular-2-form-controls-patch-value-set-value
           this.surveyForm.patchValue(this.survey);
         });
-
-       
-
       }
     });
+
     
   }
 
@@ -212,10 +199,6 @@ export class SurveyEditPage implements OnInit {
   public onMapReady(event) {
     console.log("Map Ready");
     this.map = event;
-    if(this.treeList.length>0){
-      this.olMapComponent.updateTreesLayer(this.treeList);
-      this.olMapComponent.zoomTreesLayer();
-    }
   }
 
 }
