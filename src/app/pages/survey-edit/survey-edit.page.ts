@@ -163,20 +163,38 @@ export class SurveyEditPage implements OnInit {
     
   }
 
-  saveSurvey() {
+  async saveSurvey() {
     this.submitAttempt = true;
 
     if(!this.surveyForm.valid){
         this.surveySlider.slideTo(0);
     } 
     else{
-      if(this.surveyId==0){
-        this.surveysService.create_survey_document(this.surveyForm.value);
-        this.navController.back();
-      }else{
-        this.surveysService.update_surveys_document(this.surveyId, this.surveyForm.value);
-        this.navController.back();
-      }
+      const alert = await this.alertController.create({
+        header: 'Confermi modifiche?',
+        buttons: [
+          {
+            text: 'Cancel',
+            role: 'cancel',
+            cssClass: 'secondary',
+            handler: () => {}
+          },
+          {
+            text: 'Ok',
+            handler: () => {
+              if(this.surveyId==0){
+                this.surveysService.create_survey_document(this.surveyForm.value);
+                this.navController.back();
+              }else{
+                this.surveysService.update_surveys_document(this.surveyId, this.surveyForm.value);
+                this.navController.back();
+              }
+            }
+          }
+        ]
+      });
+  
+      await alert.present();
     }
   }
 

@@ -55,7 +55,6 @@ export class SurveysService {
     data['user_uid']=this.user.uid;
     data['deleted']=false;
     //https://www.nuomiphp.com/eplan/en/2152.html
-    debugger;
     let dt = new Date();
     data['created_time']=dt.getTime();
     data['data_osservazione']= dt.toLocaleDateString();

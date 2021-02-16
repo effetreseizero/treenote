@@ -55,33 +55,6 @@ export class SurveysPage implements OnInit {
 
   async createSurvey() {
     this.router.navigate(['/menu/survey-edit']);
-    /*
-    const alert = await this.alertController.create({
-      header: 'Inserisci segnalazione',
-      inputs: [
-        {name: 'nome',type: 'text',placeholder: 'Nome'}
-      ],
-      buttons: [
-        {text: 'Cancel',role: 'cancel',cssClass: 'secondary',handler: () => {console.log('Confirm Cancel');}
-        },
-        {
-          text: 'Ok',
-          handler: (data) => {
-            if (data.nome.length>0) {
-              this.surveysService.create_survey_document(data).then(resp => {
-                this.editSurvey(resp);
-              })
-              .catch(error => {
-                console.log(error);
-              });
-            }
-            console.log('Confirm Ok');
-          }
-        }
-      ]
-    });
-
-    await alert.present();*/
   }
 
   async deleteSurvey(recordID) {
