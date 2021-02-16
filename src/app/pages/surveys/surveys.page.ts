@@ -54,6 +54,8 @@ export class SurveysPage implements OnInit {
 
 
   async createSurvey() {
+    this.router.navigate(['/menu/survey-edit']);
+    /*
     const alert = await this.alertController.create({
       header: 'Inserisci segnalazione',
       inputs: [
@@ -79,7 +81,7 @@ export class SurveysPage implements OnInit {
       ]
     });
 
-    await alert.present();
+    await alert.present();*/
   }
 
   async deleteSurvey(recordID) {

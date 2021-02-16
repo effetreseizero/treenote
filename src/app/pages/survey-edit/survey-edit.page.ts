@@ -128,7 +128,6 @@ export class SurveyEditPage implements OnInit {
         // data can be a set of coordinates, or an error (if an error occurred).
         // data.coords.latitude
         // data.coords.longitude
-        debugger;
         this.coords = data.coords;
         console.log(this.coords);
       },
@@ -156,6 +155,8 @@ export class SurveyEditPage implements OnInit {
           //https://ultimatecourses.com/blog/angular-2-form-controls-patch-value-set-value
           this.surveyForm.patchValue(this.survey);
         });
+      }else{
+        this.surveyId =0;
       }
     });
 
@@ -169,9 +170,13 @@ export class SurveyEditPage implements OnInit {
         this.surveySlider.slideTo(0);
     } 
     else{
-      debugger;
-      this.surveysService.update_surveys_document(this.surveyId, this.surveyForm.value);
-      this.navController.back();
+      if(this.surveyId==0){
+        this.surveysService.create_survey_document(this.surveyForm.value);
+        this.navController.back();
+      }else{
+        this.surveysService.update_surveys_document(this.surveyId, this.surveyForm.value);
+        this.navController.back();
+      }
     }
   }
 
