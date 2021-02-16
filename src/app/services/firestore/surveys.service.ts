@@ -20,7 +20,6 @@ export class SurveysService {
   user: User = null;
 
   collectionName = 'surveys';
-  subcollectionName = 'trees';
 
   constructor(
     private firestore: AngularFirestore,
@@ -46,17 +45,21 @@ export class SurveysService {
       this.collectionName,
       //https://stackoverflow.com/questions/49026589/angular-firestore-where-query-returning-error-property-does-not-exist-on
       //.where("userUID", "==", firebase.auth().currentUser.uid)
-      ref => ref.where("userUID", "==", this.user.uid)
+      ref => ref.where("user_uid", "==", this.user.uid)
       )
       .snapshotChanges();
 
   }
 
   create_survey_document(data) {
-    data['userUID']=this.user.uid;
+    data['user_uid']=this.user.uid;
     data['deleted']=false;
     //https://www.nuomiphp.com/eplan/en/2152.html
-    data['createdTime']=Date.now();
+    debugger;
+    let dt = new Date();
+    data['created_time']=dt.getTime();
+    data['data_osservazione']= dt.toLocaleDateString();
+    data['ora_osservazione']= dt.toLocaleTimeString();
     return this.firestore.collection(this.collectionName).add(data);
   }
 
@@ -80,38 +83,6 @@ export class SurveysService {
     
   }
 
-  /*
-  TREES SUBCOLLECTION
-  */
-
-  //https://www.freakyjolly.com/ionic-firebase-crud-operations/#.X-mQOulKiEI
-  read_trees_subcollection(surveyID) {
-    console.log("fsurveysService.read_trees_subcollection")
-    return this.firestore.collection(
-      this.collectionName+'/'+surveyID+'/'+this.subcollectionName,
-      //https://stackoverflow.com/questions/49026589/angular-firestore-where-query-returning-error-property-does-not-exist-on
-      //.where("userUID", "==", firebase.auth().currentUser.uid)
-      ref => ref.where("userUID", "==", this.user.uid)
-      )
-      .snapshotChanges();
-  }
-
-  create_tree_document(surveyID,data) {
-    data['userUID']=this.user.uid;
-    data['createdTime']=Date.now();
-    return this.firestore.collection(this.collectionName+'/'+surveyID+'/'+this.subcollectionName).add(data);
-  }
-
   
-
-  update_tree_document(surveyID,treeID, data) {
-    this.firestore.collection(this.collectionName+'/'+surveyID+'/'+this.subcollectionName).doc(treeID).update(data);
-  }
-
-  // https://stackoverflow.com/questions/48708640/delete-a-document-from-subcollection-in-firestore-with-node-js
-  delete_tree_document(surveyID,treeID) {
-    this.firestore.collection(this.collectionName+'/'+surveyID+'/'+this.subcollectionName).doc(treeID).delete();
-    
-  }
   
 }
