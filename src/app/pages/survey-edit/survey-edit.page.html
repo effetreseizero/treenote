@@ -10,7 +10,8 @@
     </ion-buttons>
 
    
-      <ion-toggle slot="end" [(ngModel)]="random_coords" checked>random_coords</ion-toggle>
+    <ion-toggle *ngIf="segmentSelected==2" slot="start" [(ngModel)]="random_coords" checked>random_coords</ion-toggle>
+
     
   </ion-toolbar>
  
@@ -23,6 +24,12 @@
   <ion-fab *ngIf="segmentSelected==1" vertical="top" edge horizontal="end" slot="fixed">
     <ion-fab-button color="danger" >
       <ion-icon name="add"></ion-icon>
+    </ion-fab-button>
+  </ion-fab>
+
+  <ion-fab *ngIf="segmentSelected==2" vertical="top" horizontal="end" edge slot="fixed" (click)="presentToastWithOptions()">
+    <ion-fab-button color="danger" >
+      <ion-icon name="navigate-circle-outline"></ion-icon>
     </ion-fab-button>
   </ion-fab>
 
@@ -86,8 +93,6 @@
     <!--map slide-->
 
     <ion-slide>
-      
-      
       <app-ol-map class="map"
       [center]="[-483281,6904172]"
       [zoom]="8.5"

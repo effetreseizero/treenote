@@ -99,6 +99,7 @@ export class SurveyEditPage implements OnInit {
       this.coords.push({
         latitude:resp.coords.latitude,
         longitude:resp.coords.latitude,
+        altitude: resp.coords.altitude,
         accuracy:resp.coords.accuracy,
         timestamp:resp.timestamp
       });
@@ -114,6 +115,7 @@ export class SurveyEditPage implements OnInit {
         this.coords.push({
           latitude:resp.coords.latitude,
           longitude:resp.coords.longitude,
+          altitude: resp.coords.altitude,
           accuracy:resp.coords.accuracy,
           timestamp:resp.timestamp
         });
@@ -222,6 +224,28 @@ export class SurveyEditPage implements OnInit {
   public onMapReady(event) {
     console.log("Map Ready");
     this.map = event;
+  }
+
+  async presentToastWithOptions() {
+    let gps_data = "";
+    for(let key of Object.keys(this.lastcoords)){
+      gps_data+=key+": "+this.lastcoords[key]+"\n";
+    };
+    const toast = await this.toastController.create({
+      header: 'GPS Data',
+      message: gps_data,
+      position: 'top',
+      buttons: [
+       {
+          text: 'Done',
+          role: 'cancel',
+          handler: () => {
+            
+          }
+        }
+      ]
+    });
+    toast.present();
   }
 
 }
