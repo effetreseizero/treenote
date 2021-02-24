@@ -32,20 +32,17 @@ export class SurveysPage implements OnInit {
   {
     
     this.surveysService.read_surveys_collection().subscribe(data => {
+      debugger;
       this.surveyList = data.map(e => {
-        return {
-          id: e.payload.doc.id,
-          isEdit: false,
-          nome: e.payload.doc.data()['nome'],
-          localizzazione: e.payload.doc.data()['localizzazione'],
-          note: e.payload.doc.data()['note'],
-          deleted: e.payload.doc.data()['deleted'],
-          createdTime: e.payload.doc.data()['createdTime'],
-        };
+        let survey = {};
+        for (let key of Object.keys(e.payload.doc.data())){
+          survey[key] = e.payload.doc.data()[key];
+        }
+        return survey;
       })
       .sort(
         (itemA, itemB) => {
-          return itemB.createdTime - itemA.createdTime;
+          return itemB["createdTime"] - itemA["createdTime"];
         }
       );
 

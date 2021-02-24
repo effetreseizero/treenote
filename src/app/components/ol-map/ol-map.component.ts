@@ -26,6 +26,11 @@ import {register}  from 'ol/proj/proj4';
 import {get as GetProjection} from 'ol/proj'
 import {Extent} from 'ol/extent';
 
+import Style from 'ol/style/Style';
+import Fill from 'ol/style/Fill';
+import Circle from 'ol/style/Circle';
+import Stroke from 'ol/style/Stroke';
+
 @Component({
   selector: 'app-ol-map',
   templateUrl: './ol-map.component.html',
@@ -84,6 +89,44 @@ export class OlMapComponent implements AfterViewInit {
       ]),
     });
   }
+
+
+  setGPSPosition(coords) {
+    debugger;
+    let gpsPoint = new Point([coords.longitude, coords.latitude]).transform('EPSG:4326', this.Map.getView().getProjection());
+    let accuracyFeature = new Feature();
+    accuracyFeature.setGeometry(gpsPoint);
+    
+    let positionFeature = new Feature();
+    positionFeature.setStyle(new Style({
+       image: new Circle({
+         radius: 4,
+         fill: new Fill({
+           color: '#3399CC'
+         }),
+         stroke: new Stroke({
+           color: '#fff',
+           width: 1
+         })
+       })
+     }));
+    positionFeature.setGeometry(gpsPoint);
+    
+ 
+
+    let vectorLayer = new VectorLayer({
+       source: new Vector({
+         features: [accuracyFeature, positionFeature]
+       })
+     });
+
+     //this.Map.addLayer(vectorSource);
+     this.Map.addLayer(vectorLayer);
+     this.Map.getView().fit(vectorLayer.getSource().getExtent());
+     this.Map.getView().setZoom(19);    
+     
+    
+};  
 
   updateTreesLayer(array){
     console.log("OlMapComponent.updateTreesLayer")

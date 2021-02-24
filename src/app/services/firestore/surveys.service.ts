@@ -57,8 +57,6 @@ export class SurveysService {
     //https://www.nuomiphp.com/eplan/en/2152.html
     let dt = new Date();
     data['created_time']=dt.getTime();
-    data['data_osservazione']= dt.toLocaleDateString();
-    data['ora_osservazione']= dt.toLocaleTimeString();
     return this.firestore.collection(this.collectionName).add(data);
   }
 

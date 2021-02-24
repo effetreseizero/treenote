@@ -67,6 +67,9 @@ export class SurveyEditPage implements OnInit {
   @ViewChild('app_ol_map') olMapComponent:OlMapComponent;
   map: Map;
 
+
+ 
+
   constructor(
     private activatedRoute:ActivatedRoute,
     private navController: NavController,
@@ -82,12 +85,18 @@ export class SurveyEditPage implements OnInit {
 
 
     this.surveyForm = this.formBuilder.group({
-      nome: ['', [Validators.required]],
-      localizzazione: ['', [Validators.required]],
-      tipo_forestale: ['', [Validators.required]],
+      data_ora_osservazione: ['', [Validators.required]],
+      localita: ['', [Validators.required]],
+      tipologia: ['', [Validators.required]],
+      identificazione: ['', [Validators.required]],      
+      nome_comune: ['',[]],
       loc_problema: ['', [Validators.required]],
-      nat_sintomi: ['', [Validators.required]],
-      note: ['', ]
+      commenti: ['', []],
+      specie: ['', [Validators.required]],
+      nome_scientifico: ['',[]],
+      sintomi: ['', [Validators.required]],
+      diffusione_perc: ['', [Validators.required]],
+      alberi_morti: ['', [Validators.required]],
     });
 
 
@@ -120,6 +129,7 @@ export class SurveyEditPage implements OnInit {
           timestamp:resp.timestamp
         });
         this.lastcoords = this.coords[this.coords.length-1];
+        this.olMapComponent.setGPSPosition(this.lastcoords);
       }
     });
 
@@ -158,7 +168,22 @@ export class SurveyEditPage implements OnInit {
           this.surveyForm.patchValue(this.survey);
         });
       }else{
+        debugger;
         this.surveyId =0;
+        this.surveyForm.patchValue({
+          data_ora_osservazione: (new Date).toJSON(),
+          localita: "Trento",
+          tipologia: "010_gruppo",
+          identificazione: "010_conifera",      
+          nome_comune: "",
+          loc_problema: "010_chioma",
+          commenti: "",
+          specie: "010_pino",
+          nome_scientifico: "",
+          sintomi: "010_avvizzimento_fogliare",
+          diffusione_perc: "010_minore_20",
+          alberi_morti: "010_si", 
+      });
       }
     });
 
@@ -166,6 +191,7 @@ export class SurveyEditPage implements OnInit {
   }
 
   async saveSurvey() {
+    debugger;
     this.submitAttempt = true;
 
     if(!this.surveyForm.valid){
@@ -185,6 +211,11 @@ export class SurveyEditPage implements OnInit {
             text: 'Ok',
             handler: () => {
               if(this.surveyId==0){
+                debugger;
+                this.surveyForm.value["latitudine"]=(this.lastcoords.latitude);
+                this.surveyForm.value["longitudine"]=this.lastcoords.longitude;
+                this.surveyForm.value["quota"]=this.lastcoords.altitude;
+                this.surveyForm.value["accuratezza"]=this.lastcoords.accuracy;
                 this.surveysService.create_survey_document(this.surveyForm.value);
                 this.navController.back();
               }else{

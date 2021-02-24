@@ -40,47 +40,110 @@
       <form [formGroup]="surveyForm" (ngSubmit)="saveSurvey()">
 
         <ion-item>
-          <ion-label type="text" position="floating">Nome segnalazione</ion-label>
-          <ion-input formControlName="nome" ></ion-input>
+          <ion-label type="text" position="floating">Località</ion-label>
+          <ion-input formControlName="localita" [class.invalid]="!surveyForm.controls.localita.valid && (surveyForm.controls.localita.dirty || submitAttempt)"></ion-input>
         </ion-item>
-    
+
         <ion-item>
-          <ion-label type="text" position="floating">Localizzazione</ion-label>
-          <ion-input formControlName="localizzazione" [class.invalid]="!surveyForm.controls.localizzazione.valid && (surveyForm.controls.localizzazione.dirty || submitAttempt)"></ion-input>
+          <ion-label>Data osservazione</ion-label>
+          <ion-datetime formControlName="data_ora_osservazione" displayFormat="DD/MM/YY HH:mm" ></ion-datetime>
         </ion-item>
-    
+
         <ion-item>
-          <ion-label>Tipo Forestale</ion-label>
-          <ion-select formControlName="tipo_forestale"  okText="Okay" cancelText="Dismiss">
-            <ion-select-option value="C1">Boschi di larice e cembro</ion-select-option>
-            <ion-select-option value="C2">Boschi di abete rosso</ion-select-option>
-            <ion-select-option value="L1">Faggete</ion-select-option>
-            <ion-select-option value="L2">Castagneti</ion-select-option>
+          <ion-label>Tipologia</ion-label>
+          <ion-select formControlName="tipologia"  okText="Ok" cancelText="Annulla">
+            <ion-select-option value="010_gruppo">Gruppo di alberi</ion-select-option>
+            <ion-select-option value="020_intero">Bosco intero </ion-select-option>
           </ion-select>
+        </ion-item>
+    
+        <ion-item>
+          <ion-label>Identificazione</ion-label>
+          <ion-select formControlName="identificazione"  okText="Ok" cancelText="Annulla">
+            <ion-select-option value="010_conifera">Conifera</ion-select-option>
+            <ion-select-option value="020_latifoglia">Latifoglia</ion-select-option>
+          </ion-select>
+        </ion-item>
+
+        <ion-item>
+          <ion-label type="text" position="floating">Nome comune</ion-label>
+          <ion-input formControlName="nome_comune" [class.invalid]="!surveyForm.controls.nome_comune.valid && (surveyForm.controls.nome_comune.dirty || submitAttempt)"></ion-input>
         </ion-item>
 
         <ion-item>
           <ion-label>Localizzazione del problema</ion-label>
-          <ion-select formControlName="loc_problema">
-            <ion-select-option value="fusto">Fusto</ion-select-option>
-            <ion-select-option value="chioma">Chioma</ion-select-option>
+          <ion-select formControlName="loc_problema"  okText="Ok" cancelText="Annulla">
+            <ion-select-option value="010_chioma">Chioma</ion-select-option>
+            <ion-select-option value="020_fusto">Fusto</ion-select-option>
           </ion-select>
+        </ion-item>
+
+        <ion-item>
+          <ion-label type="text" position="floating">Commenti</ion-label>
+          <ion-input formControlName="commenti" [class.invalid]="!surveyForm.controls.commenti.valid && (surveyForm.controls.commenti.dirty || submitAttempt)"></ion-input>
+        </ion-item>
+
+        <ion-item>
+          <ion-label>Specie forestale</ion-label>
+          <ion-select formControlName="specie"  okText="Okay" cancelText="Dismiss">
+            <ion-select-option value='010_pino'>Pino</ion-select-option>
+            <ion-select-option value='020_larice'>Larice</ion-select-option>
+            <ion-select-option value='030_abete_rosso'>Abete rosso</ion-select-option>
+            <ion-select-option value='040_abete_bianco'>Abete bianco</ion-select-option>
+            <ion-select-option value='050_cipresso'>Cipresso</ion-select-option>
+            <ion-select-option value='060_faggio'>Faggio</ion-select-option>
+            <ion-select-option value='070_quercia'>Quercia</ion-select-option>
+            <ion-select-option value='080_castagno'>Castagno</ion-select-option>
+            <ion-select-option value='090_noce'>Noce</ion-select-option>
+            <ion-select-option value='100_salice'>Salice</ion-select-option>
+            <ion-select-option value='110_ontano'>Ontano</ion-select-option>
+            <ion-select-option value='120_frassino'>Frassino</ion-select-option>
+            <ion-select-option value='130_olmo'>Olmo</ion-select-option>
+            <ion-select-option value='140_pioppo'>Pioppo</ion-select-option>
+            <ion-select-option value='150_acero'>Acero</ion-select-option>
+            <ion-select-option value='900_conifere_miste'>Conifere miste</ion-select-option>
+            <ion-select-option value='910_latifoglie_miste'>Latifoglie miste</ion-select-option>
+            <ion-select-option value='930_macchia_mediterranea'>Macchia mediterranea</ion-select-option>
+            <ion-select-option value='999_altro'>Altro</ion-select-option>
+          </ion-select>
+        </ion-item>
+
+        <ion-item>
+          <ion-label type="text" position="floating">Nome scientifico</ion-label>
+          <ion-input formControlName="nome_scientifico" [class.invalid]="!surveyForm.controls.nome_scientifico.valid && (surveyForm.controls.nome_scientifico.dirty || submitAttempt)"></ion-input>
         </ion-item>
 
         <ion-item>
           <ion-label>Natura dei sintomi</ion-label>
-          <ion-select formControlName="nat_sintomi"  okText="Okay" cancelText="Dismiss">
-            <ion-select-option value="insetti">Insetti</ion-select-option>
-            <ion-select-option value="funghi">Funghi</ion-select-option>
-            <ion-select-option value="altro">Altri parassiti</ion-select-option>
+          <ion-select formControlName="sintomi"  okText="Okay" cancelText="Dismiss">
+            <ion-select-option value='010_avvizzimento_fogliare'>Avvizzimento fogliare</ion-select-option>
+            <ion-select-option value='020_ingiallimento_fogliare'>Ingiallimento fogliare</ion-select-option>
+            <ion-select-option value='030_disseccamento_rami'>Disseccamento di rami</ion-select-option>
+            <ion-select-option value='040_microfillia'>Microfillia</ion-select-option>
+            <ion-select-option value='050_emissione_rami_epicormici'>Emissione rami epicormici</ion-select-option>
+            <ion-select-option value='060_fessurazione_longitudinale_corteccia'>Fessurazione longitudinale della corteccia</ion-select-option>
+            <ion-select-option value='070_colatura_mugillaginosa'>Colatura mugillaginosa</ion-select-option>
+            <ion-select-option value='900_altro'>Altro</ion-select-option>
           </ion-select>
-        </ion-item>        
+        </ion-item>
 
         <ion-item>
-          <ion-label type="text" position="floating">Note</ion-label>
-          <ion-input formControlName="note" ></ion-input>
+          <ion-label>Percentuale di diffusione del fenomeno</ion-label>
+          <ion-select formControlName="diffusione_perc"  okText="Ok" cancelText="Annulla">
+            <ion-select-option value='010_minore_20'>meno del 20%</ion-select-option>
+            <ion-select-option value='020_compreso_20_50'>tra il 20% e il  50%</ion-select-option>
+            <ion-select-option value='050_maggiore_50'>maggiore del 50%</ion-select-option>
+          </ion-select>
         </ion-item>
-    
+        
+        <ion-item>
+          <ion-label>Presenza di alberi morti</ion-label>
+          <ion-select formControlName="alberi_morti"  okText="Ok" cancelText="Annulla">
+            <ion-select-option value='010_si'>Si</ion-select-option>
+            <ion-select-option value='020_no'>No</ion-select-option>
+          </ion-select>
+        </ion-item>
+
       </form>
     </ion-slide>
 
