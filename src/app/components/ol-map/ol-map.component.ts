@@ -27,9 +27,11 @@ import {get as GetProjection} from 'ol/proj'
 import {Extent} from 'ol/extent';
 
 import Style from 'ol/style/Style';
+import Icon from 'ol/style/Style';
 import Fill from 'ol/style/Fill';
 import Circle from 'ol/style/Circle';
 import Stroke from 'ol/style/Stroke';
+import VectorSource from 'ol/source/Vector';
 
 @Component({
   selector: 'app-ol-map',
@@ -47,7 +49,7 @@ export class OlMapComponent implements AfterViewInit {
   extent: Extent = [-20026376.39, -20048966.10,20026376.39, 20048966.10];
 
   Map: Map;
-  treesLayer: WebGLPointsLayer;
+  gpsPositionFeature: Feature;
 
   @Output() mapReady = new EventEmitter<Map>();
 
@@ -67,6 +69,9 @@ export class OlMapComponent implements AfterViewInit {
     },500);
   }
 
+  
+
+
   private initMap(): void{
     //proj4.defs("EPSG:3857","+proj=merc +a=6378137 +b=6378137 +lat_ts=0.0 +lon_0=0.0 +x_0=0.0 +y_0=0 +k=1.0 +units=m +nadgrids=@null +wktext  +no_defs");
     //register(proj4)
@@ -78,10 +83,21 @@ export class OlMapComponent implements AfterViewInit {
       zoom: this.zoom,
       //projection: this.projection,
     });
+
+    this.gpsPositionFeature = new Feature();
+    let gpsPositionLayer = new VectorLayer({
+          source: new Vector({
+            features: [this.gpsPositionFeature]
+      })
+    });
+
     this.Map = new Map({
-      layers: [new TileLayer({
-        source: new OSM({})
-      })],
+      layers: [
+        new TileLayer({
+          source: new OSM({})
+        }),
+        gpsPositionLayer
+      ],
       target: document.getElementById('map'),
       view: this.view,
       controls: DefaultControls().extend([
@@ -92,96 +108,48 @@ export class OlMapComponent implements AfterViewInit {
 
 
   setGPSPosition(coords) {
+    
     debugger;
+    /*
+    this.Map.removeLayer(this.gpsPositionLayer);
     let gpsPoint = new Point([coords.longitude, coords.latitude]).transform('EPSG:4326', this.Map.getView().getProjection());
     let accuracyFeature = new Feature();
     accuracyFeature.setGeometry(gpsPoint);
     
     let positionFeature = new Feature();
     positionFeature.setStyle(new Style({
-       image: new Circle({
-         radius: 4,
-         fill: new Fill({
-           color: '#3399CC'
-         }),
-         stroke: new Stroke({
-           color: '#fff',
-           width: 1
-         })
-       })
-     }));
+      image: new Circle({
+        radius: 4,
+        fill: new Fill({
+          color: '#3399CC'
+        }),
+        stroke: new Stroke({
+          color: '#fff',
+          width: 1
+        })
+      })
+    }));
+    
     positionFeature.setGeometry(gpsPoint);
     
- 
-
-    let vectorLayer = new VectorLayer({
-       source: new Vector({
-         features: [accuracyFeature, positionFeature]
-       })
-     });
-
-     //this.Map.addLayer(vectorSource);
-     this.Map.addLayer(vectorLayer);
-     this.Map.getView().fit(vectorLayer.getSource().getExtent());
-     this.Map.getView().setZoom(19);    
-     
-    
-};  
-
-  updateTreesLayer(array){
-    console.log("OlMapComponent.updateTreesLayer")
-    this.Map.removeLayer(this.treesLayer);
-
-    var features = array.map((element,index)=>{
-      return new Feature({
-        geometry: new Point([
-          element.lng,
-          element.lat
-        //https://gis.stackexchange.com/questions/344530/use-point-feature-ol-in-openlayers
-        ]).transform('EPSG:4326', 'EPSG:3857'),
-        i: index,
-        value: index % 2 ? (index % 3 ? 1 : 3) : 2
-      });
+    this.gpsPositionLayer = new VectorLayer({
+      source: new Vector({
+        features: [accuracyFeature, positionFeature]
+      })
     });
-    
-    let circleStyle = {
-      symbol: {
-        symbolType: "circle",
-        size: ["interpolate", ["linear"], ["get", "value"], 1, 5, 2, 10, 3, 15],
-        color: [
-          "interpolate",
-          ["linear"],
-          ["get", "value"],
-          1,
-          "red",
-          2,
-          "green",
-          3,
-          "blue"
-        ],
-        rotateWithView: false
-      }
-    };
-    
-    let vectorSource = new Vector({
-      features: features,
-      format: new GeoJSON()
-    });
-    
-    //https://medium.com/javascript-in-plain-english/how-to-improve-responsiveness-when-displaying-large-data-sets-in-openlayers-maps-dd6d0ad9abdf
-    this.treesLayer = new WebGLPointsLayer({
-      source: vectorSource,
-      style: JSON.parse(JSON.stringify(circleStyle)),
-      disableHitDetection: true
-    });
+    */
+    //this.Map.addLayer(vectorSource);
+    //this.Map.addLayer(this.gpsPositionLayer);
 
-    this.Map.addLayer(this.treesLayer);
-    this.Map.getView().fit(vectorSource.getExtent());
-  }
+    this.gpsPositionFeature.setGeometry(coords ? new Point(fromLonLat([coords.longitude, coords.latitude])) : null);
+   
+    this.Map.getView().animate({zoom: 15, center: fromLonLat([coords.longitude, coords.latitude])});
+    setTimeout(()=>{
+      //https://forum.ionicframework.com/t/generating-a-openlayers-map-as-a-component/161373/4
+      this.Map.updateSize();
+    },500);
+  };  
 
-  zoomTreesLayer(){
-    
-  }
 }
 
 
