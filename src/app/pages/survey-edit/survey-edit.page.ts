@@ -40,7 +40,7 @@ import { coordinateRelationship } from 'ol/extent';
 })
 export class SurveyEditPage implements OnInit {
 
-  private surveyId = null;
+  private surveyId = "0";
   private survey=null;
 
   private random_coords = true;
@@ -62,6 +62,8 @@ export class SurveyEditPage implements OnInit {
   geoLocationWatchStarted = false;
   coords: any = [];
   lastcoords:any = {latitude:0,longitude:0,accuracy:0};
+
+
 
   //https://www.pluralsight.com/guides/using-template-reference-variables-to-interact-with-nested-components
   @ViewChild('app_ol_map') olMapComponent:OlMapComponent;
@@ -129,7 +131,10 @@ export class SurveyEditPage implements OnInit {
           timestamp:resp.timestamp
         });
         this.lastcoords = this.coords[this.coords.length-1];
-        this.olMapComponent.setGPSPosition(this.lastcoords);
+        this.olMapComponent.setGPSPosition(this.lastcoords.longitude,this.lastcoords.latitude);
+        if(this.surveyId=="0"){
+          this.olMapComponent.centerOn(this.lastcoords.longitude,this.lastcoords.latitude);
+        }
       }
     });
 
@@ -155,10 +160,10 @@ export class SurveyEditPage implements OnInit {
     
     //https://ionicacademy.com/pass-data-angular-router-ionic-4/
     this.activatedRoute.queryParams.subscribe(params => {
-      debugger;
       if (this.router.getCurrentNavigation().extras.state) {
 
         this.surveyId = this.router.getCurrentNavigation().extras.state.id;
+
 
         //read survey data
 
@@ -167,13 +172,16 @@ export class SurveyEditPage implements OnInit {
           //https://angular.io/guide/deprecations#ngmodel-with-reactive-forms
           //https://ultimatecourses.com/blog/angular-2-form-controls-patch-value-set-value
           this.surveyForm.patchValue(this.survey);
+
+          this.olMapComponent.setSurveyPosition(this.survey.longitudine,this.survey.latitudine);
+          this.olMapComponent.centerOn(this.survey.longitudine,this.survey.latitudine);
         });
       }else{
-        this.surveyId =0;
+        this.surveyId = "0";
 
         this.surveyForm.patchValue({
           data_ora_osservazione: (new Date).toJSON(),
-          localita: "Trento",
+          /*localita: "Trento",
           tipologia: "010_gruppo",
           identificazione: "010_conifera",      
           nome_comune: "",
@@ -183,16 +191,42 @@ export class SurveyEditPage implements OnInit {
           nome_scientifico: "",
           sintomi: "010_avvizzimento_fogliare",
           diffusione_perc: "010_minore_20",
-          alberi_morti: "010_si", 
-      });
+          alberi_morti: "010_si", */
+        });
       }
     });
 
     
   }
 
+
+  async cancelEdit() {
+    this.submitAttempt = true;
+
+  
+    const alert = await this.alertController.create({
+      header: 'Sei sicuro di voler annullare le modifiche?',
+      buttons: [
+        {
+          text: 'Cancel',
+          role: 'cancel',
+          cssClass: 'secondary',
+          handler: () => {}
+        },
+        {
+          text: 'Ok',
+          handler: () => {
+            this.navController.back();
+          }
+        }
+      ]
+    });
+
+    await alert.present();
+    
+  }
+
   async saveSurvey() {
-    debugger;
     this.submitAttempt = true;
 
     if(!this.surveyForm.valid){
@@ -211,8 +245,7 @@ export class SurveyEditPage implements OnInit {
           {
             text: 'Ok',
             handler: () => {
-              if(this.surveyId==0){
-                debugger;
+              if(this.surveyId=="0"){
                 this.surveyForm.value["latitudine"]=(this.lastcoords.latitude);
                 this.surveyForm.value["longitudine"]=this.lastcoords.longitude;
                 this.surveyForm.value["quota"]=this.lastcoords.altitude;

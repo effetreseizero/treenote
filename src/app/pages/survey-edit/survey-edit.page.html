@@ -6,12 +6,12 @@
     </ion-title>
 
     <ion-buttons slot="start">
-      <ion-button (click)="saveSurvey()"><ion-icon size="large" name="checkmark-circle-outline"></ion-icon></ion-button>
+      <ion-button (click)="cancelEdit()"><ion-icon size="large" name="close-circle-outline"></ion-icon></ion-button>
     </ion-buttons>
 
-   
-    <ion-toggle *ngIf="segmentSelected==2" slot="start" [(ngModel)]="random_coords" checked>random_coords</ion-toggle>
-
+    <ion-buttons slot="end">
+      <ion-button (click)="saveSurvey()"><ion-icon size="large" name="checkmark-circle-outline"></ion-icon></ion-button>
+    </ion-buttons>
     
   </ion-toolbar>
  
@@ -21,13 +21,13 @@
 
  
 
-  <ion-fab *ngIf="segmentSelected==1" vertical="top" edge horizontal="end" slot="fixed">
+  <ion-fab *ngIf="segmentSelected==1" vertical="top"  horizontal="end" slot="fixed">
     <ion-fab-button color="danger" >
       <ion-icon name="add"></ion-icon>
     </ion-fab-button>
   </ion-fab>
 
-  <ion-fab *ngIf="segmentSelected==2" vertical="top" horizontal="end" edge slot="fixed" (click)="presentToastWithOptions()">
+  <ion-fab *ngIf="segmentSelected==2" vertical="top" horizontal="end"  slot="fixed" (click)="presentToastWithOptions()">
     <ion-fab-button color="danger" >
       <ion-icon name="navigate-circle-outline"></ion-icon>
     </ion-fab-button>
@@ -36,7 +36,7 @@
   <ion-slides [options]="slideOptsSurveySlider"  #surveySlider (ionSlideDidChange)="slideChanged($event)">
     <!--survey slide-->
     <ion-slide>
-      <p>ID: {{surveyId}}</p>
+      <!--p>ID: {{surveyId}}</p-->
       <form [formGroup]="surveyForm" (ngSubmit)="saveSurvey()">
 
         <ion-item>
@@ -46,12 +46,12 @@
 
         <ion-item>
           <ion-label>Data osservazione</ion-label>
-          <ion-datetime formControlName="data_ora_osservazione" displayFormat="DD/MM/YY HH:mm" ></ion-datetime>
+          <ion-datetime formControlName="data_ora_osservazione" displayFormat="DD/MM/YY HH:mm" [class.invalid]="!surveyForm.controls.data_ora_osservazione.valid && (surveyForm.controls.data_ora_osservazione.dirty || submitAttempt)"></ion-datetime>
         </ion-item>
 
         <ion-item>
           <ion-label>Tipologia</ion-label>
-          <ion-select formControlName="tipologia"  okText="Ok" cancelText="Annulla">
+          <ion-select formControlName="tipologia"  okText="Ok" cancelText="Annulla" [class.invalid]="!surveyForm.controls.tipologia.valid && (surveyForm.controls.tipologia.dirty || submitAttempt)">
             <ion-select-option value="010_gruppo">Gruppo di alberi</ion-select-option>
             <ion-select-option value="020_intero">Bosco intero </ion-select-option>
           </ion-select>
@@ -59,7 +59,7 @@
     
         <ion-item>
           <ion-label>Identificazione</ion-label>
-          <ion-select formControlName="identificazione"  okText="Ok" cancelText="Annulla">
+          <ion-select formControlName="identificazione"  okText="Ok" cancelText="Annulla" [class.invalid]="!surveyForm.controls.identificazione.valid && (surveyForm.controls.identificazione.dirty || submitAttempt)">
             <ion-select-option value="010_conifera">Conifera</ion-select-option>
             <ion-select-option value="020_latifoglia">Latifoglia</ion-select-option>
           </ion-select>
@@ -72,7 +72,7 @@
 
         <ion-item>
           <ion-label>Localizzazione del problema</ion-label>
-          <ion-select formControlName="loc_problema"  okText="Ok" cancelText="Annulla">
+          <ion-select formControlName="loc_problema"  okText="Ok" cancelText="Annulla" [class.invalid]="!surveyForm.controls.loc_problema.valid && (surveyForm.controls.loc_problema.dirty || submitAttempt)">
             <ion-select-option value="010_chioma">Chioma</ion-select-option>
             <ion-select-option value="020_fusto">Fusto</ion-select-option>
           </ion-select>
@@ -85,7 +85,7 @@
 
         <ion-item>
           <ion-label>Specie forestale</ion-label>
-          <ion-select formControlName="specie"  okText="Okay" cancelText="Dismiss">
+          <ion-select formControlName="specie"  okText="Okay" cancelText="Dismiss" [class.invalid]="!surveyForm.controls.specie.valid && (surveyForm.controls.specie.dirty || submitAttempt)">
             <ion-select-option value='010_pino'>Pino</ion-select-option>
             <ion-select-option value='020_larice'>Larice</ion-select-option>
             <ion-select-option value='030_abete_rosso'>Abete rosso</ion-select-option>
@@ -115,7 +115,7 @@
 
         <ion-item>
           <ion-label>Natura dei sintomi</ion-label>
-          <ion-select formControlName="sintomi"  okText="Okay" cancelText="Dismiss">
+          <ion-select formControlName="sintomi"  okText="Okay" cancelText="Dismiss" [class.invalid]="!surveyForm.controls.sintomi.valid && (surveyForm.controls.sintomi.dirty || submitAttempt)">
             <ion-select-option value='010_avvizzimento_fogliare'>Avvizzimento fogliare</ion-select-option>
             <ion-select-option value='020_ingiallimento_fogliare'>Ingiallimento fogliare</ion-select-option>
             <ion-select-option value='030_disseccamento_rami'>Disseccamento di rami</ion-select-option>
@@ -129,7 +129,7 @@
 
         <ion-item>
           <ion-label>Percentuale di diffusione del fenomeno</ion-label>
-          <ion-select formControlName="diffusione_perc"  okText="Ok" cancelText="Annulla">
+          <ion-select formControlName="diffusione_perc"  okText="Ok" cancelText="Annulla" [class.invalid]="!surveyForm.controls.diffusione_perc.valid && (surveyForm.controls.diffusione_perc.dirty || submitAttempt)">
             <ion-select-option value='010_minore_20'>meno del 20%</ion-select-option>
             <ion-select-option value='020_compreso_20_50'>tra il 20% e il  50%</ion-select-option>
             <ion-select-option value='050_maggiore_50'>maggiore del 50%</ion-select-option>
@@ -138,7 +138,7 @@
         
         <ion-item>
           <ion-label>Presenza di alberi morti</ion-label>
-          <ion-select formControlName="alberi_morti"  okText="Ok" cancelText="Annulla">
+          <ion-select formControlName="alberi_morti"  okText="Ok" cancelText="Annulla" [class.invalid]="!surveyForm.controls.alberi_morti.valid && (surveyForm.controls.alberi_morti.dirty || submitAttempt)">
             <ion-select-option value='010_si'>Si</ion-select-option>
             <ion-select-option value='020_no'>No</ion-select-option>
           </ion-select>
@@ -157,8 +157,8 @@
 
     <ion-slide>
       <app-ol-map class="map"
-      [center]="[-483281,6904172]"
-      [zoom]="8.5"
+      [center]="[12.5,42]"
+      [zoom]="5.5"
       (mapReady)="onMapReady($event)"
       #app_ol_map
     ></app-ol-map>

@@ -27,7 +27,7 @@ import {get as GetProjection} from 'ol/proj'
 import {Extent} from 'ol/extent';
 
 import Style from 'ol/style/Style';
-import Icon from 'ol/style/Style';
+import Icon from 'ol/style/Icon';
 import Fill from 'ol/style/Fill';
 import Circle from 'ol/style/Circle';
 import Stroke from 'ol/style/Stroke';
@@ -50,6 +50,7 @@ export class OlMapComponent implements AfterViewInit {
 
   Map: Map;
   gpsPositionFeature: Feature;
+  surveyPositionFeature: Feature;
 
   @Output() mapReady = new EventEmitter<Map>();
 
@@ -79,15 +80,43 @@ export class OlMapComponent implements AfterViewInit {
     //this.projection.setExtent(this.extent);
 
     this.view = new View({
-      center: this.center,
+      center: fromLonLat(this.center),
       zoom: this.zoom,
       //projection: this.projection,
     });
 
     this.gpsPositionFeature = new Feature();
     let gpsPositionLayer = new VectorLayer({
+      source: new Vector({
+        features: [this.gpsPositionFeature]
+      })
+    });
+
+    this.surveyPositionFeature = new Feature();
+    this.surveyPositionFeature.setStyle(new Style({
+      image: new Circle({
+        radius: 10,
+        fill: new Fill({
+          color: '#AA0000'
+        }),
+        stroke: new Stroke({
+          color: '#fff',
+          width: 2
+        })
+      })
+    }));
+    /*var iconStyle = new Style({
+      image: new Icon({ 
+        anchor: [0.5, 46],
+        src: 'https://webgis.provincia.belluno.it/assets/js/OpenLayers-2.13/img/marker-green.png'
+        // src: '../../assets/img/marker/marker-blue.png'
+      })
+    });
+    this.surveyPositionFeature.setStyle(iconStyle);*/
+
+    let surveyPositionLayer = new VectorLayer({
           source: new Vector({
-            features: [this.gpsPositionFeature]
+            features: [this.surveyPositionFeature]
       })
     });
 
@@ -96,7 +125,8 @@ export class OlMapComponent implements AfterViewInit {
         new TileLayer({
           source: new OSM({})
         }),
-        gpsPositionLayer
+        gpsPositionLayer,
+        surveyPositionLayer
       ],
       target: document.getElementById('map'),
       view: this.view,
@@ -107,7 +137,7 @@ export class OlMapComponent implements AfterViewInit {
   }
 
 
-  setGPSPosition(coords) {
+  setGPSPosition(longitude,latitude) {
     
     /*
     this.Map.removeLayer(this.gpsPositionLayer);
@@ -140,14 +170,33 @@ export class OlMapComponent implements AfterViewInit {
     //this.Map.addLayer(vectorSource);
     //this.Map.addLayer(this.gpsPositionLayer);
 
-    this.gpsPositionFeature.setGeometry(coords ? new Point(fromLonLat([coords.longitude, coords.latitude])) : null);
+    this.gpsPositionFeature.setGeometry(longitude&&latitude ? new Point(fromLonLat([longitude, latitude])) : null);
    
-    this.Map.getView().animate({zoom: 15, center: fromLonLat([coords.longitude, coords.latitude])});
     setTimeout(()=>{
       //https://forum.ionicframework.com/t/generating-a-openlayers-map-as-a-component/161373/4
       this.Map.updateSize();
     },500);
   };  
+
+  centerOn(longitude,latitude) {
+    this.Map.getView().animate({zoom: 13, center: fromLonLat([longitude,latitude])});
+    setTimeout(()=>{
+      //https://forum.ionicframework.com/t/generating-a-openlayers-map-as-a-component/161373/4
+      this.Map.updateSize();
+    },500);
+  }
+
+  setSurveyPosition(longitude,latitude) {
+    
+    this.surveyPositionFeature.setGeometry(longitude&&latitude ? new Point(fromLonLat([longitude, latitude])) : null);
+   
+    setTimeout(()=>{
+      //https://forum.ionicframework.com/t/generating-a-openlayers-map-as-a-component/161373/4
+      this.Map.updateSize();
+    },500);
+
+  }
+  
 
 }
 
