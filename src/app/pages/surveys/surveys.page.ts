@@ -32,9 +32,11 @@ export class SurveysPage implements OnInit {
   {
     
     this.surveysService.read_surveys_collection().subscribe(data => {
-      debugger;
       this.surveyList = data.map(e => {
         let survey = {};
+        //add id of syrvey
+        survey["id"]=e.payload.doc.id;
+        //add all other properties
         for (let key of Object.keys(e.payload.doc.data())){
           survey[key] = e.payload.doc.data()[key];
         }
@@ -54,7 +56,7 @@ export class SurveysPage implements OnInit {
     this.router.navigate(['/menu/survey-edit']);
   }
 
-  async deleteSurvey(recordID) {
+  async deleteSurvey(recordId) {
     const alert = await this.alertController.create({
       header: 'Sei sicuro?',
       inputs: [
@@ -65,7 +67,7 @@ export class SurveysPage implements OnInit {
         {
           text: 'Ok',
           handler: () => {
-            this.surveysService.delete_surveys_document(recordID);
+            this.surveysService.delete_surveys_document(recordId);
             console.log('Confirm Ok');
           }
         }
@@ -74,11 +76,11 @@ export class SurveysPage implements OnInit {
     await alert.present();
   }
 
-  editSurvey(record){
+  editSurvey(recordId){
     //https://ionicacademy.com/pass-data-angular-router-ionic-4/
     let navigationExtras: NavigationExtras = {
       state: {
-        id: record.id 
+        id: recordId 
       }
     };
       this.router.navigate(['/menu/survey-edit'],navigationExtras);

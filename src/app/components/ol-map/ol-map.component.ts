@@ -109,7 +109,6 @@ export class OlMapComponent implements AfterViewInit {
 
   setGPSPosition(coords) {
     
-    debugger;
     /*
     this.Map.removeLayer(this.gpsPositionLayer);
     let gpsPoint = new Point([coords.longitude, coords.latitude]).transform('EPSG:4326', this.Map.getView().getProjection());

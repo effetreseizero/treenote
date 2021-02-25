@@ -155,6 +155,7 @@ export class SurveyEditPage implements OnInit {
     
     //https://ionicacademy.com/pass-data-angular-router-ionic-4/
     this.activatedRoute.queryParams.subscribe(params => {
+      debugger;
       if (this.router.getCurrentNavigation().extras.state) {
 
         this.surveyId = this.router.getCurrentNavigation().extras.state.id;
@@ -168,8 +169,8 @@ export class SurveyEditPage implements OnInit {
           this.surveyForm.patchValue(this.survey);
         });
       }else{
-        debugger;
         this.surveyId =0;
+
         this.surveyForm.patchValue({
           data_ora_osservazione: (new Date).toJSON(),
           localita: "Trento",
