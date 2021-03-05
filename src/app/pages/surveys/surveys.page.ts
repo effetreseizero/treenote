@@ -40,14 +40,25 @@ export class SurveysPage implements OnInit {
         for (let key of Object.keys(e.payload.doc.data())){
           survey[key] = e.payload.doc.data()[key];
         }
+
+        //https://stackoverflow.com/questions/2388115/get-locale-short-date-format-using-javascript/31663241
+        var date = new Date(survey["data_ora_osservazione"]);
+        var options = {
+            year: "numeric",
+            month: "2-digit",
+            day: "numeric",
+            hour: "numeric",
+            minute:"numeric"
+        };
+        
+        survey["short_date"] =  date.toLocaleDateString("it", options) //en is language option, you may specify..
         return survey;
       })
       .sort(
         (itemA, itemB) => {
-          return itemB["createdTime"] - itemA["createdTime"];
+          return itemB["created_time"] - itemA["created_time"];
         }
       );
-
     });
   }
 
