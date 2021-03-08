@@ -38,7 +38,7 @@ export class SurveysService {
   }
 
   //https://www.freakyjolly.com/ionic-firebase-crud-operations/#.X-mQOulKiEI
-  read_surveys_collection() {
+  read_user_surveys_collection() {
     console.log("fsurveysService.read_surveys_collection")
 
     return this.firestore.collection(
@@ -48,6 +48,13 @@ export class SurveysService {
       ref => ref.where("user_uid", "==", this.user.uid)
       )
       .snapshotChanges();
+
+  }
+
+  read_all_surveys_collection() {
+    console.log("fsurveysService.read_all_surveys_collection")
+
+    return this.firestore.collection(this.collectionName).snapshotChanges();
 
   }
 

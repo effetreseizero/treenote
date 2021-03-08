@@ -25,7 +25,6 @@ export class UserAccountPage implements OnInit {
   }
 
   ngOnInit() {
-
     this.user=null;
     this.coreFacade.getUser().subscribe((user)=>{
       this.user=user;

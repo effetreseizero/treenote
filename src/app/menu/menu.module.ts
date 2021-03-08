@@ -49,6 +49,11 @@ const routes: Routes = [
         canActivate: [AuthGuard]
       },
       {
+        path: 'surveys-manager',
+        loadChildren: () => import('../pages/surveys-manager/surveys-manager.module').then( m => m.SurveysManagerPageModule),
+        canActivate: [AuthGuard]
+      },
+      {
         path: 'survey-edit',
         loadChildren: () => import('../pages/survey-edit/survey-edit.module').then( m => m.SurveyEditPageModule),
         canActivate: [AuthGuard]

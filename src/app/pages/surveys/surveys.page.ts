@@ -31,7 +31,7 @@ export class SurveysPage implements OnInit {
   ngOnInit()
   {
     
-    this.surveysService.read_surveys_collection().subscribe(data => {
+    this.surveysService.read_user_surveys_collection().subscribe(data => {
       this.surveyList = data.map(e => {
         let survey = {};
         //add id of syrvey

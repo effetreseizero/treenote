@@ -26,7 +26,18 @@ export class AuthenticationService {
   ) {
     this.ngFireAuth.authState.subscribe(user => {
       if (user) {
-        this.userData = this.coreStore.setUser(user);
+        this.userData = user;
+        this.userData.isAdmin = false;
+        firebase
+              .firestore()
+              .doc(`/roles/${user.uid}`)
+              .get()
+              .then(userRoleSnapshot => {
+                this.userData.isAdmin = userRoleSnapshot.data().isAdmin;
+              }).finally(()=>{
+                this.coreStore.setUser(this.userData);
+              });
+        
         /*
         localStorage.setItem('user', JSON.stringify(this.userData));
         JSON.parse(localStorage.getItem('user'));
@@ -92,15 +103,15 @@ export class AuthenticationService {
     return this.ngFireAuth.signInWithPopup(new firebase.auth.GoogleAuthProvider);
   }
 
-    // Sign-out 
-    SignOut() {
-      return this.ngFireAuth.signOut().then(() => {
-        this.coreStore.removeUser().then((user)=>{
-          this.router.navigate(['/menu/home']);    
-        });      
-      })
-    }
-  
+  // Sign-out 
+  SignOut() {
+    return this.ngFireAuth.signOut().then(() => {
+      this.coreStore.removeUser().then((user)=>{
+        this.router.navigate(['/menu/home']);    
+      });      
+    })
+  }
+
   /*
   // Auth providers
   AuthLogin(provider) {

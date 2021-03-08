@@ -40,7 +40,7 @@ export class LoginPage implements OnInit {
     this.authService.GoogleAuth()
     .then((res) => {
       if(res.user) {
-        this.router.navigate(['/menu/surveys']);          
+        this.router.navigate(['/menu/home']);          
       } else {
         window.alert('Login failed')
         return false;

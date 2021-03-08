@@ -22,6 +22,10 @@ export class MenuPage implements OnInit {
       path: '/menu/surveys'
     },
     {
+      name: 'Manager',
+      path: '/menu/surveys-manager'
+    },
+    {
       name: 'Contattaci',
       path: '/menu/contact'
     },
