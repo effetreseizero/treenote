@@ -4,7 +4,7 @@ import { CoreState } from './core.state';
 import { CoreStore } from './core.store';
 
 import { Injectable } from '@angular/core';
-import { Observable } from 'rxjs';
+import { Observable, BehaviorSubject } from 'rxjs';
 
 import {User} from './user';
 
@@ -12,8 +12,13 @@ import {User} from './user';
     providedIn: 'root'
 })
 export class CoreFacade {
+
+
     
-  constructor(private _store: CoreStore) { }
+  constructor(private _store: CoreStore) {
+
+  }
+
 
   public getUser(): Observable<User> {
     return this._store.select(x=>x.user);

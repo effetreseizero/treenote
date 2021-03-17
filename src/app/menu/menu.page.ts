@@ -3,6 +3,10 @@ import { Component, OnInit } from '@angular/core';
 // https://www.positronx.io/add-dynamic-side-menu-in-ionic-with-active-class/
 import { Router, RouterEvent } from '@angular/router';
 
+import {CoreFacade} from "../services/storage/core.facade"
+import {User} from 'src/app/services/storage/user';
+
+
 
 @Component({
   selector: 'app-menu',
@@ -11,6 +15,8 @@ import { Router, RouterEvent } from '@angular/router';
 })
 export class MenuPage implements OnInit {
   activePath = '';
+
+  user: User;
 
   pages = [
     {
@@ -22,16 +28,15 @@ export class MenuPage implements OnInit {
       path: '/menu/surveys'
     },
     {
-      name: 'Manager',
-      path: '/menu/surveys-manager'
-    },
-    {
       name: 'Contattaci',
       path: '/menu/contact'
     },
   ]
 
-  constructor(private router: Router) {
+  constructor(
+      private router: Router,
+      private coreFacade: CoreFacade
+    ) {
     // https://www.positronx.io/add-dynamic-side-menu-in-ionic-with-active-class/
     this.router.events.subscribe((event: RouterEvent) => {
       this.activePath = event.url
@@ -39,6 +44,20 @@ export class MenuPage implements OnInit {
   }
 
   ngOnInit() {
+    this.coreFacade.getUser().subscribe((user)=>{
+      this.user=user;
+      if(this.user==undefined){
+        this.pages = this.pages.filter((page)=>{
+          return page.name !="Manager";
+        });
+      }
+      else if(this.user.isAdmin){
+        this.pages.push({
+          name: 'Manager',
+          path: '/menu/surveys-manager'
+        });
+      }
+    });
   }
 
 }

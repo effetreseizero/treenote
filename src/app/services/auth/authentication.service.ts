@@ -82,6 +82,7 @@ export class AuthenticationService {
     })
   }
 
+  /* MOVED ON CORESTORE FACADE
   // Returns true when user is looged in
   get isLoggedIn(): Promise<boolean> {
     return this.coreStore.getUser().then((user)=>{
@@ -97,6 +98,14 @@ export class AuthenticationService {
     });    
   }
 
+  // Returns true when user is admin
+  get isAdmin(): Promise<boolean>{
+    return this.coreStore.getUser().then((user)=>{
+      return user.isAdmin;
+    });    
+  }
+  */
+ 
   // Sign in with Gmail
   GoogleAuth() {
     //https://github.com/angular/angularfire/blob/master/docs/auth/getting-started.md

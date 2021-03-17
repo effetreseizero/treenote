@@ -10,8 +10,8 @@
     </ion-buttons>
 
     <ion-buttons slot="secondary">
-      <ion-button *ngIf="!userLoggedIn" (click)="logIn()" fill="outline" color="danger">Partecipa</ion-button>
-      <ion-button *ngIf="userLoggedIn" (click)="logIn()">
+      <ion-button *ngIf="!(user!=null)" (click)="logIn()" fill="outline" color="danger">Partecipa</ion-button>
+      <ion-button *ngIf="(user!=null)" (click)="userAccout()">
         <ion-icon size="large" name="person-circle-outline"></ion-icon>
       </ion-button>
     </ion-buttons>

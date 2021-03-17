@@ -13,6 +13,12 @@
             {{page.name}}
           </ion-item>
         </ion-menu-toggle>
+        <!--ion-menu-toggle auto-hide="false" *ngIf="((user!=null)&&user.isAdmin)">
+          <ion-item [routerLink]="" routerDirection="root" [class.active-menu]="">
+            Manager
+          </ion-item>
+        </ion-menu-toggle-->
+        
       </ion-list>
     </ion-content>
   </ion-menu>
