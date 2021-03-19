@@ -21,6 +21,7 @@
         <h2>{{item.localita}}</h2>
         <h3>{{item.short_date}}</h3>
       </ion-label>
+      <ion-toggle slot="end" name="public" color="warning" [(ngModel)]="item.public" (ngModelChange)="publicChange($event, item)"></ion-toggle>
       
     </ion-item>
     

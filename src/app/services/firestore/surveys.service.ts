@@ -61,6 +61,7 @@ export class SurveysService {
   create_survey_document(data) {
     data['user_uid']=this.user.uid;
     data['deleted']=false;
+    data['public']=false;
     //https://www.nuomiphp.com/eplan/en/2152.html
     let dt = new Date();
     data['created_time']=dt.getTime();

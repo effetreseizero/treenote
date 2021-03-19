@@ -56,4 +56,13 @@ export class SurveysManagerPage implements OnInit {
     });
   }
 
+  publicChange(e,item){
+    debugger;
+    let data = {
+      public: item.public
+    }
+
+    this.surveysService.update_surveys_document(item.id, data);
+  }
+
 }
