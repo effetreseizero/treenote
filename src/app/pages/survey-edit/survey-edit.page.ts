@@ -16,6 +16,9 @@ import { Survey} from '../../services/firestore/survey';
 
 import { AlertController } from '@ionic/angular';
 
+//https://ionicframework.com/docs/angular/your-first-app/2-taking-photos
+import { PhotoService } from '../../services/photo/photo.service';
+
 
 //https://medium.com/runic-software/a-simple-guide-to-openlayers-in-angular-b10f6feb3df1
 import {OlMapComponent} from '../../components/ol-map/ol-map.component';
@@ -89,7 +92,8 @@ export class SurveyEditPage implements OnInit {
     private surveysService:SurveysService,
     private alertController:AlertController,
     private toastController:ToastController,
-    private geolocation: Geolocation
+    private geolocation: Geolocation,
+    public photoService: PhotoService
   ) {
 
 
@@ -134,7 +138,7 @@ export class SurveyEditPage implements OnInit {
           
           surveyPositionFeature.setGeometry(this.survey.longitudine&&this.survey.latitudine ? new Point(fromLonLat([this.survey.longitudine, this.survey.latitudine])) : null);
           this.surveyPositionVectorSource.addFeature(surveyPositionFeature)
-          
+
           this.olMapComponent.centerOn(this.survey.longitudine,this.survey.latitudine);
         });
       }else{
@@ -257,6 +261,12 @@ export class SurveyEditPage implements OnInit {
   async slideChanged($event) {
     this.segmentSelected = await this.surveySlider.getActiveIndex();
   }
+
+
+  addPhotoToGallery() {
+    this.photoService.addNewToGallery();
+  }
+
 
   /**
    * GPS detail data toat

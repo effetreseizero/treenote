@@ -21,7 +21,7 @@
 
  
 
-  <ion-fab *ngIf="segmentSelected==1" vertical="top"  horizontal="end" slot="fixed">
+  <ion-fab *ngIf="segmentSelected==1" vertical="top"  horizontal="end" slot="fixed" (click)="addPhotoToGallery()">
     <ion-fab-button color="danger" >
       <ion-icon name="add"></ion-icon>
     </ion-fab-button>
@@ -150,6 +150,15 @@
     <!--photo slide-->
 
     <ion-slide>
+
+      <ion-grid>
+        <ion-row>
+        <ion-col size="12" 
+          *ngFor="let photo of photoService.photos; index as position">
+            <ion-img [src]="photo.webviewPath"></ion-img>
+        </ion-col>
+        </ion-row>
+      </ion-grid>
       
     </ion-slide>    
 
@@ -163,19 +172,6 @@
       #app_ol_map
     ></app-ol-map>
       
-      <!--ion-card>
-        
-        <ion-card-header>
-          <ion-icon name="navigate-circle-outline" slot="start"></ion-icon>
-          <ion-label>{{coords.length}}</ion-label>
-          <ion-icon name="menu-outline" slot="start"></ion-icon>
-        </ion-card-header>
-        <ion-card-content>
-          {{lastcoords.latitude}}
-          {{lastcoords.longitude}}
-          {{lastcoords.timestamp}}
-        </ion-card-content>
-      </ion-card-->
     </ion-slide>
 
   </ion-slides>
