@@ -16,19 +16,25 @@ import { Survey} from '../../services/firestore/survey';
 
 import { AlertController } from '@ionic/angular';
 
-//https://forum.ionicframework.com/t/generating-a-openlayers-map-as-a-component/161373/4
-
-import Map from 'ol/Map';
 
 //https://medium.com/runic-software/a-simple-guide-to-openlayers-in-angular-b10f6feb3df1
 import {OlMapComponent} from '../../components/ol-map/ol-map.component';
+
+//https://forum.ionicframework.com/t/generating-a-openlayers-map-as-a-component/161373/4
+
+import {Map,View, Feature} from "ol";
+import {Vector as VectorSource ,OSM,Cluster} from "ol/source";
+import {Style,Icon,Fill,Circle,Stroke, Text as TextStyle, RegularShape} from 'ol/style';
+import {Tile,WebGLPoints,Layer, Vector as VectorLayer} from "ol/layer";
+import {Point} from "ol/geom";
+import { fromLonLat } from "ol/proj";
 
 //https://dev.to/saviosantos0808/real-time-localization-using-ionic-framework-and-google-spreadsheets-35pe
 import { Geolocation } from '@ionic-native/geolocation/ngx';
 
 //https://firebase.google.com/docs/firestore/solutions/geoqueries
 import{ geohashForLocation } from 'geofire-common';
-import { coordinateRelationship } from 'ol/extent';
+import{ coordinateRelationship } from 'ol/extent';
 
 
 
@@ -43,8 +49,6 @@ export class SurveyEditPage implements OnInit {
   private surveyId = "0";
   private survey=null;
 
-  private random_coords = true;
-
   public surveyForm: FormGroup;
   public submitAttempt: boolean = false;
 
@@ -58,17 +62,22 @@ export class SurveyEditPage implements OnInit {
   };
   segmentSelected = 0;
 
-  geoLocationWatch:any;
-  geoLocationWatchStarted = false;
-  coords: any = [];
-  lastcoords:any = {latitude:0,longitude:0,accuracy:0};
-
-
-
   //https://www.pluralsight.com/guides/using-template-reference-variables-to-interact-with-nested-components
   @ViewChild('app_ol_map') olMapComponent:OlMapComponent;
   map: Map;
 
+  surveyPositionVectorSource= new VectorSource({
+    features: []
+  });
+
+  gpsPositionVectorSource= new VectorSource({
+    features: []
+  });
+
+  geoLocationWatch:any;
+  geoLocationWatchStarted = false;
+  coords: any = [];
+  lastcoords:any = {latitude:0,longitude:0,accuracy:0};
 
  
 
@@ -79,8 +88,6 @@ export class SurveyEditPage implements OnInit {
     public formBuilder: FormBuilder,
     private surveysService:SurveysService,
     private alertController:AlertController,
-    private elementRef:ElementRef,
-    private platform:Platform,
     private toastController:ToastController,
     private geolocation: Geolocation
   ) {
@@ -106,64 +113,13 @@ export class SurveyEditPage implements OnInit {
 
   ngOnInit() {
 
-    this.geolocation.getCurrentPosition().then((resp) => {
-      this.coords.push({
-        latitude:resp.coords.latitude,
-        longitude:resp.coords.latitude,
-        altitude: resp.coords.altitude,
-        accuracy:resp.coords.accuracy,
-        timestamp:resp.timestamp
-      });
-      this.lastcoords = this.coords[this.coords.length-1];
-    }).catch((error) => {
-      console.log('Error getting location', error);
-    });
-
-    this.geoLocationWatch = this.geolocation.watchPosition({maximumAge: 1000, timeout: 5000, enableHighAccuracy: true});
-    this.geoLocationWatch.subscribe((resp) => {
-      this.geoLocationWatchStarted = true;
-      if("coords" in resp){
-        this.coords.push({
-          latitude:resp.coords.latitude,
-          longitude:resp.coords.longitude,
-          altitude: resp.coords.altitude,
-          accuracy:resp.coords.accuracy,
-          timestamp:resp.timestamp
-        });
-        this.lastcoords = this.coords[this.coords.length-1];
-        this.olMapComponent.setGPSPosition(this.lastcoords.longitude,this.lastcoords.latitude);
-        if(this.surveyId=="0"){
-          this.olMapComponent.centerOn(this.lastcoords.longitude,this.lastcoords.latitude);
-        }
-      }
-    });
-
-    //https://ionicframework.com/docs/native/geolocation
-    /*this.geoLocationWatch = this.geolocation.watchPosition({maximumAge:1000});
-    this.geoLocationWatch.subscribe(
-      (data: any) => {
-        // data can be a set of coordinates, or an error (if an error occurred).
-        // data.coords.latitude
-        // data.coords.longitude
-        this.coords = data.coords;
-        console.log(this.coords);
-      },
-      (error) => {
-        console.log(error); //error handling
-      } 
-    );*/
-    ////https://dev.to/saviosantos0808/real-time-localization-using-ionic-framework-and-google-spreadsheets-35pe
-    /*this.geolocation.watchPosition(options).subscribe(async(response: any)=>{
-      this.coords = response.coords;
-      console.log(this.coords);
-    });*/
+    this.geolocationInit();
     
     //https://ionicacademy.com/pass-data-angular-router-ionic-4/
     this.activatedRoute.queryParams.subscribe(params => {
       if (this.router.getCurrentNavigation().extras.state) {
 
         this.surveyId = this.router.getCurrentNavigation().extras.state.id;
-
 
         //read survey data
 
@@ -173,7 +129,12 @@ export class SurveyEditPage implements OnInit {
           //https://ultimatecourses.com/blog/angular-2-form-controls-patch-value-set-value
           this.surveyForm.patchValue(this.survey);
 
-          this.olMapComponent.setSurveyPosition(this.survey.longitudine,this.survey.latitudine);
+          this.surveyPositionVectorSource.clear();
+          let surveyPositionFeature = new Feature();
+          
+          surveyPositionFeature.setGeometry(this.survey.longitudine&&this.survey.latitudine ? new Point(fromLonLat([this.survey.longitudine, this.survey.latitudine])) : null);
+          this.surveyPositionVectorSource.addFeature(surveyPositionFeature)
+          
           this.olMapComponent.centerOn(this.survey.longitudine,this.survey.latitudine);
         });
       }else{
@@ -181,6 +142,7 @@ export class SurveyEditPage implements OnInit {
 
         this.surveyForm.patchValue({
           data_ora_osservazione: (new Date).toJSON(),
+          //DUMMY DATA
           /*localita: "Trento",
           tipologia: "010_gruppo",
           identificazione: "010_conifera",      
@@ -199,11 +161,12 @@ export class SurveyEditPage implements OnInit {
     
   }
 
-
+  /**
+   * Cancel survey button
+   */
   async cancelEdit() {
     this.submitAttempt = true;
 
-  
     const alert = await this.alertController.create({
       header: 'Sei sicuro di voler annullare le modifiche?',
       buttons: [
@@ -226,6 +189,9 @@ export class SurveyEditPage implements OnInit {
     
   }
 
+  /**
+   * Save survey button
+   */
   async saveSurvey() {
     this.submitAttempt = true;
 
@@ -265,6 +231,10 @@ export class SurveyEditPage implements OnInit {
     }
   }
 
+  /**
+   * Form error toast
+   * @param data error message
+   */
 
   async showErrorToast(data: any) {
     let toast = await this.toastController.create({
@@ -276,7 +246,10 @@ export class SurveyEditPage implements OnInit {
     toast.present();
   }
 
-
+  /**
+   * Slider managment
+   * @param $event 
+   */
   //https://gist.github.com/mdorchain/90ee6a0b391b6c51b2e27c2b000f9bdd
   async segmentChanged($event){
     this.surveySlider.slideTo(this.segmentSelected);
@@ -285,11 +258,9 @@ export class SurveyEditPage implements OnInit {
     this.segmentSelected = await this.surveySlider.getActiveIndex();
   }
 
-
-  public onMapReady(event) {
-    console.log("Map Ready");
-    this.map = event;
-  }
+  /**
+   * GPS detail data toat
+   */
 
   async presentToastWithOptions() {
     let gps_data = "";
@@ -312,5 +283,151 @@ export class SurveyEditPage implements OnInit {
     });
     toast.present();
   }
+
+  /**
+   * Geolocation init 
+   */
+
+  public geolocationInit(){
+    this.geolocation.getCurrentPosition().then((resp) => {
+      this.coords.push({
+        latitude:resp.coords.latitude,
+        longitude:resp.coords.latitude,
+        altitude: resp.coords.altitude,
+        accuracy:resp.coords.accuracy,
+        timestamp:resp.timestamp
+      });
+      this.lastcoords = this.coords[this.coords.length-1];
+    }).catch((error) => {
+      console.log('Error getting location', error);
+    });
+
+    this.geoLocationWatch = this.geolocation.watchPosition({maximumAge: 1000, timeout: 5000, enableHighAccuracy: true});
+    this.geoLocationWatch.subscribe((resp) => {
+      this.geoLocationWatchStarted = true;
+      if("coords" in resp){
+        this.coords.push({
+          latitude:resp.coords.latitude,
+          longitude:resp.coords.longitude,
+          altitude: resp.coords.altitude,
+          accuracy:resp.coords.accuracy,
+          timestamp:resp.timestamp
+        });
+        this.lastcoords = this.coords[this.coords.length-1];
+
+        this.gpsPositionVectorSource.clear();
+        let gpsPositionFeature = new Feature();
+        
+        gpsPositionFeature.setGeometry(this.lastcoords.longitudine&&this.lastcoords.latitudine ? new Point(fromLonLat([this.lastcoords.longitudine, this.lastcoords.latitudine])) : null);
+        this.gpsPositionVectorSource.addFeature(gpsPositionFeature)
+
+        if(this.surveyId=="0"){
+          this.olMapComponent.centerOn(this.lastcoords.longitude,this.lastcoords.latitude);
+        }
+      }
+    });
+
+    //https://ionicframework.com/docs/native/geolocation
+    /*this.geoLocationWatch = this.geolocation.watchPosition({maximumAge:1000});
+    this.geoLocationWatch.subscribe(
+      (data: any) => {
+        // data can be a set of coordinates, or an error (if an error occurred).
+        // data.coords.latitude
+        // data.coords.longitude
+        this.coords = data.coords;
+        console.log(this.coords);
+      },
+      (error) => {
+        console.log(error); //error handling
+      } 
+    );*/
+    ////https://dev.to/saviosantos0808/real-time-localization-using-ionic-framework-and-google-spreadsheets-35pe
+    /*this.geolocation.watchPosition(options).subscribe(async(response: any)=>{
+      this.coords = response.coords;
+      console.log(this.coords);
+    });*/
+  }
+
+  /**
+   * OpenLayers Map Init
+   * @param event 
+   */
+
+  public onMapReady(event) {
+    console.log("Map Ready");
+    this.map = event;
+    this.addSurveyPositionToMap();
+    this.addGPSToMap();
+
+    //https://forum.ionicframework.com/t/generating-a-openlayers-map-as-a-component/161373/4
+    setTimeout(()=>{
+      this.map.updateSize();
+    },500);
+  }
+
+  public addSurveyPositionToMap(): void{
+    var vector = null;
+
+    var textFill = new Fill({
+      color: '#fff',
+    });
+    var textStroke = new Stroke({
+      color: 'rgba(0, 0, 0, 0.6)',
+      width: 3,
+    });
+    
+    function styleFunction(feature, resolution) {
+      var style = new Style({
+          image: new Circle({
+            radius: 10,
+            fill: new Fill({
+              color: '#AA0000'
+            }),
+            stroke: new Stroke({
+              color: '#fff',
+              width: 2
+            })
+          })
+        });
+      return style;
+    }
+
+    vector = new VectorLayer({
+      source: this.surveyPositionVectorSource,
+      style: styleFunction
+    });
+
+    this.map.addLayer(vector);
+
+  }
+
+  public addGPSToMap(): void{
+    var vector = null;
+    
+    function styleFunction(feature, resolution) {
+      var style = new Style({
+          image: new Circle({
+            radius: 5,
+            fill: new Fill({
+              color: '#0000AA'
+            }),
+            stroke: new Stroke({
+              color: '#fff',
+              width: 2
+            })
+          })
+        });
+      return style;
+    }
+
+    vector = new VectorLayer({
+      source: this.gpsPositionVectorSource,
+      style: styleFunction
+    });
+
+    this.map.addLayer(vector);
+
+  }
+
 
 }
