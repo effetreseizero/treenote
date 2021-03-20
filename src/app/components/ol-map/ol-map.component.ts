@@ -94,92 +94,14 @@ export class OlMapComponent implements AfterViewInit {
     });
     this.surveyPositionFeature.setStyle(iconStyle);*/
 
-    this.surveysFeatureSource = new VectorSource({
-      features: []
-    });
-
     
-    var maxFeatureCount;
-    var vector = null;
-
-    var earthquakeFill = new Fill({
-      color: 'rgba(255, 153, 0, 0.8)',
-    });
-    var earthquakeStroke = new Stroke({
-      color: 'rgba(255, 204, 0, 0.2)',
-      width: 1,
-    });
-    var textFill = new Fill({
-      color: '#fff',
-    });
-    var textStroke = new Stroke({
-      color: 'rgba(0, 0, 0, 0.6)',
-      width: 3,
-    });
-    var invisibleFill = new Fill({
-      color: 'rgba(255, 255, 255, 0.01)',
-    });
-
-    function createEarthquakeStyle(feature) {
-      // 2012_Earthquakes_Mag5.kml stores the magnitude of each earthquake in a
-      // standards-violating <magnitude> tag in each Placemark.  We extract it
-      // from the Placemark's name instead.
-     
-      return new Style({
-        geometry: feature.getGeometry(),
-        image: new RegularShape({
-          radius1: 10,
-          radius2: 3,
-          points: 5,
-          angle: Math.PI,
-          fill: earthquakeFill,
-          stroke: earthquakeStroke,
-        }),
-      });
-    }
-    
-    var currentResolution;
-    function styleFunction(feature, resolution) {
-      var style;
-      var size = feature.get('features').length;
-      if (size > 1) {
-        style = new Style({
-          image: new Circle({
-            radius: size*5,
-            fill: new Fill({
-              color: [255, 153, 0, 1/(size/5)],
-            }),
-          }),
-          text: new TextStyle({
-            text: size.toString(),
-            fill: textFill,
-            stroke: textStroke,
-          }),
-        });
-      } else {
-        var originalFeature = feature.get('features')[0];
-        style = createEarthquakeStyle(originalFeature);
-      }
-      return style;
-    }
-    
-    var clusterSource = new Cluster({
-      source: this.surveysFeatureSource,
-      
-    });
-
-    vector = new VectorLayer({
-      source: clusterSource,
-      style: styleFunction
-    });
 
     this.Map = new Map({
       layers: [
         new Tile({
           source: new OSM({})
         }),
-        gpsPositionLayer,
-        vector
+        gpsPositionLayer
       ],
       target: document.getElementById('map'),
       view: this.view,
@@ -194,13 +116,13 @@ export class OlMapComponent implements AfterViewInit {
        return feature
       })
       if(feature instanceof Feature){
-        debugger;
         // Fit the feature geometry or extent based on the given map
         let features = feature.getProperties().features;
         var extent = features[0].getGeometry().getExtent().slice(0);
         features.forEach(function(feature){ extend(extent,feature.getGeometry().getExtent())});
 
         this.Map.getView().fit(extent);
+        this.Map.getView().setZoom(this.Map.getView().getZoom()-1);
         // map.getView().fit(feature.getGeometry().getExtent())
 
         
@@ -256,30 +178,6 @@ export class OlMapComponent implements AfterViewInit {
       //https://forum.ionicframework.com/t/generating-a-openlayers-map-as-a-component/161373/4
       this.Map.updateSize();
     },500);
-  }
-
-  setSurveyPosition(longitude,latitude) {
-    let surveyPositionFeature = new Feature();
-    surveyPositionFeature.setStyle(new Style({
-      image: new Circle({
-        radius: 10,
-        fill: new Fill({
-          color: '#AA0000'
-        }),
-        stroke: new Stroke({
-          color: '#fff',
-          width: 2
-        })
-      })
-    }));
-    
-    surveyPositionFeature.setGeometry(longitude&&latitude ? new Point(fromLonLat([longitude, latitude])) : null);
-    this.surveysFeatureSource.addFeature(surveyPositionFeature)
-    setTimeout(()=>{
-      //https://forum.ionicframework.com/t/generating-a-openlayers-map-as-a-component/161373/4
-      this.Map.updateSize();
-    },500);
-
   }
   
 

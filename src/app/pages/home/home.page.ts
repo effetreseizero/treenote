@@ -8,10 +8,16 @@ import {CoreFacade} from "../../services/storage/core.facade"
 
 import { SurveysService} from '../../services/firestore/surveys.service';
 
-import Map from 'ol/Map';
-
 //https://medium.com/runic-software/a-simple-guide-to-openlayers-in-angular-b10f6feb3df1
 import {OlMapComponent} from '../../components/ol-map/ol-map.component';
+import {Map,View, Feature} from "ol";
+import {Vector as VectorSource ,OSM,Cluster} from "ol/source";
+import {Style,Icon,Fill,Circle,Stroke, Text as TextStyle, RegularShape} from 'ol/style';
+import {Tile,WebGLPoints,Layer, Vector as VectorLayer} from "ol/layer";
+import {Point} from "ol/geom";
+import { fromLonLat } from "ol/proj";
+
+
 import { User } from 'src/app/services/storage/user';
 
 
@@ -27,6 +33,7 @@ export class HomePage {
   map: Map;
   user: User;
   publicSurveysList=[];
+  surveysPromise;
 
   constructor(
     private router: Router,
@@ -41,6 +48,18 @@ export class HomePage {
     this.coreFacade.getUser().subscribe((user)=>{
       this.user=user;
     });
+  }
+
+  public logIn(): void{
+    this.router.navigate(['/menu/login']);
+  }
+
+  public userAccout(): void{
+    this.router.navigate(['/menu/user-account']);
+  }
+
+  public onMapReady(event) {
+    this.map = event;
 
     this.surveyService.read_public_surveys_collection().subscribe((data)=>{
       
@@ -64,29 +83,90 @@ export class HomePage {
         };
         
         survey["short_date"] =  date.toLocaleDateString("it", options) //en is language option, you may specify..
-        this.olMapComponent.setSurveyPosition(survey["longitudine"],survey["latitudine"]);
         return survey;
       });
-      //https://angular.io/guide/deprecations#ngmodel-with-reactive-forms
-      //https://ultimatecourses.com/blog/angular-2-form-controls-patch-value-set-value
 
-      
-      //this.olMapComponent.centerOn(this.survey.longitudine,this.survey.latitudine);
+      this.addPublicSurveysToMap();
     });
-  }
-
-  public logIn(): void{
-    this.router.navigate(['/menu/login']);
-  }
-
-  public userAccout(): void{
-    this.router.navigate(['/menu/user-account']);
-  }
-
-  public onMapReady(event) {
-    console.log("Map Ready");
-    this.map = event;
     
+    
+  }
+
+  public addPublicSurveysToMap(): void{
+
+    let surveysFeatureSource = new VectorSource({
+      features: []
+    });
+
+    
+    var vector = null;
+
+    var textFill = new Fill({
+      color: '#fff',
+    });
+    var textStroke = new Stroke({
+      color: 'rgba(0, 0, 0, 0.6)',
+      width: 3,
+    });
+    
+    function styleFunction(feature, resolution) {
+      var style;
+      var size = feature.get('features').length;
+      if (size > 1) {
+        style = new Style({
+          image: new Circle({
+            radius: size*5,
+            fill: new Fill({
+              color: [255, 153, 0, 1/(size/5)],
+            }),
+          }),
+          text: new TextStyle({
+            text: size.toString(),
+            fill: textFill,
+            stroke: textStroke,
+          }),
+        });
+      } else {
+        style = new Style({
+          image: new Circle({
+            radius: 10,
+            fill: new Fill({
+              color: '#AA0000'
+            }),
+            stroke: new Stroke({
+              color: '#fff',
+              width: 2
+            })
+          })
+        });
+      }
+      return style;
+    }
+    
+    var clusterSource = new Cluster({
+      source: surveysFeatureSource,
+      
+    });
+
+    vector = new VectorLayer({
+      source: clusterSource,
+      style: styleFunction
+    });
+
+    this.publicSurveysList.forEach((survey)=>{
+      let surveyPositionFeature = new Feature();
+    
+      surveyPositionFeature.setGeometry(survey.longitudine&&survey.latitudine ? new Point(fromLonLat([survey.longitudine, survey.latitudine])) : null);
+      surveysFeatureSource.addFeature(surveyPositionFeature)
+    });
+
+    this.map.addLayer(vector);
+
+    //https://forum.ionicframework.com/t/generating-a-openlayers-map-as-a-component/161373/4
+    setTimeout(()=>{
+      this.map.updateSize();
+    },500);
+
   }
 
 }
