@@ -6,6 +6,8 @@ import { Router, RouterEvent } from '@angular/router';
 import { AuthenticationService } from "../../services/auth/authentication.service";
 import {CoreFacade} from "../../services/storage/core.facade"
 
+import { SurveysService} from '../../services/firestore/surveys.service';
+
 import Map from 'ol/Map';
 
 //https://medium.com/runic-software/a-simple-guide-to-openlayers-in-angular-b10f6feb3df1
@@ -24,11 +26,13 @@ export class HomePage {
   @ViewChild('app_ol_map') olMapComponent:OlMapComponent;
   map: Map;
   user: User;
+  publicSurveysList=[];
 
   constructor(
     private router: Router,
     public authService: AuthenticationService,
-    private coreFacade: CoreFacade
+    private coreFacade: CoreFacade,
+    private surveyService: SurveysService
   ) {}
 
   userLoggedIn = false;
@@ -36,6 +40,38 @@ export class HomePage {
   ngOnInit() {
     this.coreFacade.getUser().subscribe((user)=>{
       this.user=user;
+    });
+
+    this.surveyService.read_public_surveys_collection().subscribe((data)=>{
+      
+      this.publicSurveysList=data.map(e => {
+        let survey = {};
+        //add id of syrvey
+        survey["id"]=e.payload.doc.id;
+        //add all other properties
+        for (let key of Object.keys(e.payload.doc.data())){
+          survey[key] = e.payload.doc.data()[key];
+        }
+
+        //https://stackoverflow.com/questions/2388115/get-locale-short-date-format-using-javascript/31663241
+        var date = new Date(survey["data_ora_osservazione"]);
+        var options = {
+            year: "numeric",
+            month: "2-digit",
+            day: "numeric",
+            hour: "numeric",
+            minute:"numeric"
+        };
+        
+        survey["short_date"] =  date.toLocaleDateString("it", options) //en is language option, you may specify..
+        this.olMapComponent.setSurveyPosition(survey["longitudine"],survey["latitudine"]);
+        return survey;
+      });
+      //https://angular.io/guide/deprecations#ngmodel-with-reactive-forms
+      //https://ultimatecourses.com/blog/angular-2-form-controls-patch-value-set-value
+
+      
+      //this.olMapComponent.centerOn(this.survey.longitudine,this.survey.latitudine);
     });
   }
 

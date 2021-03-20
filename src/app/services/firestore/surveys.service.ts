@@ -52,10 +52,20 @@ export class SurveysService {
   }
 
   read_all_surveys_collection() {
-    console.log("fsurveysService.read_all_surveys_collection")
+    console.log("surveysService.read_all_surveys_collection")
 
     return this.firestore.collection(this.collectionName).snapshotChanges();
 
+  }
+
+  read_public_surveys_collection() {
+    console.log("surveysService.read_public_surveys_collection")
+
+    return this.firestore.collection(
+      this.collectionName,
+      ref => ref.where("public", "==", true)
+      )
+      .snapshotChanges();
   }
 
   create_survey_document(data) {
