@@ -1,0 +1,13 @@
+<ion-card>
+  <img src="./madison.jpg" />
+  <ion-card-header>
+    <ion-card-title>{{survey.localita}}</ion-card-title>
+    <ion-card-subtitle>{{survey.short_date}}</ion-card-subtitle>   
+  </ion-card-header>
+  <ion-card-content>
+    Rilevato un {{survey.sintomi.split("_")[1]}}
+  </ion-card-content>
+ </ion-card>
+<ion-button (click)="dismiss()">
+  Chiudi
+</ion-button>

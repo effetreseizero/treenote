@@ -3,6 +3,10 @@ import { Observable } from 'rxjs';
 
 import { Router, RouterEvent } from '@angular/router';
 
+import { PopoverController } from '@ionic/angular';
+import { SurveyPreviewPopoverComponent } from '../../components/survey-preview-popover/survey-preview-popover.component';
+
+
 import { AuthenticationService } from "../../services/auth/authentication.service";
 import {CoreFacade} from "../../services/storage/core.facade"
 
@@ -42,6 +46,7 @@ export class HomePage {
 
   constructor(
     private router: Router,
+    private popoverController: PopoverController,
     public authService: AuthenticationService,
     private coreFacade: CoreFacade,
     private surveyService: SurveysService
@@ -82,7 +87,7 @@ export class HomePage {
       this.publicSurveysVectorSource.clear();
       this.publicSurveysList.forEach((survey)=>{
         let surveyPositionFeature = new Feature();
-      
+        surveyPositionFeature.setProperties(survey);
         surveyPositionFeature.setGeometry(survey.longitudine&&survey.latitudine ? new Point(fromLonLat([survey.longitudine, survey.latitudine])) : null);
         this.publicSurveysVectorSource.addFeature(surveyPositionFeature)
       });
@@ -97,6 +102,25 @@ export class HomePage {
     this.router.navigate(['/menu/user-account']);
   }
 
+  async surveyPreviewPopover(ev: any,survey) {
+    const popover = await this.popoverController.create({
+      component: SurveyPreviewPopoverComponent,
+      event: ev,
+      cssClass: 'popover_setting',
+      componentProps: {
+        survey: survey
+      },
+      translucent: true
+    });
+
+    popover.onDidDismiss().then((result) => {
+      console.log(result.data);
+    });
+
+    return await popover.present();
+    /** Sync event from popover component */
+
+  }
   
 
   /**
@@ -119,6 +143,7 @@ export class HomePage {
       if(feature instanceof Feature){
         // Fit the feature geometry or extent based on the given map
         let features = feature.getProperties().features;
+        //zoom to feature cluster
         if(features.length > 1){
           var extent = features[0].getGeometry().getExtent().slice(0);
           features.forEach(function(feature){ extend(extent,feature.getGeometry().getExtent())});
@@ -126,8 +151,9 @@ export class HomePage {
           this.map.getView().fit(extent);
           this.map.getView().setZoom(this.map.getView().getZoom()-1);
         }
+        //open popover with survey preview
         else{
-
+          this.surveyPreviewPopover(SurveyPreviewPopoverComponent,features[0].getProperties());
         }
         
       }
