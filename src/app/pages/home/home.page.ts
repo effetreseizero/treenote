@@ -17,6 +17,9 @@ import {Tile,WebGLPoints,Layer, Vector as VectorLayer} from "ol/layer";
 import {Point} from "ol/geom";
 import { fromLonLat } from "ol/proj";
 
+import {createEmpty, extend, getHeight, getWidth} from 'ol/extent';
+
+
 
 import { User } from 'src/app/services/storage/user';
 
@@ -33,7 +36,9 @@ export class HomePage {
   map: Map;
   user: User;
   publicSurveysList=[];
-  surveysPromise;
+  publicSurveysVectorSource= new VectorSource({
+    features: []
+  });
 
   constructor(
     private router: Router,
@@ -45,21 +50,10 @@ export class HomePage {
   userLoggedIn = false;
 
   ngOnInit() {
+
     this.coreFacade.getUser().subscribe((user)=>{
       this.user=user;
     });
-  }
-
-  public logIn(): void{
-    this.router.navigate(['/menu/login']);
-  }
-
-  public userAccout(): void{
-    this.router.navigate(['/menu/user-account']);
-  }
-
-  public onMapReady(event) {
-    this.map = event;
 
     this.surveyService.read_public_surveys_collection().subscribe((data)=>{
       
@@ -85,20 +79,83 @@ export class HomePage {
         survey["short_date"] =  date.toLocaleDateString("it", options) //en is language option, you may specify..
         return survey;
       });
-
-      this.addPublicSurveysToMap();
+      this.publicSurveysVectorSource.clear();
+      this.publicSurveysList.forEach((survey)=>{
+        let surveyPositionFeature = new Feature();
+      
+        surveyPositionFeature.setGeometry(survey.longitudine&&survey.latitudine ? new Point(fromLonLat([survey.longitudine, survey.latitudine])) : null);
+        this.publicSurveysVectorSource.addFeature(surveyPositionFeature)
+      });
     });
-    
+  }
+
+  public logIn(): void{
+    this.router.navigate(['/menu/login']);
+  }
+
+  public userAccout(): void{
+    this.router.navigate(['/menu/user-account']);
+  }
+
+  async presentToastWith() {
+    let gps_data = "";
+    for(let key of Object.keys(this.lastcoords)){
+      gps_data+=key+": "+this.lastcoords[key]+"\n";
+    };
+    const toast = await this.toastController.create({
+      header: 'GPS Data',
+      message: gps_data,
+      position: 'top',
+      buttons: [
+       {
+          text: 'Done',
+          role: 'cancel',
+          handler: () => {
+            
+          }
+        }
+      ]
+    });
+    toast.present();
+  }
+
+  /**
+   * Openlayers MAP managment
+   * @param event 
+   */
+  public onMapReady(event) {
+    this.map = event;
+
+    this.addPublicSurveysToMap();
+
+    /**
+     * ad click cluster animation
+     */
+    this.map.on('singleclick', event => {
+      // get the feature you clicked
+      const feature = this.map.forEachFeatureAtPixel(event.pixel, (feature) => {
+       return feature
+      })
+      if(feature instanceof Feature){
+        // Fit the feature geometry or extent based on the given map
+        let features = feature.getProperties().features;
+        if(features.length > 1){
+          var extent = features[0].getGeometry().getExtent().slice(0);
+          features.forEach(function(feature){ extend(extent,feature.getGeometry().getExtent())});
+
+          this.map.getView().fit(extent);
+          this.map.getView().setZoom(this.map.getView().getZoom()-1);
+        }
+        else{
+
+        }
+        
+      }
+     })
     
   }
 
   public addPublicSurveysToMap(): void{
-
-    let surveysFeatureSource = new VectorSource({
-      features: []
-    });
-
-    
     var vector = null;
 
     var textFill = new Fill({
@@ -113,12 +170,23 @@ export class HomePage {
       var style;
       var size = feature.get('features').length;
       if (size > 1) {
+        let fill = new Fill({
+          color: [255, 153, 0, 0.6],
+        });
+        if(size>=5&&size<10){
+          fill = new Fill({
+            color: [153, 255, , 0.6],
+          });
+        }
+        if(size>10){
+          fill = new Fill({
+            color: [153, 0, 255 , 0.6],
+          });
+        }
         style = new Style({
           image: new Circle({
-            radius: size*5,
-            fill: new Fill({
-              color: [255, 153, 0, 1/(size/5)],
-            }),
+            radius: size>10?50:size*5,
+            fill: fill,
           }),
           text: new TextStyle({
             text: size.toString(),
@@ -144,20 +212,13 @@ export class HomePage {
     }
     
     var clusterSource = new Cluster({
-      source: surveysFeatureSource,
+      source: this.publicSurveysVectorSource,
       
     });
 
     vector = new VectorLayer({
       source: clusterSource,
       style: styleFunction
-    });
-
-    this.publicSurveysList.forEach((survey)=>{
-      let surveyPositionFeature = new Feature();
-    
-      surveyPositionFeature.setGeometry(survey.longitudine&&survey.latitudine ? new Point(fromLonLat([survey.longitudine, survey.latitudine])) : null);
-      surveysFeatureSource.addFeature(surveyPositionFeature)
     });
 
     this.map.addLayer(vector);
