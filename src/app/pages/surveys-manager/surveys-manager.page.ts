@@ -56,6 +56,16 @@ export class SurveysManagerPage implements OnInit {
     });
   }
 
+  editSurvey(recordId){
+    //https://ionicacademy.com/pass-data-angular-router-ionic-4/
+    let navigationExtras: NavigationExtras = {
+      state: {
+        id: recordId 
+      }
+    };
+      this.router.navigate(['/menu/survey-edit'],navigationExtras);
+  }
+
   publicChange(e,item){
     debugger;
     let data = {
@@ -64,5 +74,7 @@ export class SurveysManagerPage implements OnInit {
 
     this.surveysService.update_surveys_document(item.id, data);
   }
+
+
 
 }
