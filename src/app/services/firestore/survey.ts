@@ -17,5 +17,11 @@ export interface Survey {
     sintomi: string;
     diffusione_perc: string;
     alberi_morti: string;
+    photo_0_imageurl: string;
+    photo_0_storageuri: string;
+    photo_1_imageurl: string;
+    photo_1_storageuri: string;
+    photo_2_imageurl: string;
+    photo_2_storageuri: string;
 }
 

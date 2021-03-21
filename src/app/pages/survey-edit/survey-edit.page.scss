@@ -12,8 +12,12 @@ p {
 ion-slides {
     height: 100%;
     //https://stackoverflow.com/questions/54854794/ionic-4-ion-slides-vertical-scrolling-not-working
-    overflow-y: scroll;
+    overflow-y: auto;
+
 }
+
+
+
 //https://www.joshmorony.com/advanced-forms-validation-in-ionic-2/
 ion-slide {
     display: block;
@@ -33,15 +37,17 @@ ion-label, .select-text {
 }
 
 .container {
-height: 200px;
-background-color: green;
-overflow: scroll; 
-white-space: nowrap;
-::-webkit-scrollbar {
-    display: none;
-}
+    height: 200px;
+    background-color: green;
+    overflow: scroll; 
+    white-space: nowrap;
+    ::-webkit-scrollbar {
+        display: none;
+    }
 
-.scroll {
-    overflow: auto;
-}
+    .scroll {
+        overflow: auto;
+    }
+
+
 }

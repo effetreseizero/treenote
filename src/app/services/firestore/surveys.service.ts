@@ -3,6 +3,8 @@ import { Injectable } from '@angular/core';
 
 //https://www.freakyjolly.com/ionic-firebase-crud-operations/#.X-mQOulKiEI
 import { AngularFirestore } from '@angular/fire/firestore';
+import { AngularFireAuth } from '@angular/fire/auth';
+import { AngularFireStorage } from '@angular/fire/storage';
 
 import { CoreFacade } from "../storage/core.facade";
 import { User } from 'src/app/services/storage/user';
@@ -10,6 +12,7 @@ import { User } from 'src/app/services/storage/user';
 import * as firebase from 'firebase/app';
 import 'firebase/firestore';
 import { TimeoutError } from 'rxjs';
+import { FirebaseApp } from '@angular/fire';
 
 
 @Injectable({
@@ -23,6 +26,8 @@ export class SurveysService {
 
   constructor(
     private firestore: AngularFirestore,
+    private fireauth: AngularFireAuth,
+    private firestorage: AngularFireStorage,
     private coreFacade: CoreFacade
   ) { 
     
@@ -68,22 +73,44 @@ export class SurveysService {
       .snapshotChanges();
   }
 
-  create_survey_document(data) {
+  async create_surveys_document(data,photos) {
     data['user_uid']=this.user.uid;
     data['deleted']=false;
     data['public']=false;
     //https://www.nuomiphp.com/eplan/en/2152.html
     let dt = new Date();
     data['created_time']=dt.getTime();
-    return this.firestore.collection(this.collectionName).add(data);
+    try {
+      const messageRef = await this.firestore.collection(this.collectionName).add(data);
+      debugger;
+      // 2 - Upload the image to Cloud Storage.
+      for (let i=0;i<photos.length; i++){
+        var filePath = this.user.uid + '/' + messageRef.id + '/' + i +"."+photos[i].filetype;
+        // Create file metadata including the content type
+        var metadata = {
+          contentType: 'image/'+photos[i].filetype,
+        };
+        let blob = await fetch(photos[i].webviewPath).then(r => r.blob());
+        const fileSnapshot = await this.firestorage.ref(filePath).put(blob,metadata);
+        const url = await fileSnapshot.ref.getDownloadURL();
+        let imagedata = {};
+        imagedata["photo_"+i+"_imageurl"] = url;
+        imagedata["photo_"+i+"_storageuri"] = fileSnapshot.metadata.fullPath;
+        await messageRef.update(imagedata);
+      }
+      
+    } catch (error) {
+      console.error('There was an error uploading a file to Cloud Storage:', error);
+    }
   }
+
 
   read_surveys_document(surveyID) {
     return this.firestore.doc(this.collectionName + '/' + surveyID).snapshotChanges();
   }
 
-  update_surveys_document(surveyID, data) {
-    this.firestore.doc(this.collectionName + '/' + surveyID).update(data);
+  async update_surveys_document(surveyID, data) {
+    return await this.firestore.doc(this.collectionName + '/' + surveyID).update(data);
   }
 
   delete_surveys_document(surveyID) {

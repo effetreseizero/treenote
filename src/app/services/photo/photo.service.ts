@@ -4,7 +4,7 @@ import { Injectable } from '@angular/core';
 import { Plugins, CameraResultType, Capacitor, FilesystemDirectory, 
   CameraPhoto, CameraSource } from '@capacitor/core';
 
-const { Camera, Filesystem, Storage } = Plugins;
+const { Camera } = Plugins;
 
 @Injectable({
   providedIn: 'root'
@@ -12,26 +12,32 @@ const { Camera, Filesystem, Storage } = Plugins;
 
 export class PhotoService {
 
-  public photos: Photo[] = [];
+  //public photos: Photo[] = [];
 
   constructor() { }
 
-  public async addNewToGallery() {
+  public async addNewToGallery(): Promise<Photo> {
     // Take a photo
+
+    //TO DO 
+    //discover how to resize captured images
     const capturedPhoto = await Camera.getPhoto({
       resultType: CameraResultType.Uri, 
       source: CameraSource.Camera, 
-      quality: 100 
+      width:800,
+      preserveAspectRatio:true,
+      quality: 70,
+      correctOrientation: true 
     });
 
-    this.photos.unshift({
-      filepath: "soon...",
-      webviewPath: capturedPhoto.webPath
-    });
+    return {
+        filetype: capturedPhoto.format,
+        webviewPath: capturedPhoto.webPath
+    };
   }
 }
 
 export interface Photo {
-  filepath: string;
+  filetype: string;
   webviewPath: string;
 }

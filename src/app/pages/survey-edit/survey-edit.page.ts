@@ -7,7 +7,7 @@
 import { Component, OnInit,ViewChild, ElementRef } from '@angular/core';
 
 import { Router, ActivatedRoute, RouteReuseStrategy } from '@angular/router';
-import { IonSlides, NavController,Platform, ToastController  } from '@ionic/angular';
+import { IonContent,IonSlides, NavController,Platform, ToastController  } from '@ionic/angular';
 
 import { FormGroup, Validators, FormBuilder } from '@angular/forms';
 
@@ -17,7 +17,7 @@ import { Survey} from '../../services/firestore/survey';
 import { AlertController } from '@ionic/angular';
 
 //https://ionicframework.com/docs/angular/your-first-app/2-taking-photos
-import { PhotoService } from '../../services/photo/photo.service';
+import { PhotoService, Photo } from '../../services/photo/photo.service';
 
 
 //https://medium.com/runic-software/a-simple-guide-to-openlayers-in-angular-b10f6feb3df1
@@ -48,9 +48,11 @@ import{ coordinateRelationship } from 'ol/extent';
   styleUrls: ['./survey-edit.page.scss'],
 })
 export class SurveyEditPage implements OnInit {
+  @ViewChild(IonContent) content: IonContent;
 
   private surveyId = "0";
   private survey=null;
+  private editable = true;
 
   public surveyForm: FormGroup;
   public submitAttempt: boolean = false;
@@ -60,7 +62,7 @@ export class SurveyEditPage implements OnInit {
   slideOptsSurveySlider = {
     initialSlide: 0,  
 
-    //woth autoHeigth Map is not correctly resized, even if map.autoSize() is called onSlideChanged
+    //with autoHeigth Openlayers Map is not correctly resized, even if map.autoSize() is called onSlideChanged
     //autoHeight: true
   };
   segmentSelected = 0;
@@ -76,6 +78,8 @@ export class SurveyEditPage implements OnInit {
   gpsPositionVectorSource= new VectorSource({
     features: []
   });
+
+  photos: Photo[] = [];
 
   geoLocationWatch:any;
   geoLocationWatchStarted = false;
@@ -123,15 +127,31 @@ export class SurveyEditPage implements OnInit {
     this.activatedRoute.queryParams.subscribe(params => {
       if (this.router.getCurrentNavigation().extras.state) {
 
+        this.editable = false;
+
         this.surveyId = this.router.getCurrentNavigation().extras.state.id;
 
         //read survey data
 
         this.surveysService.read_surveys_document(this.surveyId).subscribe((data)=>{
+
           this.survey=data.payload.data();
           //https://angular.io/guide/deprecations#ngmodel-with-reactive-forms
           //https://ultimatecourses.com/blog/angular-2-form-controls-patch-value-set-value
           this.surveyForm.patchValue(this.survey);
+
+          this.surveyForm.disable();
+
+          this.photos = [];
+          for (let i=0;i<3;i++){
+            if(this.survey["photo_"+i+"_imageurl"]){
+              this.photos.push({
+                filetype: "jpeg",
+                webviewPath: this.survey["photo_"+i+"_imageurl"]
+              })
+            }
+          }
+
 
           this.surveyPositionVectorSource.clear();
           let surveyPositionFeature = new Feature();
@@ -144,10 +164,12 @@ export class SurveyEditPage implements OnInit {
       }else{
         this.surveyId = "0";
 
+        this.editable = true;
+
         this.surveyForm.patchValue({
           data_ora_osservazione: (new Date).toJSON(),
           //DUMMY DATA
-          /*localita: "Trento",
+          localita: "Trento",
           tipologia: "010_gruppo",
           identificazione: "010_conifera",      
           nome_comune: "",
@@ -157,7 +179,7 @@ export class SurveyEditPage implements OnInit {
           nome_scientifico: "",
           sintomi: "010_avvizzimento_fogliare",
           diffusione_perc: "010_minore_20",
-          alberi_morti: "010_si", */
+          alberi_morti: "010_si", 
         });
       }
     });
@@ -169,27 +191,31 @@ export class SurveyEditPage implements OnInit {
    * Cancel survey button
    */
   async cancelEdit() {
-    this.submitAttempt = true;
+    if(this.editable){
+      this.submitAttempt = true;
 
-    const alert = await this.alertController.create({
-      header: 'Sei sicuro di voler annullare le modifiche?',
-      buttons: [
-        {
-          text: 'Cancel',
-          role: 'cancel',
-          cssClass: 'secondary',
-          handler: () => {}
-        },
-        {
-          text: 'Ok',
-          handler: () => {
-            this.navController.back();
+      const alert = await this.alertController.create({
+        header: 'Sei sicuro di voler annullare le modifiche?',
+        buttons: [
+          {
+            text: 'Cancel',
+            role: 'cancel',
+            cssClass: 'secondary',
+            handler: () => {}
+          },
+          {
+            text: 'Ok',
+            handler: () => {
+              this.navController.back();
+            }
           }
-        }
-      ]
-    });
+        ]
+      });
 
-    await alert.present();
+      await alert.present();
+    }else{
+      this.navController.back();
+    }
     
   }
 
@@ -220,11 +246,14 @@ export class SurveyEditPage implements OnInit {
                 this.surveyForm.value["longitudine"]=this.lastcoords.longitude;
                 this.surveyForm.value["quota"]=this.lastcoords.altitude;
                 this.surveyForm.value["accuratezza"]=this.lastcoords.accuracy;
-                this.surveysService.create_survey_document(this.surveyForm.value);
-                this.navController.back();
+                this.surveysService.create_surveys_document(this.surveyForm.value,this.photos).then(()=>{
+                  this.navController.back();
+                });
+                
               }else{
-                this.surveysService.update_surveys_document(this.surveyId, this.surveyForm.value);
-                this.navController.back();
+                this.surveysService.update_surveys_document(this.surveyId, this.surveyForm.value).then(()=>{
+                  this.navController.back();
+                });
               }
             }
           }
@@ -256,15 +285,31 @@ export class SurveyEditPage implements OnInit {
    */
   //https://gist.github.com/mdorchain/90ee6a0b391b6c51b2e27c2b000f9bdd
   async segmentChanged($event){
+    
     this.surveySlider.slideTo(this.segmentSelected);
+    this.surveySlider.getSwiper().then((swiper)=>{
+      swiper.updateAutoHeight(0);
+    });
+
+    
   }
   async slideChanged($event) {
     this.segmentSelected = await this.surveySlider.getActiveIndex();
   }
 
 
-  addPhotoToGallery() {
-    this.photoService.addNewToGallery();
+  async addPhotoToGallery() {
+    if(this.photos.length<3){
+      const capturedPhoto = await this.photoService.addNewToGallery();
+      this.photos.unshift(capturedPhoto);
+    }else{
+      const toast = await this.toastController.create({
+        color: 'dark',
+        duration: 2000,
+        message: 'Si possono allegare massimo tre foto!',
+      });
+      await toast.present();      
+    }
   }
 
 
