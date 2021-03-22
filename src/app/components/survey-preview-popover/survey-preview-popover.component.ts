@@ -15,7 +15,7 @@ export class SurveyPreviewPopoverComponent implements OnInit {
   ) { }
 
   ngOnInit() {
-    
+    debugger;
   }
 
   dismiss() {
