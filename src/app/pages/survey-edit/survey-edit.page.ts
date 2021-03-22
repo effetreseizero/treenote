@@ -227,7 +227,9 @@ export class SurveyEditPage implements OnInit {
 
     if(!this.surveyForm.valid){
         this.surveySlider.slideTo(0);
-    } 
+    } else if(this.photos.length==0){
+      this.surveySlider.slideTo(1);
+    }
     else{
       const alert = await this.alertController.create({
         header: 'Confermi modifiche?',
@@ -301,7 +303,7 @@ export class SurveyEditPage implements OnInit {
   async addPhotoToGallery() {
     if(this.photos.length<3){
       const capturedPhoto = await this.photoService.addNewToGallery();
-      this.photos.unshift(capturedPhoto);
+      this.photos.push(capturedPhoto);
     }else{
       const toast = await this.toastController.create({
         color: 'dark',

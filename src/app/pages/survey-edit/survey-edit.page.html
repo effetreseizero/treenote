@@ -153,11 +153,21 @@
 
       <ion-grid>
         <ion-row>
+        <ion-col size="12" *ngIf="photos.length==0">
+            <ion-card>
+              <h2>Aggiungi una foto</h2>
+            </ion-card>
+        </ion-col>
         <ion-col size="12" *ngFor="let photo of photos; index as position">
             <ion-card>
               <ion-img [src]="photo.webviewPath"></ion-img>
             </ion-card>
         </ion-col>
+        <ion-col size="12" >
+          <ion-card>
+            <label>Si consiglia di inquadrare il fenomeno osservato, ad esclusione di minorenni, targhe, ecc. ; in caso contrario questo comporterà la mancata pubblicazione della foto relativa alla segnalazione</label>
+          </ion-card>
+      </ion-col>
         </ion-row>
       </ion-grid>
       
