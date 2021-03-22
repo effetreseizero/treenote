@@ -67,7 +67,6 @@ export class SurveysManagerPage implements OnInit {
   }
 
   publicChange(e,item){
-    debugger;
     let data = {
       public: item.public
     }

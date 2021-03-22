@@ -17,6 +17,8 @@ import { AlertController } from '@ionic/angular';
 export class SurveysPage implements OnInit {
 
   surveyList = [];
+  sentSurveyList = [];
+  publicSurveyList = [];
 
   constructor(
     private surveysService: SurveysService,
@@ -59,6 +61,11 @@ export class SurveysPage implements OnInit {
           return itemB["created_time"] - itemA["created_time"];
         }
       );
+
+      this.sentSurveyList = this.surveyList.filter(x => (x.deleted == false && x.public==false));
+
+      this.publicSurveyList = this.surveyList.filter(x => (x.deleted == false && x.public==true));
+
     });
   }
 
@@ -96,9 +103,5 @@ export class SurveysPage implements OnInit {
     };
       this.router.navigate(['/menu/survey-edit'],navigationExtras);
   }
-
-  activeSurveys(){
-    return this.surveyList.filter(x => x.deleted == false);
-}
 
 }

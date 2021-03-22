@@ -102,6 +102,10 @@ export class HomePage {
     this.router.navigate(['/menu/user-account']);
   }
 
+  async createSurvey() {
+    this.router.navigate(['/menu/survey-edit']);
+  }
+
   async surveyPreviewPopover(ev: any,survey) {
     const popover = await this.popoverController.create({
       component: SurveyPreviewPopoverComponent,

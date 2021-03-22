@@ -6,24 +6,26 @@
     <ion-buttons slot="start">
       <ion-menu-button autoHide="false"></ion-menu-button>
     </ion-buttons>
-    <ion-buttons slot="end">
-      <ion-button (click)="createSurvey()"><ion-icon size="large" name="add-circle-outline"></ion-icon></ion-button>
-    </ion-buttons>
   </ion-toolbar>
 </ion-header>
 
 <ion-content [fullscreen]="true" class="ion-padding background">
-  <!--ion-fab vertical="top" horizontal="end" edge slot="fixed" (click)="createSurvey()">
+  <ion-fab vertical="top" horizontal="end" slot="fixed" (click)="createSurvey()">
     <ion-fab-button color="danger" >
       <ion-icon name="add"></ion-icon>
     </ion-fab-button>
-  </ion-fab-->
+  </ion-fab>
 
   <ion-list>
     <ion-list-header>
-      <h1>Segnalazioni inviate</h1>
+      <h1>
+      <ion-chip outline color="secondary">
+        <ion-icon name="mail"></ion-icon>
+        <ion-label>{{sentSurveyList.length}} Segnalazioni inviate</ion-label>
+      </ion-chip>
+      </h1>
     </ion-list-header>
-    <ion-item *ngFor="let item of activeSurveys()" lines="inset">
+    <ion-item *ngFor="let item of sentSurveyList" lines="inset">
       <ion-label>
         <h2>{{item.localita}}</h2>
         <h3>{{item.short_date}}</h3>
@@ -40,9 +42,14 @@
 
   <ion-list>
     <ion-list-header>
-      <h1>Segnalazioni pubblicate</h1>
+      <h1>
+        <ion-chip outline color="secondary">
+          <ion-icon name="star"></ion-icon>
+          <ion-label>{{publicSurveyList.length}} Segnalazioni pubblicate</ion-label>
+        </ion-chip>
+        </h1>
     </ion-list-header>
-    <!--ion-item *ngFor="let item of activeSurveys()" lines="inset">
+    <ion-item *ngFor="let item of publicSurveyList" lines="inset">
       <ion-label>
         <h2>{{item.localita}}</h2>
         <h3>{{item.short_date}}</h3>
@@ -50,11 +57,7 @@
       <ion-button slot="end" shape="round" color="secondary" size="small" (click)="editSurvey(item.id)"> 
         <ion-icon size="small" slot="icon-only" name="create"></ion-icon>
       </ion-button>
-
-      <ion-button slot="end" shape="round" color="danger" size="small" (click)="deleteSurvey(item.id)">
-        <ion-icon size="small" slot="icon-only" name="trash"></ion-icon>
-      </ion-button>
-    </ion-item-->
+    </ion-item>
   </ion-list>
   <!-- //https://www.freakyjolly.com/ionic-firebase-crud-operations/#.X-2m2On0mEJ -->
   <!--ion-card *ngFor="let item of activeSurveys()" color="primary">

@@ -82,7 +82,6 @@ export class SurveysService {
     data['created_time']=dt.getTime();
     try {
       const messageRef = await this.firestore.collection(this.collectionName).add(data);
-      debugger;
       // 2 - Upload the image to Cloud Storage.
       for (let i=0;i<photos.length; i++){
         var filePath = this.user.uid + '/' + messageRef.id + '/' + i +"."+photos[i].filetype;
