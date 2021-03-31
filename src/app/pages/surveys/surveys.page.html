@@ -44,12 +44,13 @@
     <ion-list-header>
       <h1>
         <ion-chip outline color="secondary">
-          <ion-icon name="star"></ion-icon>
-          <ion-label>{{publicSurveyList.length}} Segnalazioni pubblicate</ion-label>
+          <ion-icon name="document-text-outline"></ion-icon>
+          <ion-label>{{reviewSurveyList.length}} Segnalazioni in revisione</ion-label>
         </ion-chip>
         </h1>
     </ion-list-header>
-    <ion-item *ngFor="let item of publicSurveyList" lines="inset">
+    
+    <ion-item *ngFor="let item of reviewSurveyList" lines="inset">
       <ion-label>
         <h2>{{item.localita}}</h2>
         <h3>{{item.short_date}}</h3>
@@ -57,6 +58,24 @@
       <ion-button slot="end" shape="round" color="secondary" size="small" (click)="editSurvey(item.id)"> 
         <ion-icon size="small" slot="icon-only" name="create"></ion-icon>
       </ion-button>
+    </ion-item>
+  </ion-list>
+
+  <ion-list>
+    <ion-list-header>
+      <h1>
+        <ion-chip outline color="secondary">
+          <ion-icon name="star"></ion-icon>
+          <ion-label>{{publicSurveyList.length}} Segnalazioni pubblicate</ion-label>
+        </ion-chip>
+        </h1>
+    </ion-list-header>
+    
+    <ion-item *ngFor="let item of publicSurveyList" lines="inset">
+      <ion-label>
+        <h2>{{item.localita}}</h2>
+        <h3>{{item.short_date}}</h3>
+      </ion-label>
     </ion-item>
   </ion-list>
   <!-- //https://www.freakyjolly.com/ionic-firebase-crud-operations/#.X-2m2On0mEJ -->

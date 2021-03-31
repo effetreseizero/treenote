@@ -57,9 +57,10 @@ export class SurveysManagerPage implements OnInit {
         }
       );
 
-      this.sentSurveyList = this.surveysList.filter(x => (x.deleted == false && x.review==false && x.public==false));
-      this.reviewSurveyList = this.surveysList.filter(x => (x.deleted == false && x.review==true && x.public==false));
-      this.publicSurveyList = this.surveysList.filter(x => (x.deleted == false && x.review==false && x.public==true));
+      this.sentSurveyList = this.surveysList.filter(x => (x.status === "sent"));
+      this.reviewSurveyList = this.surveysList.filter(x => (x.status === "review"));
+      this.publicSurveyList = this.surveysList.filter(x => (x.status === "public"));
+
 
     });
   }
@@ -104,21 +105,61 @@ export class SurveysManagerPage implements OnInit {
     await alert.present();
   }
 
-  promoteToReview(recordId){
-    let data = {
-      review: true
-    }
+  async promoteToReview(recordId){
 
-    this.surveysService.update_surveys_document(recordId, data);
+    const alert = await this.alertController.create({
+      header: 'Sposta in revisione?',
+      buttons: [
+        {
+          text: 'Cancel',
+          role: 'cancel',
+          cssClass: 'secondary',
+          handler: () => {}
+        },
+        {
+          text: 'Ok',
+          handler: () => {
+            let data = {
+              status: "review"
+            }
+        
+            this.surveysService.update_surveys_document(recordId, data);
+          }
+        }
+      ]
+    });
+
+    await alert.present();
+
+    
   }
 
-  promoteToPublic(recordId){
-    let data = {
-      review: false,
-      public: true
-    }
+  async promoteToPublic(recordId){
 
-    this.surveysService.update_surveys_document(recordId, data);
+    const alert = await this.alertController.create({
+      header: 'Rendi pubblico?',
+      buttons: [
+        {
+          text: 'Cancel',
+          role: 'cancel',
+          cssClass: 'secondary',
+          handler: () => {}
+        },
+        {
+          text: 'Ok',
+          handler: () => {
+            let data = {
+              status: "public"
+            }
+        
+            this.surveysService.update_surveys_document(recordId, data);
+          }
+        }
+      ]
+    });
+
+    await alert.present();
+
   }
 
   /**

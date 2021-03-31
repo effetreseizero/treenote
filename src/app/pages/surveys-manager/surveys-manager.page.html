@@ -21,7 +21,7 @@
           <h1>Segnalazioni inviate</h1>
         </ion-list-header>
 
-        <ion-item *ngFor="let item of sentSurveyList" lines="inset">
+        <ion-item *ngFor="let item of sentSurveyList">
           <ion-label>
             <h3>{{item.localita}}</h3>
             <p>{{item.short_date}}<p>
@@ -32,8 +32,8 @@
           <ion-button slot="end" shape="round" color="danger" size="small" (click)="deleteSurvey(item.id)">
             <ion-icon size="small" slot="icon-only" name="trash"></ion-icon>
           </ion-button>
-          <ion-button slot="end" shape="round" color="primary" size="small" (click)="promoteToReview(item.id)">
-            <ion-icon size="small" slot="icon-only" name="search"></ion-icon>
+          <ion-button slot="end" shape="round" color="tertiary" size="small" (click)="promoteToReview(item.id)">
+            <ion-icon size="small" slot="icon-only" name="document-text-outline"></ion-icon>
           </ion-button>
           
         </ion-item>
@@ -49,7 +49,7 @@
           <h1>Segnalazioni in revisione</h1>
         </ion-list-header>
 
-        <ion-item *ngFor="let item of reviewSurveyList" lines="inset">
+        <ion-item *ngFor="let item of reviewSurveyList">
           <ion-label>
             <h3>{{item.localita}}</h3>
             <p>{{item.short_date}}</p>
@@ -60,7 +60,7 @@
           <ion-button slot="end" shape="round" color="danger" size="small" (click)="deleteSurvey(item.id)">
             <ion-icon size="small" slot="icon-only" name="trash"></ion-icon>
           </ion-button>
-          <ion-button slot="end" shape="round" color="primary" size="small" (click)="promoteToPublic(item.id)">
+          <ion-button slot="end" shape="round" color="tertiary" size="small" (click)="promoteToPublic(item.id)">
             <ion-icon size="small" slot="icon-only" name="star"></ion-icon>
           </ion-button>
         </ion-item>
@@ -76,7 +76,7 @@
           <h1>Segnalazioni pubblicate</h1>
         </ion-list-header>
 
-        <ion-item *ngFor="let item of publicSurveyList" lines="inset">
+        <ion-item *ngFor="let item of publicSurveyList">
           <ion-label>
             <h3>{{item.localita}}</h3>
             <p>{{item.short_date}}</p>

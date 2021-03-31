@@ -76,7 +76,7 @@ export class SurveysService {
   async create_surveys_document(data,photos) {
     data['user_uid']=this.user.uid;
     data['deleted']=false;
-    data['public']=false;
+    data['status']="sent";
     //https://www.nuomiphp.com/eplan/en/2152.html
     let dt = new Date();
     data['created_time']=dt.getTime();

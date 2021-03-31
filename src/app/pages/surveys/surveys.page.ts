@@ -19,6 +19,7 @@ export class SurveysPage implements OnInit {
   surveyList = [];
   sentSurveyList = [];
   publicSurveyList = [];
+  reviewSurveyList = [];
 
   constructor(
     private surveysService: SurveysService,
@@ -62,9 +63,11 @@ export class SurveysPage implements OnInit {
         }
       );
 
-      this.sentSurveyList = this.surveyList.filter(x => (x.deleted == false && x.public==false));
+      this.sentSurveyList = this.surveyList.filter(x => (x.status=="sent"));
 
-      this.publicSurveyList = this.surveyList.filter(x => (x.deleted == false && x.public==true));
+      this.reviewSurveyList = this.surveyList.filter(x => (x.status=="review"));
+
+      this.publicSurveyList = this.surveyList.filter(x => (x.status=="public"));
 
     });
   }
