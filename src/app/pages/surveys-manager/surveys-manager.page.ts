@@ -60,6 +60,7 @@ export class SurveysManagerPage implements OnInit {
       this.sentSurveyList = this.surveysList.filter(x => (x.status === "sent"));
       this.reviewSurveyList = this.surveysList.filter(x => (x.status === "review"));
       this.publicSurveyList = this.surveysList.filter(x => (x.status === "public"));
+      this.publicSurveyList = this.surveysList.filter(x => (x.status === "archived"));
 
 
     });
@@ -160,6 +161,35 @@ export class SurveysManagerPage implements OnInit {
 
     await alert.present();
 
+  }
+
+  async promoteToArchive(recordId){
+
+    const alert = await this.alertController.create({
+      header: 'Sposta in archivio?',
+      buttons: [
+        {
+          text: 'Cancel',
+          role: 'cancel',
+          cssClass: 'secondary',
+          handler: () => {}
+        },
+        {
+          text: 'Ok',
+          handler: () => {
+            let data = {
+              status: "archived"
+            }
+        
+            this.surveysService.update_surveys_document(recordId, data);
+          }
+        }
+      ]
+    });
+
+    await alert.present();
+
+    
   }
 
   /**

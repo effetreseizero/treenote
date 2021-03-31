@@ -16,13 +16,13 @@
     <!--survey slide-->
     <ion-slide>
 
-      <ion-list>
+      <ion-list inset="false">
         <ion-list-header>
           <h1>Segnalazioni inviate</h1>
         </ion-list-header>
 
-        <ion-item *ngFor="let item of sentSurveyList">
-          <ion-label>
+        <ion-item *ngFor="let item of sentSurveyList" class="ion-text-wrap">
+          <ion-label >
             <h3>{{item.localita}}</h3>
             <p>{{item.short_date}}<p>
           </ion-label>
@@ -94,6 +94,31 @@
 
     </ion-slide>
 
+    <ion-slide>
+
+      <ion-list>
+        <ion-list-header>
+          <h1>Segnalazioni archiviate</h1>
+        </ion-list-header>
+
+        <ion-item *ngFor="let item of archivedSurveyList">
+          <ion-label>
+            <h3>{{item.localita}}</h3>
+            <p>{{item.short_date}}</p>
+          </ion-label>
+          <ion-button slot="end" shape="round" color="secondary" size="small" (click)="editSurvey(item.id)">
+            <ion-icon size="small" slot="icon-only" name="create"></ion-icon>
+          </ion-button>
+          <ion-button slot="end" shape="round" color="danger" size="small" (click)="deleteSurvey(item.id)">
+            <ion-icon size="small" slot="icon-only" name="trash"></ion-icon>
+          </ion-button>
+         
+        </ion-item>
+
+      </ion-list>
+
+    </ion-slide>
+
   </ion-slides>
 
 </ion-content>
@@ -104,10 +129,13 @@
         <ion-label>Inviate</ion-label>
       </ion-segment-button>
       <ion-segment-button value="1">
-        <ion-label>Review</ion-label>
+        <ion-label>Revisione</ion-label>
       </ion-segment-button>
       <ion-segment-button value="2">
         <ion-label>Pubblicate</ion-label>
+      </ion-segment-button>
+      <ion-segment-button value="3">
+        <ion-label>Archiviate</ion-label>
       </ion-segment-button>
     </ion-segment>
   </ion-toolbar>
