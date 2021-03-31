@@ -1,6 +1,7 @@
 export interface Survey {
     user_uid: string;
     deleted: boolean;
+    status: string;
     created_time: number;
     data_ora_osservazione:string;
     latitudine: number;
