@@ -68,7 +68,7 @@ export class SurveysService {
 
     return this.firestore.collection(
       this.collectionName,
-      ref => ref.where("public", "==", true)
+      ref => ref.where("status", "==", "public")
       )
       .snapshotChanges();
   }
