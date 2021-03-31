@@ -39,111 +39,125 @@
       <!--p>ID: {{surveyId}}</p-->
       <form [formGroup]="surveyForm" (ngSubmit)="saveSurvey()">
 
-        <ion-item [class.invalid]="!surveyForm.controls.localita.valid && (surveyForm.controls.localita.dirty || submitAttempt)">
-          <ion-label type="text" position="floating">Località</ion-label>
-          <ion-input formControlName="localita" ></ion-input>
-        </ion-item>
-
-        <ion-item [class.invalid]="!surveyForm.controls.data_ora_osservazione.valid && (surveyForm.controls.data_ora_osservazione.dirty || submitAttempt)">
-          <ion-label>Data osservazione</ion-label>
-          <ion-datetime formControlName="data_ora_osservazione" displayFormat="DD/MM/YY HH:mm" ></ion-datetime>
-        </ion-item>
-
-        <ion-item [class.invalid]="!surveyForm.controls.tipologia.valid && (surveyForm.controls.tipologia.dirty || submitAttempt)">
-          <ion-label>Tipologia</ion-label>
-          <ion-select formControlName="tipologia"  okText="Ok" cancelText="Annulla" >
-            <ion-select-option value="010_gruppo">Gruppo di alberi</ion-select-option>
-            <ion-select-option value="020_intero">Bosco intero </ion-select-option>
-          </ion-select>
-        </ion-item>
+        <ion-list>
+          <ion-item-group>
+            <ion-item-divider>
+              <ion-label>Base</ion-label>
+            </ion-item-divider>
+            <ion-item [class.invalid]="!surveyForm.controls.localita.valid && (surveyForm.controls.localita.dirty || submitAttempt)">
+              <ion-label type="text" position="floating">Località</ion-label>
+              <ion-input formControlName="localita" ></ion-input>
+            </ion-item>
     
-        <ion-item [class.invalid]="!surveyForm.controls.identificazione.valid && (surveyForm.controls.identificazione.dirty || submitAttempt)">
-          <ion-label>Identificazione</ion-label>
-          <ion-select formControlName="identificazione"  okText="Ok" cancelText="Annulla" >
-            <ion-select-option value="010_conifera">Conifera</ion-select-option>
-            <ion-select-option value="020_latifoglia">Latifoglia</ion-select-option>
-          </ion-select>
-        </ion-item>
-
-        <ion-item [class.invalid]="!surveyForm.controls.nome_comune.valid && (surveyForm.controls.nome_comune.dirty || submitAttempt)">
-          <ion-label type="text" position="floating">Nome comune</ion-label>
-          <ion-input formControlName="nome_comune" ></ion-input>
-        </ion-item>
-
-        <ion-item [class.invalid]="!surveyForm.controls.loc_problema.valid && (surveyForm.controls.loc_problema.dirty || submitAttempt)">
-          <ion-label>Localizzazione del problema</ion-label>
-          <ion-select formControlName="loc_problema"  okText="Ok" cancelText="Annulla" >
-            <ion-select-option value="010_chioma">Chioma</ion-select-option>
-            <ion-select-option value="020_fusto">Fusto</ion-select-option>
-          </ion-select>
-        </ion-item>
-
-        <ion-item [class.invalid]="!surveyForm.controls.commenti.valid && (surveyForm.controls.commenti.dirty || submitAttempt)">
-          <ion-label type="text" position="floating">Commenti</ion-label>
-          <ion-input formControlName="commenti" ></ion-input>
-        </ion-item>
-
-        <ion-item [class.invalid]="!surveyForm.controls.specie.valid && (surveyForm.controls.specie.dirty || submitAttempt)">
-          <ion-label>Specie forestale</ion-label>
-          <ion-select formControlName="specie"  okText="Okay" cancelText="Dismiss" >
-            <ion-select-option value='010_pino'>Pino</ion-select-option>
-            <ion-select-option value='020_larice'>Larice</ion-select-option>
-            <ion-select-option value='030_abete_rosso'>Abete rosso</ion-select-option>
-            <ion-select-option value='040_abete_bianco'>Abete bianco</ion-select-option>
-            <ion-select-option value='050_cipresso'>Cipresso</ion-select-option>
-            <ion-select-option value='060_faggio'>Faggio</ion-select-option>
-            <ion-select-option value='070_quercia'>Quercia</ion-select-option>
-            <ion-select-option value='080_castagno'>Castagno</ion-select-option>
-            <ion-select-option value='090_noce'>Noce</ion-select-option>
-            <ion-select-option value='100_salice'>Salice</ion-select-option>
-            <ion-select-option value='110_ontano'>Ontano</ion-select-option>
-            <ion-select-option value='120_frassino'>Frassino</ion-select-option>
-            <ion-select-option value='130_olmo'>Olmo</ion-select-option>
-            <ion-select-option value='140_pioppo'>Pioppo</ion-select-option>
-            <ion-select-option value='150_acero'>Acero</ion-select-option>
-            <ion-select-option value='900_conifere_miste'>Conifere miste</ion-select-option>
-            <ion-select-option value='910_latifoglie_miste'>Latifoglie miste</ion-select-option>
-            <ion-select-option value='930_macchia_mediterranea'>Macchia mediterranea</ion-select-option>
-            <ion-select-option value='999_altro'>Altro</ion-select-option>
-          </ion-select>
-        </ion-item>
-
-        <ion-item [class.invalid]="!surveyForm.controls.nome_scientifico.valid && (surveyForm.controls.nome_scientifico.dirty || submitAttempt)">
-          <ion-label type="text" position="floating">Nome scientifico</ion-label>
-          <ion-input formControlName="nome_scientifico" ></ion-input>
-        </ion-item>
-
-        <ion-item [class.invalid]="!surveyForm.controls.sintomi.valid && (surveyForm.controls.sintomi.dirty || submitAttempt)">
-          <ion-label>Natura dei sintomi</ion-label>
-          <ion-select formControlName="sintomi"  okText="Okay" cancelText="Dismiss" >
-            <ion-select-option value='010_avvizzimento_fogliare'>Avvizzimento fogliare</ion-select-option>
-            <ion-select-option value='020_ingiallimento_fogliare'>Ingiallimento fogliare</ion-select-option>
-            <ion-select-option value='030_disseccamento_rami'>Disseccamento di rami</ion-select-option>
-            <ion-select-option value='040_microfillia'>Microfillia</ion-select-option>
-            <ion-select-option value='050_emissione_rami_epicormici'>Emissione rami epicormici</ion-select-option>
-            <ion-select-option value='060_fessurazione_longitudinale_corteccia'>Fessurazione longitudinale della corteccia</ion-select-option>
-            <ion-select-option value='070_colatura_mugillaginosa'>Colatura mugillaginosa</ion-select-option>
-            <ion-select-option value='900_altro'>Altro</ion-select-option>
-          </ion-select>
-        </ion-item>
-
-        <ion-item [class.invalid]="!surveyForm.controls.diffusione_perc.valid && (surveyForm.controls.diffusione_perc.dirty || submitAttempt)">
-          <ion-label>Percentuale di diffusione del fenomeno</ion-label>
-          <ion-select formControlName="diffusione_perc"  okText="Ok" cancelText="Annulla" >
-            <ion-select-option value='010_minore_20'>meno del 20%</ion-select-option>
-            <ion-select-option value='020_compreso_20_50'>tra il 20% e il  50%</ion-select-option>
-            <ion-select-option value='050_maggiore_50'>maggiore del 50%</ion-select-option>
-          </ion-select>
-        </ion-item>
+            <ion-item [class.invalid]="!surveyForm.controls.data_ora_osservazione.valid && (surveyForm.controls.data_ora_osservazione.dirty || submitAttempt)">
+              <ion-label type="text" position="floating">Data osservazione</ion-label>
+              <ion-datetime formControlName="data_ora_osservazione" displayFormat="DD/MM/YY HH:mm" ></ion-datetime>
+            </ion-item>
+    
+            <ion-item [class.invalid]="!surveyForm.controls.tipologia.valid && (surveyForm.controls.tipologia.dirty || submitAttempt)">
+              <ion-label type="text" position="floating">Tipologia</ion-label>
+              <ion-select formControlName="tipologia"  okText="Ok" cancelText="Annulla" >
+                <ion-select-option value="010_gruppo">Gruppo di alberi</ion-select-option>
+                <ion-select-option value="020_intero">Bosco intero </ion-select-option>
+              </ion-select>
+            </ion-item>
         
-        <ion-item [class.invalid]="!surveyForm.controls.alberi_morti.valid && (surveyForm.controls.alberi_morti.dirty || submitAttempt)">
-          <ion-label>Presenza di alberi morti</ion-label>
-          <ion-select formControlName="alberi_morti"  okText="Ok" cancelText="Annulla" >
-            <ion-select-option value='010_si'>Si</ion-select-option>
-            <ion-select-option value='020_no'>No</ion-select-option>
-          </ion-select>
-        </ion-item>
-
+            <ion-item [class.invalid]="!surveyForm.controls.identificazione.valid && (surveyForm.controls.identificazione.dirty || submitAttempt)">
+              <ion-label type="text" position="floating">Identificazione</ion-label>
+              <ion-select formControlName="identificazione"  okText="Ok" cancelText="Annulla" >
+                <ion-select-option value="010_conifera">Conifera</ion-select-option>
+                <ion-select-option value="020_latifoglia">Latifoglia</ion-select-option>
+              </ion-select>
+            </ion-item>
+    
+            <ion-item [class.invalid]="!surveyForm.controls.nome_comune.valid && (surveyForm.controls.nome_comune.dirty || submitAttempt)">
+              <ion-label type="text" position="floating">Nome comune</ion-label>
+              <ion-input formControlName="nome_comune" ></ion-input>
+            </ion-item>
+    
+            <ion-item [class.invalid]="!surveyForm.controls.loc_problema.valid && (surveyForm.controls.loc_problema.dirty || submitAttempt)">
+              <ion-label type="text" position="floating">Localizzazione del problema</ion-label>
+              <ion-select formControlName="loc_problema"  okText="Ok" cancelText="Annulla" >
+                <ion-select-option value="010_chioma">Chioma</ion-select-option>
+                <ion-select-option value="020_fusto">Fusto</ion-select-option>
+              </ion-select>
+            </ion-item>
+    
+            <ion-item [class.invalid]="!surveyForm.controls.commenti.valid && (surveyForm.controls.commenti.dirty || submitAttempt)">
+              <ion-label type="text" position="floating">Commenti</ion-label>
+              <ion-input formControlName="commenti" ></ion-input>
+            </ion-item>
+          </ion-item-group>
+          <ion-item-group>
+            <ion-item-divider>
+              <ion-label>Avanzate</ion-label>
+              <ion-toggle formControlName="avanzate"></ion-toggle>
+            </ion-item-divider>
+            <ion-item *ngIf="this.surveyForm.value['avanzate']" [class.invalid]="!surveyForm.controls.specie.valid && (surveyForm.controls.specie.dirty || submitAttempt)">
+              <ion-label type="text" position="floating">Specie forestale</ion-label>
+              <ion-select formControlName="specie"  okText="Ok" cancelText="Annulla" interface="action-sheet">
+                <ion-select-option value='010_pino'>Pino</ion-select-option>
+                <ion-select-option value='020_larice'>Larice</ion-select-option>
+                <ion-select-option value='030_abete_rosso'>Abete rosso</ion-select-option>
+                <ion-select-option value='040_abete_bianco'>Abete bianco</ion-select-option>
+                <ion-select-option value='050_cipresso'>Cipresso</ion-select-option>
+                <ion-select-option value='060_faggio'>Faggio</ion-select-option>
+                <ion-select-option value='070_quercia'>Quercia</ion-select-option>
+                <ion-select-option value='080_castagno'>Castagno</ion-select-option>
+                <ion-select-option value='090_noce'>Noce</ion-select-option>
+                <ion-select-option value='100_salice'>Salice</ion-select-option>
+                <ion-select-option value='110_ontano'>Ontano</ion-select-option>
+                <ion-select-option value='120_frassino'>Frassino</ion-select-option>
+                <ion-select-option value='130_olmo'>Olmo</ion-select-option>
+                <ion-select-option value='140_pioppo'>Pioppo</ion-select-option>
+                <ion-select-option value='150_acero'>Acero</ion-select-option>
+                <ion-select-option value='900_conifere_miste'>Conifere miste</ion-select-option>
+                <ion-select-option value='910_latifoglie_miste'>Latifoglie miste</ion-select-option>
+                <ion-select-option value='930_macchia_mediterranea'>Macchia mediterranea</ion-select-option>
+                <ion-select-option value='999_altro'>Altro</ion-select-option>
+              </ion-select>
+            </ion-item>
+    
+            <ion-item *ngIf="this.surveyForm.value['avanzate']"  [class.invalid]="!surveyForm.controls.nome_scientifico.valid && (surveyForm.controls.nome_scientifico.dirty || submitAttempt)">
+              <ion-label type="text" position="floating">Nome scientifico</ion-label>
+              <ion-input formControlName="nome_scientifico" ></ion-input>
+            </ion-item>
+    
+            <ion-item *ngIf="this.surveyForm.value['avanzate']"  [class.invalid]="!surveyForm.controls.sintomi.valid && (surveyForm.controls.sintomi.dirty || submitAttempt)">
+              <ion-label type="text" position="floating" >Natura dei sintomi</ion-label>
+              <ion-select formControlName="sintomi"  okText="Ok" cancelText="Annulla" interface="action-sheet">
+                <ion-select-option value='010_avvizzimento_fogliare'>Avvizzimento fogliare</ion-select-option>
+                <ion-select-option value='020_ingiallimento_fogliare'>Ingiallimento fogliare</ion-select-option>
+                <ion-select-option value='030_disseccamento_rami'>Disseccamento di rami</ion-select-option>
+                <ion-select-option value='040_microfillia'>Microfillia</ion-select-option>
+                <ion-select-option value='050_emissione_rami_epicormici'>Emissione rami epicormici</ion-select-option>
+                <ion-select-option value='060_fessurazione_longitudinale_corteccia'>Fessurazione longitudinale della corteccia</ion-select-option>
+                <ion-select-option value='070_colatura_mugillaginosa'>Colatura mugillaginosa</ion-select-option>
+                <ion-select-option value='900_altro'>Altro</ion-select-option>
+              </ion-select>
+              <ion-button *ngIf="this.surveyForm.value['sintomi']==''" slot="end" shape="round" fill="clear" (click)="sintomiInfo()">
+                <ion-icon slot="icon-only"  name="information-circle" size="large" ></ion-icon>
+              </ion-button>
+            </ion-item>
+    
+            <ion-item *ngIf="this.surveyForm.value['avanzate']" [class.invalid]="!surveyForm.controls.diffusione_perc.valid && (surveyForm.controls.diffusione_perc.dirty || submitAttempt)">
+              <ion-label type="text" position="floating">Percentuale di diffusione del fenomeno</ion-label>
+              <ion-select formControlName="diffusione_perc"  okText="Ok" cancelText="Annulla" >
+                <ion-select-option value='010_minore_20'>meno del 20%</ion-select-option>
+                <ion-select-option value='020_compreso_20_50'>tra il 20% e il  50%</ion-select-option>
+                <ion-select-option value='050_maggiore_50'>maggiore del 50%</ion-select-option>
+              </ion-select>
+            </ion-item>
+            
+            <ion-item *ngIf="this.surveyForm.value['avanzate']" [class.invalid]="!surveyForm.controls.alberi_morti.valid && (surveyForm.controls.alberi_morti.dirty || submitAttempt)">
+              <ion-label type="text" position="floating">Presenza di alberi morti</ion-label>
+              <ion-select formControlName="alberi_morti"  okText="Ok" cancelText="Annulla" >
+                <ion-select-option value='010_si'>Si</ion-select-option>
+                <ion-select-option value='020_no'>No</ion-select-option>
+              </ion-select>
+            </ion-item>
+          </ion-item-group>
+        </ion-list>
       </form>
     </ion-slide>
 
@@ -161,6 +175,7 @@
         <ion-col size="12" *ngFor="let photo of photos; index as position">
             <ion-card>
               <ion-img [src]="photo.webviewPath"></ion-img>
+                <ion-icon *ngIf="editable" [class.badge-one]="true" name="trash" color="danger" size="large" (click)="removePhoto(position);"></ion-icon>
             </ion-card>
         </ion-col>
         <ion-col size="12" >
@@ -177,11 +192,12 @@
 
     <ion-slide>
       <app-ol-map class="map"
-      [center]="[12.5,42]"
-      [zoom]="5.5"
-      (mapReady)="onMapReady($event)"
-      #app_ol_map
-    ></app-ol-map>
+        [center]="[12.5,42]"
+        [zoom]="5.5"
+        (mapReady)="onMapReady($event)"
+        #app_ol_map
+      >
+      </app-ol-map>
       
     </ion-slide>
 

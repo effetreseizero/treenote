@@ -52,7 +52,10 @@ export class SurveyEditPage implements OnInit {
 
   private surveyId = "0";
   private survey=null;
+
   private editable = true;
+
+  private avanzateActive = false;
 
   public surveyForm: FormGroup;
   public submitAttempt: boolean = false;
@@ -66,6 +69,8 @@ export class SurveyEditPage implements OnInit {
     //autoHeight: true
   };
   segmentSelected = 0;
+
+  
 
   //https://www.pluralsight.com/guides/using-template-reference-variables-to-interact-with-nested-components
   @ViewChild('app_ol_map') olMapComponent:OlMapComponent;
@@ -109,11 +114,12 @@ export class SurveyEditPage implements OnInit {
       nome_comune: ['',[]],
       loc_problema: ['', [Validators.required]],
       commenti: ['', []],
-      specie: ['', [Validators.required]],
+      avanzate: ['', []],
+      specie: ['', []],
       nome_scientifico: ['',[]],
-      sintomi: ['', [Validators.required]],
-      diffusione_perc: ['', [Validators.required]],
-      alberi_morti: ['', [Validators.required]],
+      sintomi: ['', []],
+      diffusione_perc: ['', []],
+      alberi_morti: ['', []],
     });
 
 
@@ -122,7 +128,7 @@ export class SurveyEditPage implements OnInit {
   ngOnInit() {
 
     this.geolocationInit();
-    
+
     //https://ionicacademy.com/pass-data-angular-router-ionic-4/
     this.activatedRoute.queryParams.subscribe(params => {
       if (this.router.getCurrentNavigation().extras.state) {
@@ -141,6 +147,8 @@ export class SurveyEditPage implements OnInit {
           this.surveyForm.patchValue(this.survey);
 
           this.surveyForm.disable();
+
+          this.avanzateActive = this.surveyForm.get("avanzate");
 
           this.photos = [];
           for (let i=0;i<3;i++){
@@ -166,6 +174,9 @@ export class SurveyEditPage implements OnInit {
 
         this.editable = true;
         
+        this.avanzateActive = false;
+        
+        /*
         this.surveyForm.patchValue({
           data_ora_osservazione: (new Date).toJSON(),
           //DUMMY DATA
@@ -181,11 +192,49 @@ export class SurveyEditPage implements OnInit {
           diffusione_perc: "010_minore_20",
           alberi_morti: "010_si", 
         });
+        */
+
+        this.surveyForm.get("avanzate").valueChanges.subscribe(async (checked)=>{
+          if(!checked){
+            const alert = await this.alertController.create({
+              header: 'Le informazioni avanzate saranno cancellate. Confermi?',
+              buttons: [
+                {
+                  text: 'Cancel',
+                  role: 'cancel',
+                  cssClass: 'secondary',
+                  handler: () => {
+                    this.surveyForm.patchValue({
+                      avanzate: true
+                    });
+                    this.avanzateActive = true;
+                  }
+                },
+                {
+                  text: 'Ok',
+                  handler: () => {
+                    this.surveyForm.patchValue({
+                      specie: "",
+                      nome_scientifico: "",
+                      sintomi: "",
+                      diffusione_perc: "",
+                      alberi_morti: "", 
+                    });
+                    this.avanzateActive = false;
+                  }
+                }
+              ]
+            });
+        
+            await alert.present();
+          } 
+        });
         
       }
     });
 
-    
+    //https://www.tektutorialshub.com/angular/valuechanges-in-angular-forms/#:~:text=The%20ValueChanges%20is%20an%20event,time%20and%20respond%20to%20it.
+        
   }
 
   /**
@@ -282,6 +331,19 @@ export class SurveyEditPage implements OnInit {
     toast.present();
   }
 
+
+  async sintomiInfo(){
+    let toast = await this.toastController.create({
+      message: "sintomi",
+      duration: 3000,
+      position: 'top'
+    });
+
+    toast.present();
+  }
+
+  
+
   /**
    * Slider managment
    * @param $event 
@@ -314,6 +376,29 @@ export class SurveyEditPage implements OnInit {
       await toast.present();      
     }
   }
+
+  async removePhoto(position) {
+    const alert = await this.alertController.create({
+      header: 'Rimuovere la foto?',
+      buttons: [
+        {
+          text: 'Cancel',
+          role: 'cancel',
+          cssClass: 'secondary',
+          handler: () => {}
+        },
+        {
+          text: 'Ok',
+          handler: () => {
+            this.photos.splice(position,1);
+          }
+        }
+      ]
+    });
+  
+    await alert.present();
+  }
+
 
 
   /**
