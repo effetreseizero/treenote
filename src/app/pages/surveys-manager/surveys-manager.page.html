@@ -11,27 +11,107 @@
 
 <ion-content [fullscreen]="true" class="ion-padding background">
 
-  <ion-list>
-    <ion-list-header>
-      <h1>Segnalazioni presenti</h1>
-    </ion-list-header>
+  <ion-slides [options]="slideOptsSurveySlider" id="surveySlider" #surveySlider
+    (ionSlideDidChange)="slideChanged($event)">
+    <!--survey slide-->
+    <ion-slide>
 
-    <ion-item *ngFor="let item of surveysList" lines="inset">
-      <ion-label>
-        <h2>{{item.localita}}</h2>
-        <h3>{{item.short_date}}</h3>
-      </ion-label>
-      <ion-button slot="end" shape="round" color="secondary" size="small" (click)="editSurvey(item.id)"> 
-        <ion-icon size="small" slot="icon-only" name="create"></ion-icon>
-      </ion-button>
-      <ion-toggle slot="end" name="public" color="warning" [(ngModel)]="item.public" (ngModelChange)="publicChange($event, item)"></ion-toggle>
-      
-    </ion-item>
-    
-  </ion-list>
+      <ion-list>
+        <ion-list-header>
+          <h1>Segnalazioni inviate</h1>
+        </ion-list-header>
 
-  
+        <ion-item *ngFor="let item of sentSurveyList" lines="inset">
+          <ion-label>
+            <h3>{{item.localita}}</h3>
+            <p>{{item.short_date}}<p>
+          </ion-label>
+          <ion-button slot="end" shape="round" color="secondary" size="small" (click)="editSurvey(item.id)">
+            <ion-icon size="small" slot="icon-only" name="create"></ion-icon>
+          </ion-button>
+          <ion-button slot="end" shape="round" color="danger" size="small" (click)="deleteSurvey(item.id)">
+            <ion-icon size="small" slot="icon-only" name="trash"></ion-icon>
+          </ion-button>
+          <ion-button slot="end" shape="round" color="primary" size="small" (click)="promoteToReview(item.id)">
+            <ion-icon size="small" slot="icon-only" name="search"></ion-icon>
+          </ion-button>
+          
+        </ion-item>
 
+      </ion-list>
 
+    </ion-slide>
+
+    <ion-slide>
+
+      <ion-list>
+        <ion-list-header>
+          <h1>Segnalazioni in revisione</h1>
+        </ion-list-header>
+
+        <ion-item *ngFor="let item of reviewSurveyList" lines="inset">
+          <ion-label>
+            <h3>{{item.localita}}</h3>
+            <p>{{item.short_date}}</p>
+          </ion-label>
+          <ion-button slot="end" shape="round" color="secondary" size="small" (click)="editSurvey(item.id)">
+            <ion-icon size="small" slot="icon-only" name="create"></ion-icon>
+          </ion-button>
+          <ion-button slot="end" shape="round" color="danger" size="small" (click)="deleteSurvey(item.id)">
+            <ion-icon size="small" slot="icon-only" name="trash"></ion-icon>
+          </ion-button>
+          <ion-button slot="end" shape="round" color="primary" size="small" (click)="promoteToPublic(item.id)">
+            <ion-icon size="small" slot="icon-only" name="star"></ion-icon>
+          </ion-button>
+        </ion-item>
+
+      </ion-list>
+
+    </ion-slide>
+
+    <ion-slide>
+
+      <ion-list>
+        <ion-list-header>
+          <h1>Segnalazioni pubblicate</h1>
+        </ion-list-header>
+
+        <ion-item *ngFor="let item of publicSurveyList" lines="inset">
+          <ion-label>
+            <h3>{{item.localita}}</h3>
+            <p>{{item.short_date}}</p>
+          </ion-label>
+          <ion-button slot="end" shape="round" color="secondary" size="small" (click)="editSurvey(item.id)">
+            <ion-icon size="small" slot="icon-only" name="create"></ion-icon>
+          </ion-button>
+          <ion-button slot="end" shape="round" color="danger" size="small" (click)="deleteSurvey(item.id)">
+            <ion-icon size="small" slot="icon-only" name="trash"></ion-icon>
+          </ion-button>
+         
+        </ion-item>
+
+      </ion-list>
+
+    </ion-slide>
+
+  </ion-slides>
 
 </ion-content>
+<ion-footer class="ion-no-border">
+  <ion-toolbar>
+    <ion-segment [(ngModel)]="segmentSelected" (ionChange)="segmentChanged($event)">
+      <ion-segment-button value="0">
+        <ion-label>Inviate</ion-label>
+      </ion-segment-button>
+      <ion-segment-button value="1">
+        <ion-label>Review</ion-label>
+      </ion-segment-button>
+      <ion-segment-button value="2">
+        <ion-label>Pubblicate</ion-label>
+      </ion-segment-button>
+    </ion-segment>
+  </ion-toolbar>
+</ion-footer>
+
+
+

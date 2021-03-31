@@ -165,7 +165,7 @@ export class SurveyEditPage implements OnInit {
         this.surveyId = "0";
 
         this.editable = true;
-
+        
         this.surveyForm.patchValue({
           data_ora_osservazione: (new Date).toJSON(),
           //DUMMY DATA
@@ -181,6 +181,7 @@ export class SurveyEditPage implements OnInit {
           diffusione_perc: "010_minore_20",
           alberi_morti: "010_si", 
         });
+        
       }
     });
 
