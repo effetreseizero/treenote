@@ -6,6 +6,10 @@ const routes: Routes = [
   {
     path: '',
     loadChildren: './menu/menu.module#MenuPageModule'
+  },
+  {
+    path: 'info-list',
+    loadChildren: () => import('./modal/info-list/info-list.module').then( m => m.InfoListPageModule)
   }
 
 ];

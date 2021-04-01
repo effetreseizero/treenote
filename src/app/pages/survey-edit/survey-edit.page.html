@@ -93,7 +93,7 @@
               <ion-label>Avanzate</ion-label>
               <ion-toggle formControlName="avanzate"></ion-toggle>
             </ion-item-divider>
-            <ion-item *ngIf="this.surveyForm.value['avanzate']" [class.invalid]="!surveyForm.controls.specie.valid && (surveyForm.controls.specie.dirty || submitAttempt)">
+            <ion-item *ngIf="this.avanzateActivated"  [class.invalid]="!surveyForm.controls.specie.valid && (surveyForm.controls.specie.dirty || submitAttempt)">
               <ion-label type="text" position="floating">Specie forestale</ion-label>
               <ion-select formControlName="specie"  okText="Ok" cancelText="Annulla" interface="action-sheet">
                 <ion-select-option value='010_pino'>Pino</ion-select-option>
@@ -118,12 +118,12 @@
               </ion-select>
             </ion-item>
     
-            <ion-item *ngIf="this.surveyForm.value['avanzate']"  [class.invalid]="!surveyForm.controls.nome_scientifico.valid && (surveyForm.controls.nome_scientifico.dirty || submitAttempt)">
+            <ion-item *ngIf="this.avanzateActivated"  [class.invalid]="!surveyForm.controls.nome_scientifico.valid && (surveyForm.controls.nome_scientifico.dirty || submitAttempt)">
               <ion-label type="text" position="floating">Nome scientifico</ion-label>
               <ion-input formControlName="nome_scientifico" ></ion-input>
             </ion-item>
     
-            <ion-item *ngIf="this.surveyForm.value['avanzate']"  [class.invalid]="!surveyForm.controls.sintomi.valid && (surveyForm.controls.sintomi.dirty || submitAttempt)">
+            <ion-item *ngIf="this.avanzateActivated"  [class.invalid]="!surveyForm.controls.sintomi.valid && (surveyForm.controls.sintomi.dirty || submitAttempt)">
               <ion-label type="text" position="floating" >Natura dei sintomi</ion-label>
               <ion-select formControlName="sintomi"  okText="Ok" cancelText="Annulla" interface="action-sheet">
                 <ion-select-option value='010_avvizzimento_fogliare'>Avvizzimento fogliare</ion-select-option>
@@ -140,7 +140,7 @@
               </ion-button>
             </ion-item>
     
-            <ion-item *ngIf="this.surveyForm.value['avanzate']" [class.invalid]="!surveyForm.controls.diffusione_perc.valid && (surveyForm.controls.diffusione_perc.dirty || submitAttempt)">
+            <ion-item *ngIf="this.avanzateActivated" [class.invalid]="!surveyForm.controls.diffusione_perc.valid && (surveyForm.controls.diffusione_perc.dirty || submitAttempt)">
               <ion-label type="text" position="floating">Percentuale di diffusione del fenomeno</ion-label>
               <ion-select formControlName="diffusione_perc"  okText="Ok" cancelText="Annulla" >
                 <ion-select-option value='010_minore_20'>meno del 20%</ion-select-option>
@@ -149,7 +149,7 @@
               </ion-select>
             </ion-item>
             
-            <ion-item *ngIf="this.surveyForm.value['avanzate']" [class.invalid]="!surveyForm.controls.alberi_morti.valid && (surveyForm.controls.alberi_morti.dirty || submitAttempt)">
+            <ion-item *ngIf="this.avanzateActivated" [class.invalid]="!surveyForm.controls.alberi_morti.valid && (surveyForm.controls.alberi_morti.dirty || submitAttempt)">
               <ion-label type="text" position="floating">Presenza di alberi morti</ion-label>
               <ion-select formControlName="alberi_morti"  okText="Ok" cancelText="Annulla" >
                 <ion-select-option value='010_si'>Si</ion-select-option>

@@ -4,7 +4,9 @@ import { Observable } from 'rxjs';
 import { Router, RouterEvent } from '@angular/router';
 
 import { PopoverController } from '@ionic/angular';
+
 import { SurveyPreviewPopoverComponent } from '../../components/survey-preview-popover/survey-preview-popover.component';
+import { HelperPopoverComponent } from '../../components/helper-popover/helper-popover.component';
 
 
 import { AuthenticationService } from "../../services/auth/authentication.service";
@@ -52,7 +54,6 @@ export class HomePage {
     private surveyService: SurveysService
   ) {}
 
-  userLoggedIn = false;
 
   ngOnInit() {
 
@@ -92,7 +93,46 @@ export class HomePage {
         this.publicSurveysVectorSource.addFeature(surveyPositionFeature)
       });
     });
+
   }
+
+  ionViewDidEnter(){
+    setTimeout(async ()=>{
+      let popover;
+      if(this.user){
+        popover = await this.popoverController.create({
+          component: HelperPopoverComponent,
+          cssClass: 'popover_setting',
+          componentProps: {
+            message: {
+              imageurl: "../../assets/images/helper_home_add.png",
+              title: "Segnalazione",
+              text: "Inviaci una segnalazione con questo bottone o dalla voce di menu Segnalazioni"
+            }
+          },
+          translucent: true
+        });
+      }else{
+        popover = await this.popoverController.create({
+          component: HelperPopoverComponent,
+          cssClass: 'popover_setting',
+          componentProps: {
+            message: {
+              imageurl: "../../assets/images/helper_home_partecipa.png",
+              title: "Iscriviti",
+              text: "Mandaci le tue segnalazioni sullo stato di salute delle piante"
+            }
+          },
+          translucent: true
+        });
+      }
+      
+      await popover.present();
+      
+  
+    },5000);
+  }
+  
 
   public logIn(): void{
     this.router.navigate(['/menu/login']);

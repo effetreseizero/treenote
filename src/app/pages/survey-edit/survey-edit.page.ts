@@ -15,6 +15,10 @@ import { SurveysService} from '../../services/firestore/surveys.service';
 import { Survey} from '../../services/firestore/survey';
 
 import { AlertController } from '@ionic/angular';
+import { ModalController } from '@ionic/angular';
+
+import { InfoListPage } from '../../modal/info-list/info-list.page'
+
 
 //https://ionicframework.com/docs/angular/your-first-app/2-taking-photos
 import { PhotoService, Photo } from '../../services/photo/photo.service';
@@ -55,7 +59,7 @@ export class SurveyEditPage implements OnInit {
 
   private editable = true;
 
-  private avanzateActive = false;
+  private avanzateActivated = false;
 
   public surveyForm: FormGroup;
   public submitAttempt: boolean = false;
@@ -102,7 +106,8 @@ export class SurveyEditPage implements OnInit {
     private alertController:AlertController,
     private toastController:ToastController,
     private geolocation: Geolocation,
-    public photoService: PhotoService
+    public photoService: PhotoService,
+    public modalController: ModalController
   ) {
 
 
@@ -148,7 +153,7 @@ export class SurveyEditPage implements OnInit {
 
           this.surveyForm.disable();
 
-          this.avanzateActive = this.surveyForm.get("avanzate");
+          this.avanzateActivated = this.surveyForm.get("avanzate").value;
 
           this.photos = [];
           for (let i=0;i<3;i++){
@@ -174,7 +179,9 @@ export class SurveyEditPage implements OnInit {
 
         this.editable = true;
         
-        this.avanzateActive = false;
+        this.avanzateActivated = false;
+
+        this.surveyForm.get("avanzate").setValue(false);
         
         /*
         this.surveyForm.patchValue({
@@ -207,7 +214,7 @@ export class SurveyEditPage implements OnInit {
                     this.surveyForm.patchValue({
                       avanzate: true
                     });
-                    this.avanzateActive = true;
+                    this.avanzateActivated = true;
                   }
                 },
                 {
@@ -220,13 +227,15 @@ export class SurveyEditPage implements OnInit {
                       diffusione_perc: "",
                       alberi_morti: "", 
                     });
-                    this.avanzateActive = false;
+                    this.avanzateActivated = false;
                   }
                 }
               ]
             });
         
             await alert.present();
+          } else {
+            this.avanzateActivated = true;
           } 
         });
         
@@ -333,13 +342,11 @@ export class SurveyEditPage implements OnInit {
 
 
   async sintomiInfo(){
-    let toast = await this.toastController.create({
-      message: "sintomi",
-      duration: 3000,
-      position: 'top'
+    const modal = await this.modalController.create({
+      component: InfoListPage,
     });
-
-    toast.present();
+    return await modal.present();
+    
   }
 
   
