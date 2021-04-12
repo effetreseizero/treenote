@@ -36,7 +36,6 @@ export class PublicSurveysStore extends Store<CoreState> {
       this.firestorage.ref('public_surveys/public_surveys.geojson').getDownloadURL().toPromise().then( url =>{
         this.geojson_url = url;
         return this.httpClient.get(this.geojson_url).toPromise().then(data =>{
-          debugger;
           this.setStateValue(data);
           return data;
         }).catch(_ => {
@@ -47,8 +46,10 @@ export class PublicSurveysStore extends Store<CoreState> {
     ])
   }
 
-  public getPublicSurveys(): any {
-    return this.state;
+  public getPublicSurveys(): Promise<any> {
+    return this.ready$.then(()=>{
+      return this.state;
+    });
   }
  
 

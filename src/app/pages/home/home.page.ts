@@ -66,7 +66,6 @@ export class HomePage {
     });
 
     this.surveyService.read_public_surveys_collection().subscribe((data)=>{
-      debugger;
       this.publicSurveysList=data.map(e => {
         let survey = {};
         //add id of syrvey
@@ -283,7 +282,7 @@ export class HomePage {
      });
       
       var clusterSource = new Cluster({
-        distance: 100,
+        distance: 70,
         source: publicSurveysVectorSource,
       });
   

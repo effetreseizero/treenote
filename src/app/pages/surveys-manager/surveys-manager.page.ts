@@ -23,6 +23,16 @@ export class SurveysManagerPage implements OnInit {
 
   psJson = [];
 
+   //https://gist.github.com/mdorchain/90ee6a0b391b6c51b2e27c2b000f9bdd
+   @ViewChild('surveySlider', { static: true }) surveySlider: IonSlides;
+   slideOptsSurveySlider = {
+     initialSlide: 0,  
+ 
+     //with autoHeigth Openlayers Map is not correctly resized, even if map.autoSize() is called onSlideChanged
+     autoHeight: true
+   };
+   segmentSelected = 0;
+
   constructor(
     private surveysService: SurveysService,
     private router: Router,
@@ -64,25 +74,17 @@ export class SurveysManagerPage implements OnInit {
 
       this.sentSurveyList = this.surveysList.filter(x => (x.status === "sent"));
       this.reviewSurveyList = this.surveysList.filter(x => (x.status === "review"));
-      this.publicSurveyList = this.surveysList.filter(x => (x.status === "public"));
+      //this.publicSurveyList = this.surveysList.filter(x => (x.status === "public"));
       this.archivedSurveyList = this.surveysList.filter(x => (x.status === "archived"));
 
 
     });
-    this.publicSurveysStore.ready$.then(()=>{
-      this.psJson = this.publicSurveysStore.getPublicSurveys();
-    });      
+    
+    this.publicSurveysStore.getPublicSurveys().then((data)=>{
+      this.publicSurveyList = data.features;
+    });
+          
   }
-
-  //https://gist.github.com/mdorchain/90ee6a0b391b6c51b2e27c2b000f9bdd
-  @ViewChild('surveySlider', { static: true }) surveySlider: IonSlides;
-  slideOptsSurveySlider = {
-    initialSlide: 0,  
-
-    //with autoHeigth Openlayers Map is not correctly resized, even if map.autoSize() is called onSlideChanged
-    //autoHeight: true
-  };
-  segmentSelected = 0;
 
   editSurvey(recordId){
     //https://ionicacademy.com/pass-data-angular-router-ionic-4/
