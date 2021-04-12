@@ -1,6 +1,7 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 
 import { SurveysService} from '../../services/firestore/surveys.service';
+import { PublicSurveysStore } from '../../services/public-surveys-store/public-surveys-store.service'
 
 
 import { Router, NavigationExtras } from "@angular/router";
@@ -20,13 +21,16 @@ export class SurveysManagerPage implements OnInit {
   publicSurveyList = [];
   archivedSurveyList = [];
 
+  psJson = [];
+
   constructor(
     private surveysService: SurveysService,
     private router: Router,
-    private alertController: AlertController
+    private alertController: AlertController,
+    private publicSurveysStore: PublicSurveysStore
   ) {
     
-   }
+  }
 
   ngOnInit() {
     this.surveysService.read_all_surveys_collection().subscribe(data => {
@@ -65,6 +69,9 @@ export class SurveysManagerPage implements OnInit {
 
 
     });
+    this.publicSurveysStore.ready$.then(()=>{
+      this.psJson = this.publicSurveysStore.getPublicSurveys();
+    });      
   }
 
   //https://gist.github.com/mdorchain/90ee6a0b391b6c51b2e27c2b000f9bdd
