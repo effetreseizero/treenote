@@ -2,6 +2,9 @@ import { CoreState } from './core.state';
 import { Store } from './abstract.store';
 import { Injectable } from '@angular/core';
 
+import { Observable } from 'rxjs';
+
+
 //https://www.freakyjolly.com/ionic-firebase-crud-operations/#.X-mQOulKiEI
 import { AngularFireStorage } from '@angular/fire/storage';
 
@@ -52,6 +55,9 @@ export class PublicSurveysStore extends Store<CoreState> {
     });
   }
  
+  public subscribePublicSurveys(): Observable<any> {
+    return this.subscribe();
+  }
 
   updatePublicSurveys(){
     /*

@@ -21,7 +21,7 @@ export class SurveysManagerPage implements OnInit {
   publicSurveyList = [];
   archivedSurveyList = [];
 
-  psJson = [];
+  publicslice: number = 100;
 
    //https://gist.github.com/mdorchain/90ee6a0b391b6c51b2e27c2b000f9bdd
    @ViewChild('surveySlider', { static: true }) surveySlider: IonSlides;
@@ -80,10 +80,17 @@ export class SurveysManagerPage implements OnInit {
 
     });
     
-    this.publicSurveysStore.getPublicSurveys().then((data)=>{
+    this.publicSurveysStore.subscribePublicSurveys().subscribe((data)=>{
+      debugger;
       this.publicSurveyList = data.features;
     });
           
+  }
+
+  doInfinite(infiniteScroll) {
+    this.publicslice += 100;
+    infiniteScroll.target.complete();
+    
   }
 
   editSurvey(recordId){

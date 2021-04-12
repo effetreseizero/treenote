@@ -18,4 +18,7 @@ export abstract class Store<T> {
     this._state$.next(nextState);
   }
 
+  public subscribe(): Observable<T>{
+    return this._state$;
+  }
 }
