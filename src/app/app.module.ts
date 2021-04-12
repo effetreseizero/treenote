@@ -9,6 +9,10 @@ import { StatusBar } from '@ionic-native/status-bar/ngx';
 import { AppComponent } from './app.component';
 import { AppRoutingModule } from './app-routing.module';
 
+//https://www.techiediaries.com/angular-local-json-files/
+import { HttpClientModule } from '@angular/common/http';
+
+
 // https://jsmobiledev.com/article/crud-ionic-firestore
 import { firebaseConfig } from './credentials';
 import { AngularFireModule } from '@angular/fire';
@@ -39,6 +43,7 @@ import { environment } from '../environments/environment';
     AngularFirestoreModule,
     AngularFireAuthModule,
     ServiceWorkerModule.register('ngsw-worker.js', { enabled: environment.production }),
+    HttpClientModule
   ],
   providers: [
     StatusBar,

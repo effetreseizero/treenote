@@ -84,7 +84,7 @@ export class SurveysService {
       const messageRef = await this.firestore.collection(this.collectionName).add(data);
       // 2 - Upload the image to Cloud Storage.
       for (let i=0;i<photos.length; i++){
-        var filePath = this.user.uid + '/' + messageRef.id + '/' + i +"."+photos[i].filetype;
+        var filePath = 'users_photo/'+this.user.uid + '/' + messageRef.id + '/' + i +"."+photos[i].filetype;
         // Create file metadata including the content type
         var metadata = {
           contentType: 'image/'+photos[i].filetype,

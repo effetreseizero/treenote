@@ -12,12 +12,15 @@ import { HelperPopoverComponent } from '../../components/helper-popover/helper-p
 import { AuthenticationService } from "../../services/auth/authentication.service";
 import {CoreFacade} from "../../services/storage/core.facade"
 
+import { AngularFireStorage } from '@angular/fire/storage';
+
 import { SurveysService} from '../../services/firestore/surveys.service';
 
 //https://medium.com/runic-software/a-simple-guide-to-openlayers-in-angular-b10f6feb3df1
 import {OlMapComponent} from '../../components/ol-map/ol-map.component';
 import {Map,View, Feature} from "ol";
 import {Vector as VectorSource ,OSM,Cluster} from "ol/source";
+import {GeoJSON} from "ol/format";
 import {Style,Icon,Fill,Circle,Stroke, Text as TextStyle, RegularShape} from 'ol/style';
 import {Tile,WebGLPoints,Layer, Vector as VectorLayer} from "ol/layer";
 import {Point} from "ol/geom";
@@ -51,7 +54,8 @@ export class HomePage {
     private popoverController: PopoverController,
     public authService: AuthenticationService,
     private coreFacade: CoreFacade,
-    private surveyService: SurveysService
+    private surveyService: SurveysService,
+    private firestorage: AngularFireStorage,
   ) {}
 
 
@@ -62,7 +66,7 @@ export class HomePage {
     });
 
     this.surveyService.read_public_surveys_collection().subscribe((data)=>{
-      
+      debugger;
       this.publicSurveysList=data.map(e => {
         let survey = {};
         //add id of syrvey
@@ -220,19 +224,27 @@ export class HomePage {
       var style;
       var size = feature.get('features').length;
       if (size > 1) {
+        //https://krazydad.com/tutorials/makecolors.php
+        let frequency = .3;
+        let i = size%32
+        let red   = Math.sin(frequency*i + 0) * 127 + 128;
+        let green = Math.sin(frequency*i + 2) * 127 + 128;
+        let blue  = Math.sin(frequency*i + 4) * 127 + 128;
         let fill = new Fill({
-          color: [255, 153, 0, 0.6],
+          color: [red, green, blue, 0.6],
         });
+        /*
         if(size>=5&&size<10){
           fill = new Fill({
             color: [153, 255, , 0.6],
           });
         }
-        if(size>10){
+        if(size>=10){
           fill = new Fill({
             color: [153, 0, 255 , 0.6],
           });
         }
+        */
         style = new Style({
           image: new Circle({
             radius: size>10?50:size*5,
@@ -260,18 +272,29 @@ export class HomePage {
       }
       return style;
     }
-    
-    var clusterSource = new Cluster({
-      source: this.publicSurveysVectorSource,
+
+    var pathReference = this.firestorage.ref('public_surveys/public_surveys.geojson');
+
+    // Get the download URL
+    pathReference.getDownloadURL().subscribe((geojson_url) => {
+      var publicSurveysVectorSource = new VectorSource({
+        url: geojson_url,
+        format: new GeoJSON
+     });
       
+      var clusterSource = new Cluster({
+        distance: 100,
+        source: publicSurveysVectorSource,
+      });
+  
+      vector = new VectorLayer({
+        source: clusterSource,
+        style: styleFunction
+      });
+  
+      this.map.addLayer(vector);
     });
 
-    vector = new VectorLayer({
-      source: clusterSource,
-      style: styleFunction
-    });
-
-    this.map.addLayer(vector);
 
     //https://forum.ionicframework.com/t/generating-a-openlayers-map-as-a-component/161373/4
     setTimeout(()=>{
