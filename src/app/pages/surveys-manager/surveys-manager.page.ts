@@ -74,7 +74,6 @@ export class SurveysManagerPage implements OnInit {
 
       this.sentSurveyList = this.surveysList.filter(x => (x.status === "sent"));
       this.reviewSurveyList = this.surveysList.filter(x => (x.status === "review"));
-      //this.publicSurveyList = this.surveysList.filter(x => (x.status === "public"));
       this.archivedSurveyList = this.surveysList.filter(x => (x.status === "archived"));
 
 

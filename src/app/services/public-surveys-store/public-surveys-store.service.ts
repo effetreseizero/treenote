@@ -78,12 +78,26 @@ export class PublicSurveysStore extends Store<CoreState> {
   async addPublicSurvey(surveyId){
     this.surveysService.read_surveys_document(surveyId).subscribe((data)=>{
       debugger;
+
+      //https://stackoverflow.com/questions/2388115/get-locale-short-date-format-using-javascript/31663241
+      var date = new Date(data.data()["data_ora_osservazione"]);
+      var options = {
+          year: "numeric",
+          month: "2-digit",
+          day: "numeric",
+          hour: "numeric",
+          minute:"numeric"
+      };
+      
+      let short_date =  date.toLocaleDateString("it", options) //en is language option, you may specify..
+
+
       let publicSurveyRecord= {
         "type": "Feature",
         "properties": { 
           "id": data.id,
           "localita": data.data()["localita"],
-          "data_ora_osservazione": data.data()["data_ora_osservazione"],
+          "short_date": short_date,
         },
         "geometry": {
           "type": "Point", 
@@ -93,6 +107,7 @@ export class PublicSurveysStore extends Store<CoreState> {
           ] 
         } 
       }
+
       
       //add new public survey to the beggining of array
       this.state['features'].unshift(publicSurveyRecord);

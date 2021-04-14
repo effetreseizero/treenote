@@ -78,7 +78,8 @@
 
         <ion-item *ngFor="let item of publicSurveyList | slice:0:publicInfiniteScrollSlice; let i=index">
           <ion-label>
-            <h3>{{item.properties.id}}</h3>
+            <h3>{{item.properties.localita}}</h3>
+            <p>{{item.properties.short_date}}</p>
           </ion-label>
           <ion-button slot="end" shape="round" color="secondary" size="small" (click)="editSurvey(item.id)">
             <ion-icon size="small" slot="icon-only" name="create"></ion-icon>

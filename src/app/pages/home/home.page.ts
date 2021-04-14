@@ -16,6 +16,8 @@ import { AngularFireStorage } from '@angular/fire/storage';
 
 import { SurveysService} from '../../services/firestore/surveys.service';
 
+import { UserOptionsService } from '../../services/options/user-options.service'
+
 //https://medium.com/runic-software/a-simple-guide-to-openlayers-in-angular-b10f6feb3df1
 import {OlMapComponent} from '../../components/ol-map/ol-map.component';
 import {Map,View, Feature} from "ol";
@@ -55,6 +57,7 @@ export class HomePage {
     public authService: AuthenticationService,
     private coreFacade: CoreFacade,
     private surveyService: SurveysService,
+    private userOptionsService: UserOptionsService,
     private firestorage: AngularFireStorage,
   ) {}
 
@@ -100,6 +103,8 @@ export class HomePage {
   }
 
   ionViewDidEnter(){
+    let showGuide = this.userOptionsService.getShowHomeGuide();
+
     setTimeout(async ()=>{
       let popover;
       if(this.user){
