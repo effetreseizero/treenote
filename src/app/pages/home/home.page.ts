@@ -150,22 +150,24 @@ export class HomePage {
   }
 
   async surveyPreviewPopover(ev: any,survey) {
-    const popover = await this.popoverController.create({
-      component: SurveyPreviewPopoverComponent,
-      event: ev,
-      cssClass: 'popover_setting',
-      componentProps: {
-        survey: survey
-      },
-      translucent: true
-    });
+    this.surveyService.read_surveys_document(survey.id).subscribe(async (survey)=>{
+      const popover = await this.popoverController.create({
+        component: SurveyPreviewPopoverComponent,
+        event: ev,
+        cssClass: 'popover_setting',
+        componentProps: {
+          survey: survey.data()
+        },
+        translucent: true
+      });
+      popover.onDidDismiss().then((result) => {
+        console.log(result.data);
+      });
 
-    popover.onDidDismiss().then((result) => {
-      console.log(result.data);
+      return await popover.present();
+      /** Sync event from popover component */
     });
-
-    return await popover.present();
-    /** Sync event from popover component */
+    
 
   }
   
