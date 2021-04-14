@@ -21,7 +21,7 @@ export class SurveysManagerPage implements OnInit {
   publicSurveyList = [];
   archivedSurveyList = [];
 
-  publicslice: number = 100;
+  publicInfiniteScrollSlice: number = 100;
 
    //https://gist.github.com/mdorchain/90ee6a0b391b6c51b2e27c2b000f9bdd
    @ViewChild('surveySlider', { static: true }) surveySlider: IonSlides;
@@ -81,14 +81,13 @@ export class SurveysManagerPage implements OnInit {
     });
     
     this.publicSurveysStore.subscribePublicSurveys().subscribe((data)=>{
-      debugger;
       this.publicSurveyList = data.features;
     });
           
   }
 
   doInfinite(infiniteScroll) {
-    this.publicslice += 100;
+    this.publicInfiniteScrollSlice += 100;
     infiniteScroll.target.complete();
     
   }
@@ -166,11 +165,7 @@ export class SurveysManagerPage implements OnInit {
         {
           text: 'Ok',
           handler: () => {
-            let data = {
-              status: "public"
-            }
-        
-            this.surveysService.update_surveys_document(recordId, data);
+            this.publicSurveysStore.addPublicSurvey(recordId);
           }
         }
       ]
@@ -197,7 +192,7 @@ export class SurveysManagerPage implements OnInit {
             let data = {
               status: "archived"
             }
-        
+            
             this.surveysService.update_surveys_document(recordId, data);
           }
         }

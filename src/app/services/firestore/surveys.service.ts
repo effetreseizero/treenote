@@ -105,7 +105,7 @@ export class SurveysService {
 
 
   read_surveys_document(surveyID) {
-    return this.firestore.doc(this.collectionName + '/' + surveyID).snapshotChanges();
+    return this.firestore.doc(this.collectionName + '/' + surveyID).get();
   }
 
   async update_surveys_document(surveyID, data) {

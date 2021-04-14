@@ -146,7 +146,7 @@ export class SurveyEditPage implements OnInit {
 
         this.surveysService.read_surveys_document(this.surveyId).subscribe((data)=>{
 
-          this.survey=data.payload.data();
+          this.survey=data.data();
           //https://angular.io/guide/deprecations#ngmodel-with-reactive-forms
           //https://ultimatecourses.com/blog/angular-2-form-controls-patch-value-set-value
           this.surveyForm.patchValue(this.survey);

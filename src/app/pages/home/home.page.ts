@@ -230,7 +230,7 @@ export class HomePage {
         let green = Math.sin(frequency*i + 2) * 127 + 128;
         let blue  = Math.sin(frequency*i + 4) * 127 + 128;
         let fill = new Fill({
-          color: [red, green, blue, 0.6],
+          color: [red, green, blue, 0.2],
         });
         /*
         if(size>=5&&size<10){

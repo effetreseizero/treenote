@@ -7,6 +7,6 @@ export class CoreState {
   
     constructor() {
       // set initial state
-      this.publicSurveys = [];
+      this.publicSurveys = null;
     }
 }

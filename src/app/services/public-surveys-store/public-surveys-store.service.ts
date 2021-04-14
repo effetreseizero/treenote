@@ -12,6 +12,9 @@ import { AngularFireStorage } from '@angular/fire/storage';
 import { HttpClient } from "@angular/common/http";
 
 
+import { SurveysService} from '../../services/firestore/surveys.service';
+
+
 
 import * as firebase from 'firebase/app';
 import 'firebase/firestore';
@@ -30,7 +33,8 @@ export class PublicSurveysStore extends Store<CoreState> {
 
   constructor(
     private firestorage: AngularFireStorage,
-    private httpClient: HttpClient
+    private httpClient: HttpClient,
+    private surveysService: SurveysService,
   ) { 
 
     super(new CoreState());
@@ -41,10 +45,22 @@ export class PublicSurveysStore extends Store<CoreState> {
         return this.httpClient.get(this.geojson_url).toPromise().then(data =>{
           this.setStateValue(data);
           return data;
-        }).catch(_ => {
-          this.setStateValue(undefined);
-          return undefined;
         })
+      }).catch(_ => {
+        debugger;
+        let empty_geojson={
+          "type": "FeatureCollection",
+          "name": "public_surveys",
+          "crs": { 
+            "type": "name", 
+            "properties": { 
+              "name": "urn:ogc:def:crs:OGC:1.3:CRS84" 
+            }
+          },
+          "features": []
+        }
+        this.setStateValue(empty_geojson);
+        return empty_geojson;
       })
     ])
   }
@@ -59,21 +75,40 @@ export class PublicSurveysStore extends Store<CoreState> {
     return this.subscribe();
   }
 
-  updatePublicSurveys(){
-    /*
-    var filePath = 'public_surveys/'+this.user.uid + '/' + messageRef.id + '/' + i +"."+photos[i].filetype;
-        // Create file metadata including the content type
-        var metadata = {
-          contentType: 'image/'+photos[i].filetype,
-        };
-        let blob = await fetch(photos[i].webviewPath).then(r => r.blob());
-        const fileSnapshot = await this.firestorage.ref(filePath).put(blob,metadata);
-        const url = await fileSnapshot.ref.getDownloadURL();
-        let imagedata = {};
-        imagedata["photo_"+i+"_imageurl"] = url;
-        imagedata["photo_"+i+"_storageuri"] = fileSnapshot.metadata.fullPath;
-        await messageRef.update(imagedata);
-      */
+  async addPublicSurvey(surveyId){
+    this.surveysService.read_surveys_document(surveyId).subscribe((data)=>{
+      debugger;
+      let publicSurveyRecord= {
+        "type": "Feature",
+        "properties": { 
+          "id": data.id,
+          "localita": data.data()["localita"],
+          "data_ora_osservazione": data.data()["data_ora_osservazione"],
+        },
+        "geometry": {
+          "type": "Point", 
+          "coordinates": [ 
+            data.data()["longitudine"], 
+            data.data()["latitudine"]
+          ] 
+        } 
+      }
+      
+      //add new public survey to the beggining of array
+      this.state['features'].unshift(publicSurveyRecord);
+
+      //upload json array in firebase storage
+      //https://medium.com/@dorathedev/uploading-json-objects-as-json-files-to-firebase-storage-without-having-or-creating-a-json-file-38ad323af3c4
+      var blob = new Blob([JSON.stringify(this.state)], {type: "application/json"})
+      return this.firestorage.ref('public_surveys/public_surveys.geojson').put(blob).then(()=>{
+        //onse saved, update survey status
+        debugger;
+        let data = {
+          status: "public"
+        }
+        this.surveysService.update_surveys_document(surveyId, data);
+      });
+    });
   }
 
   private setStateValue(value: any): void {

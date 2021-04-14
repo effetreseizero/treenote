@@ -76,7 +76,7 @@
           <h1>Segnalazioni pubblicate</h1>
         </ion-list-header>
 
-        <ion-item *ngFor="let item of publicSurveyList | slice:0:publicslice; let i=index">
+        <ion-item *ngFor="let item of publicSurveyList | slice:0:publicInfiniteScrollSlice; let i=index">
           <ion-label>
             <h3>{{item.properties.id}}</h3>
           </ion-label>
