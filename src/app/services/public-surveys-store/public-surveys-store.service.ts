@@ -103,7 +103,7 @@ export class PublicSurveysStore extends Store<CoreState> {
             data.data()["longitudine"], 
             data.data()["latitudine"]
           ] 
-        } 
+        }  
       }
 
       
@@ -117,6 +117,26 @@ export class PublicSurveysStore extends Store<CoreState> {
         //onse saved, update survey status
         let data = {
           status: "public"
+        }
+        this.surveysService.update_surveys_document(surveyId, data);
+      });
+    });
+  }
+
+  async removePublicSurvey(surveyId,newStatus){
+    this.surveysService.read_surveys_document(surveyId).subscribe((data)=>{
+
+      debugger;
+      //add new public survey to the beggining of array
+      this.state['features'] = this.state['features'].filter((x)=>(!(x.properties.id===surveyId)));
+
+      //upload json array in firebase storage
+      //https://medium.com/@dorathedev/uploading-json-objects-as-json-files-to-firebase-storage-without-having-or-creating-a-json-file-38ad323af3c4
+      var blob = new Blob([JSON.stringify(this.state)], {type: "application/json"})
+      return this.firestorage.ref('public_surveys/public_surveys.geojson').put(blob).then(()=>{
+        //onse saved, update survey status
+        let data = {
+          status: newStatus
         }
         this.surveysService.update_surveys_document(surveyId, data);
       });

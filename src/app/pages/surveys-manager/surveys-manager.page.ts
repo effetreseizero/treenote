@@ -19,7 +19,7 @@ export class SurveysManagerPage implements OnInit {
   sentSurveyList = [];
   reviewSurveyList = [];
   publicSurveyList = [];
-  archivedSurveyList = [];
+  archiveSurveyList = [];
 
   publicInfiniteScrollSlice: number = 100;
 
@@ -76,6 +76,37 @@ export class SurveysManagerPage implements OnInit {
 
     this.surveysService.read_review_surveys_collection().subscribe(data => {
       this.reviewSurveyList = data.map(e => {
+        let survey = {};
+        //add id of syrvey
+        survey["id"]=e.payload.doc.id;
+        //add all other properties
+        for (let key of Object.keys(e.payload.doc.data())){
+          survey[key] = e.payload.doc.data()[key];
+        }
+
+        //https://stackoverflow.com/questions/2388115/get-locale-short-date-format-using-javascript/31663241
+        var date = new Date(survey["data_ora_osservazione"]);
+        var options = {
+            year: "numeric",
+            month: "2-digit",
+            day: "numeric",
+            hour: "numeric",
+            minute:"numeric"
+        };
+        
+        survey["short_date"] =  date.toLocaleDateString("it", options) //en is language option, you may specify..
+        return survey;
+      })
+      .filter(x=>(!x["deleted"]))
+      .sort(
+        (itemA, itemB) => {
+          return itemB["created_time"] - itemA["created_time"];
+        }
+      );
+    });
+
+    this.surveysService.read_archive_surveys_collection().subscribe(data => {
+      this.archiveSurveyList = data.map(e => {
         let survey = {};
         //add id of syrvey
         survey["id"]=e.payload.doc.id;
@@ -178,6 +209,31 @@ export class SurveysManagerPage implements OnInit {
     
   }
 
+  async promoteToReviewFromPublic(recordId){
+
+    const alert = await this.alertController.create({
+      header: 'Sposta in revisione?',
+      buttons: [
+        {
+          text: 'Cancel',
+          role: 'cancel',
+          cssClass: 'secondary',
+          handler: () => {}
+        },
+        {
+          text: 'Ok',
+          handler: () => {
+            this.publicSurveysStore.removePublicSurvey(recordId,"review");
+          }
+        }
+      ]
+    });
+
+    await alert.present();
+
+    
+  }
+
   async promoteToPublic(recordId){
 
     const alert = await this.alertController.create({
@@ -217,10 +273,35 @@ export class SurveysManagerPage implements OnInit {
           text: 'Ok',
           handler: () => {
             let data = {
-              status: "archived"
+              status: "archive"
             }
             
             this.surveysService.update_surveys_document(recordId, data);
+          }
+        }
+      ]
+    });
+
+    await alert.present();
+
+    
+  }
+
+  async promoteToArchiveFromPublic(recordId){
+
+    const alert = await this.alertController.create({
+      header: 'Sposta in revisione?',
+      buttons: [
+        {
+          text: 'Cancel',
+          role: 'cancel',
+          cssClass: 'secondary',
+          handler: () => {}
+        },
+        {
+          text: 'Ok',
+          handler: () => {
+            this.publicSurveysStore.removePublicSurvey(recordId,"archive");
           }
         }
       ]

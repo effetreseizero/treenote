@@ -27,13 +27,13 @@
             <p>{{item.short_date}}<p>
           </ion-label>
           <ion-button slot="end" shape="round" color="secondary" size="small" (click)="editSurvey(item.id)">
-            <ion-icon size="small" slot="icon-only" name="create"></ion-icon>
+            <ion-icon size="small" slot="icon-only" name="document-text-outline"></ion-icon>
           </ion-button>
-          <ion-button slot="end" shape="round" color="danger" size="small" (click)="deleteSurvey(item.id)">
-            <ion-icon size="small" slot="icon-only" name="trash"></ion-icon>
+          <ion-button slot="end" shape="round" color="danger" size="small" (click)="promoteToArchive(item.id)">
+            <ion-icon size="small" slot="icon-only" name="archive"></ion-icon>
           </ion-button>
           <ion-button slot="end" shape="round" color="tertiary" size="small" (click)="promoteToReview(item.id)">
-            <ion-icon size="small" slot="icon-only" name="document-text-outline"></ion-icon>
+            <ion-icon size="small" slot="icon-only" name="create"></ion-icon>
           </ion-button>
           
         </ion-item>
@@ -57,8 +57,8 @@
           <ion-button slot="end" shape="round" color="secondary" size="small" (click)="editSurvey(item.id)">
             <ion-icon size="small" slot="icon-only" name="create"></ion-icon>
           </ion-button>
-          <ion-button slot="end" shape="round" color="danger" size="small" (click)="deleteSurvey(item.id)">
-            <ion-icon size="small" slot="icon-only" name="trash"></ion-icon>
+          <ion-button slot="end" shape="round" color="danger" size="small" (click)="promoteToArchive(item.id)">
+            <ion-icon size="small" slot="icon-only" name="archive"></ion-icon>
           </ion-button>
           <ion-button slot="end" shape="round" color="tertiary" size="small" (click)="promoteToPublic(item.id)">
             <ion-icon size="small" slot="icon-only" name="star"></ion-icon>
@@ -81,11 +81,14 @@
             <h3>{{item.properties.localita}}</h3>
             <p>{{item.properties.short_date}}</p>
           </ion-label>
-          <ion-button slot="end" shape="round" color="secondary" size="small" (click)="editSurvey(item.properties.id)">
+          <ion-button slot="end" shape="round" color="tertiary" size="small" (click)="promoteToReviewFromPublic(item.properties.id)">
             <ion-icon size="small" slot="icon-only" name="create"></ion-icon>
           </ion-button>
-          <ion-button slot="end" shape="round" color="danger" size="small" (click)="deleteSurvey(item.properties.id)">
-            <ion-icon size="small" slot="icon-only" name="trash"></ion-icon>
+          <ion-button slot="end" shape="round" color="secondary" size="small" (click)="editSurvey(item.properties.id)">
+            <ion-icon size="small" slot="icon-only" name="document-text-outline"></ion-icon>
+          </ion-button>
+          <ion-button slot="end" shape="round" color="danger" size="small" (click)="promoteToArchiveFromPublic(item.properties.properties.id)">
+            <ion-icon size="small" slot="icon-only" name="archive"></ion-icon>
           </ion-button>
          
         </ion-item>
@@ -109,18 +112,20 @@
           <h1>Segnalazioni archiviate</h1>
         </ion-list-header>
 
-        <ion-item *ngFor="let item of archivedSurveyList">
+        <ion-item *ngFor="let item of archiveSurveyList">
           <ion-label>
             <h3>{{item.localita}}</h3>
             <p>{{item.short_date}}</p>
           </ion-label>
-          <ion-button slot="end" shape="round" color="secondary" size="small" (click)="editSurvey(item.id)">
+          <ion-button slot="end" shape="round" color="tertiary" size="small" (click)="promoteToReview(item.id)">
             <ion-icon size="small" slot="icon-only" name="create"></ion-icon>
+          </ion-button>
+          <ion-button slot="end" shape="round" color="secondary" size="small" (click)="editSurvey(item.id)">
+            <ion-icon size="small" slot="icon-only" name="document-text-outline"></ion-icon>
           </ion-button>
           <ion-button slot="end" shape="round" color="danger" size="small" (click)="deleteSurvey(item.id)">
             <ion-icon size="small" slot="icon-only" name="trash"></ion-icon>
           </ion-button>
-         
         </ion-item>
 
       </ion-list>
@@ -134,16 +139,16 @@
   <ion-toolbar>
     <ion-segment [(ngModel)]="segmentSelected" (ionChange)="segmentChanged($event)">
       <ion-segment-button value="0">
-        <ion-label>Inviate</ion-label>
+        <ion-icon  name="mail"></ion-icon>
       </ion-segment-button>
       <ion-segment-button value="1">
-        <ion-label>Revisione</ion-label>
+        <ion-icon  name="create"></ion-icon>
       </ion-segment-button>
       <ion-segment-button value="2">
-        <ion-label>Pubblicate</ion-label>
+        <ion-icon  name="star"></ion-icon>
       </ion-segment-button>
       <ion-segment-button value="3">
-        <ion-label>Archiviate</ion-label>
+        <ion-icon  name="archive"></ion-icon>
       </ion-segment-button>
     </ion-segment>
   </ion-toolbar>

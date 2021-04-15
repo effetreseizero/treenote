@@ -16,10 +16,11 @@ import { AlertController } from '@ionic/angular';
 })
 export class SurveysPage implements OnInit {
 
-  surveyList = [];
+  userSurveyList = [];
   sentSurveyList = [];
-  publicSurveyList = [];
   reviewSurveyList = [];
+  publicSurveyList = [];
+  archiveSurveyList = [];
 
   constructor(
     private surveysService: SurveysService,
@@ -35,7 +36,7 @@ export class SurveysPage implements OnInit {
   {
     
     this.surveysService.read_user_surveys_collection().subscribe(data => {
-      this.surveyList = data.map(e => {
+      this.userSurveyList = data.map(e => {
         let survey = {};
         //add id of syrvey
         survey["id"]=e.payload.doc.id;
@@ -63,14 +64,15 @@ export class SurveysPage implements OnInit {
         }
       );
 
-      let existingSurveys = this.surveyList.filter(x => (!x.deleted));
+      let notDeletedSurveys = this.userSurveyList.filter(x => (!x.deleted));
 
-      this.sentSurveyList = existingSurveys.filter(x => (x.status=="sent"));
+      this.sentSurveyList = notDeletedSurveys.filter(x => (x.status=="sent"));
 
-      this.reviewSurveyList = existingSurveys.filter(x => (x.status=="review"));
+      this.reviewSurveyList = notDeletedSurveys.filter(x => (x.status=="review"));
 
-      this.publicSurveyList = existingSurveys.filter(x => (x.status=="public"));
+      this.publicSurveyList = notDeletedSurveys.filter(x => (x.status=="public"));
 
+      this.archiveSurveyList = notDeletedSurveys.filter(x => (x.status=="archive"));
     });
   }
 

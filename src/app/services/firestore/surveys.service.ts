@@ -77,12 +77,12 @@ export class SurveysService {
 
   }
 
-  read_archived_surveys_collection() {
+  read_archive_surveys_collection() {
     return this.firestore.collection(
       this.collectionName,
       //https://stackoverflow.com/questions/49026589/angular-firestore-where-query-returning-error-property-does-not-exist-on
       //.where("userUID", "==", firebase.auth().currentUser.uid)
-      ref => ref.where("status", "==", "review")
+      ref => ref.where("status", "==", "archive")
       )
       .snapshotChanges();
 

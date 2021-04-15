@@ -3,10 +3,8 @@
 
 export class CoreState {
 
-    public readonly publicSurveys: any;
   
     constructor() {
       // set initial state
-      this.publicSurveys = null;
     }
-}
+} 
