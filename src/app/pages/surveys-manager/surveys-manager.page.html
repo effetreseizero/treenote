@@ -15,7 +15,7 @@
     (ionSlideDidChange)="slideChanged($event)">
     <!--survey slide-->
     <ion-slide>
-
+      <ion-grid fixed>
       <ion-list inset="false">
         <ion-list-header>
           <h1>Segnalazioni inviate</h1>
@@ -30,20 +30,20 @@
             <ion-icon size="small" slot="icon-only" name="document-text-outline"></ion-icon>
           </ion-button>
           <ion-button slot="end" shape="round" color="danger" size="small" (click)="promoteToArchive(item.id)">
-            <ion-icon size="small" slot="icon-only" name="archive"></ion-icon>
+            <ion-icon size="small" slot="icon-only" name="library-outline"></ion-icon>
           </ion-button>
           <ion-button slot="end" shape="round" color="tertiary" size="small" (click)="promoteToReview(item.id)">
-            <ion-icon size="small" slot="icon-only" name="create"></ion-icon>
+            <ion-icon size="small" slot="icon-only" name="checkbox-outline"></ion-icon>
           </ion-button>
           
         </ion-item>
-
+      
       </ion-list>
-
+    </ion-grid>
     </ion-slide>
 
     <ion-slide>
-
+      <ion-grid fixed>
       <ion-list>
         <ion-list-header>
           <h1>Segnalazioni in revisione</h1>
@@ -58,7 +58,7 @@
             <ion-icon size="small" slot="icon-only" name="create"></ion-icon>
           </ion-button>
           <ion-button slot="end" shape="round" color="danger" size="small" (click)="promoteToArchive(item.id)">
-            <ion-icon size="small" slot="icon-only" name="archive"></ion-icon>
+            <ion-icon size="small" slot="icon-only" name="library-outline"></ion-icon>
           </ion-button>
           <ion-button slot="end" shape="round" color="tertiary" size="small" (click)="promoteToPublic(item.id)">
             <ion-icon size="small" slot="icon-only" name="star"></ion-icon>
@@ -66,11 +66,11 @@
         </ion-item>
 
       </ion-list>
-
+    </ion-grid>
     </ion-slide>
 
     <ion-slide>
-
+    <ion-grid fixed>
       <ion-list>
         <ion-list-header>
           <h1>Segnalazioni pubblicate</h1>
@@ -82,13 +82,13 @@
             <p>{{item.properties.short_date}}</p>
           </ion-label>
           <ion-button slot="end" shape="round" color="tertiary" size="small" (click)="promoteToReviewFromPublic(item.properties.id)">
-            <ion-icon size="small" slot="icon-only" name="create"></ion-icon>
+            <ion-icon size="small" slot="icon-only" name="checkbox-outline"></ion-icon>
           </ion-button>
           <ion-button slot="end" shape="round" color="secondary" size="small" (click)="editSurvey(item.properties.id)">
             <ion-icon size="small" slot="icon-only" name="document-text-outline"></ion-icon>
           </ion-button>
           <ion-button slot="end" shape="round" color="danger" size="small" (click)="promoteToArchiveFromPublic(item.properties.properties.id)">
-            <ion-icon size="small" slot="icon-only" name="archive"></ion-icon>
+            <ion-icon size="small" slot="icon-only" name="library-outline"></ion-icon>
           </ion-button>
          
         </ion-item>
@@ -102,11 +102,11 @@
           loadingText="Loading more data...">
         </ion-infinite-scroll-content>
       </ion-infinite-scroll>
-
+    </ion-grid>
     </ion-slide>
 
     <ion-slide>
-
+      <ion-grid fixed>
       <ion-list>
         <ion-list-header>
           <h1>Segnalazioni archiviate</h1>
@@ -118,7 +118,7 @@
             <p>{{item.short_date}}</p>
           </ion-label>
           <ion-button slot="end" shape="round" color="tertiary" size="small" (click)="promoteToReview(item.id)">
-            <ion-icon size="small" slot="icon-only" name="create"></ion-icon>
+            <ion-icon size="small" slot="icon-only" name="checkbox-outline"></ion-icon>
           </ion-button>
           <ion-button slot="end" shape="round" color="secondary" size="small" (click)="editSurvey(item.id)">
             <ion-icon size="small" slot="icon-only" name="document-text-outline"></ion-icon>
@@ -129,7 +129,7 @@
         </ion-item>
 
       </ion-list>
-
+      </ion-grid>
     </ion-slide>
 
   </ion-slides>
@@ -142,13 +142,13 @@
         <ion-icon  name="mail"></ion-icon>
       </ion-segment-button>
       <ion-segment-button value="1">
-        <ion-icon  name="create"></ion-icon>
+        <ion-icon  name="checkbox-outline"></ion-icon>
       </ion-segment-button>
       <ion-segment-button value="2">
         <ion-icon  name="star"></ion-icon>
       </ion-segment-button>
       <ion-segment-button value="3">
-        <ion-icon  name="archive"></ion-icon>
+        <ion-icon  name="library-outline"></ion-icon>
       </ion-segment-button>
     </ion-segment>
   </ion-toolbar>

@@ -10,12 +10,7 @@
 </ion-header>
 
 <ion-content [fullscreen]="true" class="ion-padding background">
-  <!--ion-fab vertical="top" horizontal="end" slot="fixed" (click)="createSurvey()">
-    <ion-fab-button color="danger" >
-      <ion-icon name="add"></ion-icon>
-    </ion-fab-button>
-  </ion-fab-->
-
+  <ion-grid fixed>
   <ion-button expand="block" (click)="createSurvey()" color = "danger" shape="round">Invia una segnalazione</ion-button>
 
   <ion-list>
@@ -46,7 +41,7 @@
     <ion-list-header>
       <h1>
         <ion-chip outline color="secondary">
-          <ion-icon name="document-text-outline"></ion-icon>
+          <ion-icon name="checkbox-outline"></ion-icon>
           <ion-label>{{reviewSurveyList.length}} Segnalazioni in revisione</ion-label>
         </ion-chip>
         </h1>
@@ -88,7 +83,7 @@
     <ion-list-header>
       <h1>
         <ion-chip outline color="secondary">
-          <ion-icon name="archive"></ion-icon>
+          <ion-icon name="library-outline"></ion-icon>
           <ion-label>{{archiveSurveyList.length}} Segnalazioni archiviate</ion-label>
         </ion-chip>
         </h1>
@@ -105,6 +100,6 @@
     </ion-item>
   </ion-list>
 
-
+  </ion-grid>
 
 </ion-content>
