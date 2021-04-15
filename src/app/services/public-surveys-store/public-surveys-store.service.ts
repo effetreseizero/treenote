@@ -47,7 +47,6 @@ export class PublicSurveysStore extends Store<CoreState> {
           return data;
         })
       }).catch(_ => {
-        debugger;
         let empty_geojson={
           "type": "FeatureCollection",
           "name": "public_surveys",
@@ -77,7 +76,6 @@ export class PublicSurveysStore extends Store<CoreState> {
 
   async addPublicSurvey(surveyId){
     this.surveysService.read_surveys_document(surveyId).subscribe((data)=>{
-      debugger;
 
       //https://stackoverflow.com/questions/2388115/get-locale-short-date-format-using-javascript/31663241
       var date = new Date(data.data()["data_ora_osservazione"]);
@@ -117,7 +115,6 @@ export class PublicSurveysStore extends Store<CoreState> {
       var blob = new Blob([JSON.stringify(this.state)], {type: "application/json"})
       return this.firestorage.ref('public_surveys/public_surveys.geojson').put(blob).then(()=>{
         //onse saved, update survey status
-        debugger;
         let data = {
           status: "public"
         }
