@@ -63,11 +63,13 @@ export class SurveysPage implements OnInit {
         }
       );
 
-      this.sentSurveyList = this.surveyList.filter(x => (x.status=="sent"));
+      let existingSurveys = this.surveyList.filter(x => (!x.deleted));
 
-      this.reviewSurveyList = this.surveyList.filter(x => (x.status=="review"));
+      this.sentSurveyList = existingSurveys.filter(x => (x.status=="sent"));
 
-      this.publicSurveyList = this.surveyList.filter(x => (x.status=="public"));
+      this.reviewSurveyList = existingSurveys.filter(x => (x.status=="review"));
+
+      this.publicSurveyList = existingSurveys.filter(x => (x.status=="public"));
 
     });
   }
