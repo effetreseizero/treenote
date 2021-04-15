@@ -3,6 +3,9 @@
 import { Component, OnInit } from '@angular/core';
 import { PopoverController, } from '@ionic/angular';
 
+
+import { UserOptionsService } from '../../services/options/user-options.service'
+
 @Component({
   selector: 'app-helper-popover',
   templateUrl: './helper-popover.component.html',
@@ -11,15 +14,25 @@ import { PopoverController, } from '@ionic/angular';
 export class HelperPopoverComponent implements OnInit {
   message;
 
+  public hidehelper = false;
+
   constructor(
-    private popoverController: PopoverController
+    private popoverController: PopoverController,
+    private userOptionsService: UserOptionsService
   ) { }
 
   ngOnInit() {}
 
   dismiss() {
     // code for dismiss
+    if(this.hidehelper){
+      this.userOptionsService.setHideHelper(false);
+    }
     this.popoverController.dismiss();
+  }
+
+  changeToggle(){
+    this.hidehelper = !this.hidehelper;
   }
 
 }

@@ -11,6 +11,6 @@
   Chiudi
 </ion-button>
 <ion-item>
-  <ion-checkbox color="dark" checked slot="start"></ion-checkbox>
-  <ion-label>Non mostrare più la guida</ion-label>
+  <ion-toggle [(ngModel)]="hidehelper" (ionChange)="changeToggle()" slot="start"></ion-toggle>
+  <ion-label>Nascondi guida</ion-label>
 </ion-item>

@@ -26,7 +26,7 @@ import {GeoJSON} from "ol/format";
 import {Style,Icon,Fill,Circle,Stroke, Text as TextStyle, RegularShape} from 'ol/style';
 import {Tile,WebGLPoints,Layer, Vector as VectorLayer} from "ol/layer";
 import {Point} from "ol/geom";
-import { fromLonLat } from "ol/proj";
+import { fromLonLat, toUserExtent } from "ol/proj";
 
 import {createEmpty, extend, getHeight, getWidth} from 'ol/extent';
 
@@ -103,42 +103,44 @@ export class HomePage {
   }
 
   ionViewDidEnter(){
-    let showGuide = this.userOptionsService.getShowHomeGuide();
-
-    setTimeout(async ()=>{
-      let popover;
-      if(this.user){
-        popover = await this.popoverController.create({
-          component: HelperPopoverComponent,
-          cssClass: 'popover_setting',
-          componentProps: {
-            message: {
-              imageurl: "../../assets/images/helper_home_add.png",
-              title: "Segnalazione",
-              text: "Inviaci una segnalazione con questo bottone o dalla voce di menu Segnalazioni"
-            }
-          },
-          translucent: true
-        });
-      }else{
-        popover = await this.popoverController.create({
-          component: HelperPopoverComponent,
-          cssClass: 'popover_setting',
-          componentProps: {
-            message: {
-              imageurl: "../../assets/images/helper_home_partecipa.png",
-              title: "Iscriviti",
-              text: "Mandaci le tue segnalazioni sullo stato di salute delle piante"
-            }
-          },
-          translucent: true
-        });
+    this.userOptionsService.readHideHelper().then((toshow)=>{
+      if(!toshow.value){
+        setTimeout(async ()=>{
+          let popover;
+          if(this.user){
+            popover = await this.popoverController.create({
+              component: HelperPopoverComponent,
+              cssClass: 'popover_setting',
+              componentProps: {
+                message: {
+                  imageurl: "../../assets/images/helper_home_add.png",
+                  title: "Segnalazione",
+                  text: "Inviaci una segnalazione con questo bottone o dalla voce di menu Segnalazioni"
+                }
+              },
+              translucent: true
+            });
+          }else{
+            popover = await this.popoverController.create({
+              component: HelperPopoverComponent,
+              cssClass: 'popover_setting',
+              componentProps: {
+                message: {
+                  imageurl: "../../assets/images/helper_home_partecipa.png",
+                  title: "Iscriviti",
+                  text: "Mandaci le tue segnalazioni sullo stato di salute delle piante"
+                }
+              },
+              translucent: true
+            });
+          }
+          
+          await popover.present();
+          
+      
+        },5000);
       }
-      
-      await popover.present();
-      
-  
-    },5000);
+    });
   }
   
 
