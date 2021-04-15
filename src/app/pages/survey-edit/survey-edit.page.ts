@@ -95,6 +95,7 @@ export class SurveyEditPage implements OnInit {
   geoLocationWatchStarted = false;
   coords: any = [];
   lastcoords:any = {latitude:0,longitude:0,accuracy:0};
+  gpsPositionSetted = false;
 
  
 
@@ -294,6 +295,8 @@ export class SurveyEditPage implements OnInit {
         this.surveySlider.slideTo(0);
     } else if(this.photos.length==0){
       this.surveySlider.slideTo(1);
+    } else if(!this.gpsPositionSetted){
+      this.surveySlider.slideTo(2);
     }
     else{
       const alert = await this.alertController.create({
@@ -309,10 +312,6 @@ export class SurveyEditPage implements OnInit {
             text: 'Ok',
             handler: () => {
               if(this.surveyId=="0"){
-                this.surveyForm.value["latitudine"]=this.lastcoords.latitude||45;
-                this.surveyForm.value["longitudine"]=this.lastcoords.longitude||11;
-                this.surveyForm.value["quota"]=this.lastcoords.altitude||0;
-                this.surveyForm.value["accuratezza"]=this.lastcoords.accuracy||1000;
                 this.surveysService.create_surveys_document(this.surveyForm.value,this.photos).then(()=>{
                   this.navController.back();
                 });
@@ -413,13 +412,14 @@ export class SurveyEditPage implements OnInit {
   }
 
   getGpsPosition(){
-    debugger;
     this.geolocation.getCurrentPosition().then((resp) => {
-      debugger;
       this.surveyForm.value["latitudine"]=resp.coords.latitude;
       this.surveyForm.value["longitudine"]=resp.coords.longitude;
       this.surveyForm.value["quota"]=resp.coords.altitude||0;
       this.surveyForm.value["accuratezza"]=resp.coords.accuracy||-1;
+
+      this.gpsPositionSetted = true;
+
       this.presentToastWithOptions();
     }).catch((error) => {
       console.log('Error getting location', error);
@@ -434,6 +434,9 @@ export class SurveyEditPage implements OnInit {
       this.surveyForm.value["longitudine"]=coords[0];
       this.surveyForm.value["quota"]=0;
       this.surveyForm.value["accuratezza"]=1;
+
+      this.gpsPositionSetted = true;
+
       this.presentToastWithOptions();
       this.map.un('singleclick', mapClickCB);
     };
