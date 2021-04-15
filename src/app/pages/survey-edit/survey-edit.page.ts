@@ -420,6 +420,14 @@ export class SurveyEditPage implements OnInit {
 
       this.gpsPositionSetted = true;
 
+      this.surveyPositionVectorSource.clear();
+      let surveyPositionFeature = new Feature();
+      
+      surveyPositionFeature.setGeometry(new Point(fromLonLat([this.surveyForm.value["longitudine"], this.surveyForm.value["latitudine"]])));
+      this.surveyPositionVectorSource.addFeature(surveyPositionFeature)
+
+      this.olMapComponent.centerOn(this.surveyForm.value["longitudine"],this.surveyForm.value["latitudine"]);
+
       this.presentToastWithOptions();
     }).catch((error) => {
       console.log('Error getting location', error);
@@ -436,6 +444,14 @@ export class SurveyEditPage implements OnInit {
       this.surveyForm.value["accuratezza"]=1;
 
       this.gpsPositionSetted = true;
+
+      this.surveyPositionVectorSource.clear();
+      let surveyPositionFeature = new Feature();
+      
+      surveyPositionFeature.setGeometry(new Point(fromLonLat([this.surveyForm.value["longitudine"], this.surveyForm.value["latitudine"]])));
+      this.surveyPositionVectorSource.addFeature(surveyPositionFeature)
+
+      this.olMapComponent.centerOn(this.surveyForm.value["longitudine"],this.surveyForm.value["latitudine"]);
 
       this.presentToastWithOptions();
       this.map.un('singleclick', mapClickCB);
