@@ -112,15 +112,28 @@ export class SurveysService {
     return await this.firestore.doc(this.collectionName + '/' + surveyID).update(data);
   }
 
-  delete_surveys_document(surveyID) {
-    //https://www.nuomiphp.com/eplan/en/2152.html
-    let data =
-    {
-      deleted: true,
-      deletedTime: Date.now()
-
-    }
-    this.firestore.doc(this.collectionName + '/' + surveyID).update(data);
+  async delete_surveys_document(surveyID) {
+    debugger;
+    //delete survey photos directory
+    this.firestore.doc(this.collectionName + '/' + surveyID).get().toPromise().then((survey)=>{
+      var surveyStoragePath = 'users_photo/'+this.user.uid + '/' + surveyID;
+      Promise.all([
+        //https://bezkoder.com/firebase-storage-angular-10-file-upload/
+        this.firestorage.ref(surveyStoragePath).child("0.jpeg").delete(),
+        this.firestorage.ref(surveyStoragePath).child("1.jpeg").delete(),
+        this.firestorage.ref(surveyStoragePath).child("2.jpeg").delete(),
+      ]).then(()=>{
+        //then mark as deleted
+        //https://www.nuomiphp.com/eplan/en/2152.html
+        let data =
+        {
+          deleted: true,
+          deletedTime: Date.now()
+  
+        }
+        this.firestore.doc(this.collectionName + '/' + surveyID).update(data);
+      })
+    });
     
   }
 
