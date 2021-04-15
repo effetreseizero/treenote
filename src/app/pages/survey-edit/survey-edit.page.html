@@ -27,11 +27,21 @@
     </ion-fab-button>
   </ion-fab>
 
-  <ion-fab *ngIf="segmentSelected==2&&newsurvey" vertical="top" horizontal="end"  slot="fixed" (click)="presentToastWithOptions()">
+  <ion-fab *ngIf="segmentSelected==2&&newsurvey" horizontal="end" vertical="top" slot="fixed">
     <ion-fab-button color="danger" >
-      <ion-icon name="navigate-circle-outline"></ion-icon>
+      <ion-icon name="pin-outline"></ion-icon>
     </ion-fab-button>
+    <ion-fab-list>
+      <ion-fab-button color="light" (click)="getGpsPosition()">
+        <ion-icon name="navigate-circle-outline"></ion-icon>
+      </ion-fab-button>
+      <ion-fab-button color="light" (click)="getMapPosition()">
+        <ion-icon name="map-outline"></ion-icon>
+      </ion-fab-button>
+    </ion-fab-list>
   </ion-fab>
+
+  
 
   <ion-slides [options]="slideOptsSurveySlider" id="surveySlider" #surveySlider (ionSlideDidChange)="slideChanged($event)">
     <!--survey slide-->
@@ -191,6 +201,7 @@
     <!--map slide-->
 
     <ion-slide>
+
       <app-ol-map class="map"
         [center]="[12.5,42]"
         [zoom]="5.5"

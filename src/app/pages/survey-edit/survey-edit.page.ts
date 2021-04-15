@@ -34,7 +34,7 @@ import {Vector as VectorSource ,OSM,Cluster} from "ol/source";
 import {Style,Icon,Fill,Circle,Stroke, Text as TextStyle, RegularShape} from 'ol/style';
 import {Tile,WebGLPoints,Layer, Vector as VectorLayer} from "ol/layer";
 import {Point} from "ol/geom";
-import { fromLonLat } from "ol/proj";
+import { fromLonLat , transform} from "ol/proj";
 
 //https://dev.to/saviosantos0808/real-time-localization-using-ionic-framework-and-google-spreadsheets-35pe
 import { Geolocation } from '@ionic-native/geolocation/ngx';
@@ -412,6 +412,35 @@ export class SurveyEditPage implements OnInit {
     await alert.present();
   }
 
+  getGpsPosition(){
+    debugger;
+    this.geolocation.getCurrentPosition().then((resp) => {
+      debugger;
+      this.surveyForm.value["latitudine"]=resp.coords.latitude;
+      this.surveyForm.value["longitudine"]=resp.coords.longitude;
+      this.surveyForm.value["quota"]=resp.coords.altitude||0;
+      this.surveyForm.value["accuratezza"]=resp.coords.accuracy||-1;
+      this.presentToastWithOptions();
+    }).catch((error) => {
+      console.log('Error getting location', error);
+    });
+  }
+
+  getMapPosition(){
+    let mapClickCB = (evt)=>{
+      // convert coordinate to EPSG-4326
+      let coords = transform(evt.coordinate, 'EPSG:3857', 'EPSG:4326');
+      this.surveyForm.value["latitudine"]=coords[1];
+      this.surveyForm.value["longitudine"]=coords[0];
+      this.surveyForm.value["quota"]=0;
+      this.surveyForm.value["accuratezza"]=1;
+      this.presentToastWithOptions();
+      this.map.un('singleclick', mapClickCB);
+    };
+    this.map.on('singleclick', mapClickCB);
+  }
+
+
 
 
   /**
@@ -420,9 +449,10 @@ export class SurveyEditPage implements OnInit {
 
   async presentToastWithOptions() {
     let gps_data = "";
-    for(let key of Object.keys(this.lastcoords)){
-      gps_data+=key+": "+this.lastcoords[key]+"\n";
-    };
+    gps_data+="<p>latitudine: "+this.surveyForm.value["latitudine"];
+    gps_data+="<\p><p>longitudine: "+this.surveyForm.value["longitudine"];
+    gps_data+="<\p><p>quota: "+this.surveyForm.value["quota"];
+    gps_data+="<\p><p>accuratezza: "+this.surveyForm.value["accuratezza"]+"<\p>";
     const toast = await this.toastController.create({
       header: 'GPS Data',
       message: gps_data,
@@ -445,19 +475,7 @@ export class SurveyEditPage implements OnInit {
    */
 
   public geolocationInit(){
-    this.geolocation.getCurrentPosition().then((resp) => {
-      this.coords.push({
-        latitude:resp.coords.latitude,
-        longitude:resp.coords.latitude,
-        altitude: resp.coords.altitude,
-        accuracy:resp.coords.accuracy,
-        timestamp:resp.timestamp
-      });
-      this.lastcoords = this.coords[this.coords.length-1];
-    }).catch((error) => {
-      console.log('Error getting location', error);
-    });
-
+    
     this.geoLocationWatch = this.geolocation.watchPosition({maximumAge: 1000, timeout: 5000, enableHighAccuracy: true});
     this.geoLocationWatch.subscribe((resp) => {
       this.geoLocationWatchStarted = true;
@@ -477,31 +495,12 @@ export class SurveyEditPage implements OnInit {
         gpsPositionFeature.setGeometry(this.lastcoords.longitudine&&this.lastcoords.latitudine ? new Point(fromLonLat([this.lastcoords.longitudine, this.lastcoords.latitudine])) : null);
         this.gpsPositionVectorSource.addFeature(gpsPositionFeature)
 
-        if(this.surveyId=="0"){
+        if(this.newsurvey){
           this.olMapComponent.centerOn(this.lastcoords.longitude,this.lastcoords.latitude);
         }
       }
     });
 
-    //https://ionicframework.com/docs/native/geolocation
-    /*this.geoLocationWatch = this.geolocation.watchPosition({maximumAge:1000});
-    this.geoLocationWatch.subscribe(
-      (data: any) => {
-        // data can be a set of coordinates, or an error (if an error occurred).
-        // data.coords.latitude
-        // data.coords.longitude
-        this.coords = data.coords;
-        console.log(this.coords);
-      },
-      (error) => {
-        console.log(error); //error handling
-      } 
-    );*/
-    ////https://dev.to/saviosantos0808/real-time-localization-using-ionic-framework-and-google-spreadsheets-35pe
-    /*this.geolocation.watchPosition(options).subscribe(async(response: any)=>{
-      this.coords = response.coords;
-      console.log(this.coords);
-    });*/
   }
 
   /**
