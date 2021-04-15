@@ -21,13 +21,13 @@
 
  
 
-  <ion-fab *ngIf="segmentSelected==1&&editable" vertical="top"  horizontal="end" slot="fixed" (click)="addPhotoToGallery()">
+  <ion-fab *ngIf="segmentSelected==1&&newsurvey" vertical="top"  horizontal="end" slot="fixed" (click)="addPhotoToGallery()">
     <ion-fab-button color="danger" >
       <ion-icon name="add"></ion-icon>
     </ion-fab-button>
   </ion-fab>
 
-  <ion-fab *ngIf="segmentSelected==2" vertical="top" horizontal="end"  slot="fixed" (click)="presentToastWithOptions()">
+  <ion-fab *ngIf="segmentSelected==2&&newsurvey" vertical="top" horizontal="end"  slot="fixed" (click)="presentToastWithOptions()">
     <ion-fab-button color="danger" >
       <ion-icon name="navigate-circle-outline"></ion-icon>
     </ion-fab-button>
@@ -175,7 +175,7 @@
         <ion-col size="12" *ngFor="let photo of photos; index as position">
             <ion-card>
               <ion-img [src]="photo.webviewPath"></ion-img>
-                <ion-icon *ngIf="editable" [class.badge-one]="true" name="trash" color="danger" size="large" (click)="removePhoto(position);"></ion-icon>
+                <ion-icon *ngIf="newsurvey" [class.badge-one]="true" name="trash" color="danger" size="large" (click)="removePhoto(position);"></ion-icon>
             </ion-card>
         </ion-col>
         <ion-col size="12" >

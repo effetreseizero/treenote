@@ -58,6 +58,7 @@ export class SurveyEditPage implements OnInit {
   private survey=null;
 
   private editable = true;
+  private newsurvey = false;
 
   private avanzateActivated = false;
 
@@ -138,20 +139,24 @@ export class SurveyEditPage implements OnInit {
     this.activatedRoute.queryParams.subscribe(params => {
       if (this.router.getCurrentNavigation().extras.state) {
 
-        this.editable = false;
-
         this.surveyId = this.router.getCurrentNavigation().extras.state.id;
 
         //read survey data
 
         this.surveysService.read_surveys_document(this.surveyId).subscribe((data)=>{
 
+          this.newsurvey = false;
+
           this.survey=data.data();
+
           //https://angular.io/guide/deprecations#ngmodel-with-reactive-forms
           //https://ultimatecourses.com/blog/angular-2-form-controls-patch-value-set-value
           this.surveyForm.patchValue(this.survey);
 
-          this.surveyForm.disable();
+          if(this.survey["status"]==="public"||this.survey["status"]==="archive"){
+            this.editable = false;
+            this.surveyForm.disable();
+          }
 
           this.avanzateActivated = this.surveyForm.get("avanzate").value;
 
@@ -177,6 +182,7 @@ export class SurveyEditPage implements OnInit {
       }else{
         this.surveyId = "0";
 
+        this.newsurvey = true;
         this.editable = true;
         
         this.avanzateActivated = false;
@@ -303,10 +309,10 @@ export class SurveyEditPage implements OnInit {
             text: 'Ok',
             handler: () => {
               if(this.surveyId=="0"){
-                this.surveyForm.value["latitudine"]=(this.lastcoords.latitude);
-                this.surveyForm.value["longitudine"]=this.lastcoords.longitude;
-                this.surveyForm.value["quota"]=this.lastcoords.altitude;
-                this.surveyForm.value["accuratezza"]=this.lastcoords.accuracy;
+                this.surveyForm.value["latitudine"]=this.lastcoords.latitude||45;
+                this.surveyForm.value["longitudine"]=this.lastcoords.longitude||11;
+                this.surveyForm.value["quota"]=this.lastcoords.altitude||0;
+                this.surveyForm.value["accuratezza"]=this.lastcoords.accuracy||1000;
                 this.surveysService.create_surveys_document(this.surveyForm.value,this.photos).then(()=>{
                   this.navController.back();
                 });
