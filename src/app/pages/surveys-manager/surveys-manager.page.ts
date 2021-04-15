@@ -43,8 +43,8 @@ export class SurveysManagerPage implements OnInit {
   }
 
   ngOnInit() {
-    this.surveysService.read_all_surveys_collection().subscribe(data => {
-      this.surveysList = data.map(e => {
+    this.surveysService.read_sent_surveys_collection().subscribe(data => {
+      this.sentSurveyList = data.map(e => {
         let survey = {};
         //add id of syrvey
         survey["id"]=e.payload.doc.id;
@@ -66,18 +66,46 @@ export class SurveysManagerPage implements OnInit {
         survey["short_date"] =  date.toLocaleDateString("it", options) //en is language option, you may specify..
         return survey;
       })
+      .filter(x=>(!x["deleted"]))
       .sort(
         (itemA, itemB) => {
           return itemB["created_time"] - itemA["created_time"];
         }
       );
-
-      this.sentSurveyList = this.surveysList.filter(x => (x.status === "sent"));
-      this.reviewSurveyList = this.surveysList.filter(x => (x.status === "review"));
-      this.archivedSurveyList = this.surveysList.filter(x => (x.status === "archived"));
-
-
     });
+
+    this.surveysService.read_review_surveys_collection().subscribe(data => {
+      this.reviewSurveyList = data.map(e => {
+        let survey = {};
+        //add id of syrvey
+        survey["id"]=e.payload.doc.id;
+        //add all other properties
+        for (let key of Object.keys(e.payload.doc.data())){
+          survey[key] = e.payload.doc.data()[key];
+        }
+
+        //https://stackoverflow.com/questions/2388115/get-locale-short-date-format-using-javascript/31663241
+        var date = new Date(survey["data_ora_osservazione"]);
+        var options = {
+            year: "numeric",
+            month: "2-digit",
+            day: "numeric",
+            hour: "numeric",
+            minute:"numeric"
+        };
+        
+        survey["short_date"] =  date.toLocaleDateString("it", options) //en is language option, you may specify..
+        return survey;
+      })
+      .filter(x=>(!x["deleted"]))
+      .sort(
+        (itemA, itemB) => {
+          return itemB["created_time"] - itemA["created_time"];
+        }
+      );
+    });
+
+
     
     this.publicSurveysStore.subscribePublicSurveys().subscribe((data)=>{
       this.publicSurveyList = data.features;

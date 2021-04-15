@@ -46,10 +46,6 @@ export class HomePage {
   @ViewChild('app_ol_map') olMapComponent:OlMapComponent;
   map: Map;
   user: User;
-  publicSurveysList=[];
-  publicSurveysVectorSource= new VectorSource({
-    features: []
-  });
 
   constructor(
     private router: Router,
@@ -66,38 +62,6 @@ export class HomePage {
 
     this.coreFacade.getUser().subscribe((user)=>{
       this.user=user;
-    });
-
-    this.surveyService.read_public_surveys_collection().subscribe((data)=>{
-      this.publicSurveysList=data.map(e => {
-        let survey = {};
-        //add id of syrvey
-        survey["id"]=e.payload.doc.id;
-        //add all other properties
-        for (let key of Object.keys(e.payload.doc.data())){
-          survey[key] = e.payload.doc.data()[key];
-        }
-
-        //https://stackoverflow.com/questions/2388115/get-locale-short-date-format-using-javascript/31663241
-        var date = new Date(survey["data_ora_osservazione"]);
-        var options = {
-            year: "numeric",
-            month: "2-digit",
-            day: "numeric",
-            hour: "numeric",
-            minute:"numeric"
-        };
-        
-        survey["short_date"] =  date.toLocaleDateString("it", options) //en is language option, you may specify..
-        return survey;
-      });
-      this.publicSurveysVectorSource.clear();
-      this.publicSurveysList.forEach((survey)=>{
-        let surveyPositionFeature = new Feature();
-        surveyPositionFeature.setProperties(survey);
-        surveyPositionFeature.setGeometry(survey.longitudine&&survey.latitudine ? new Point(fromLonLat([survey.longitudine, survey.latitudine])) : null);
-        this.publicSurveysVectorSource.addFeature(surveyPositionFeature)
-      });
     });
 
   }

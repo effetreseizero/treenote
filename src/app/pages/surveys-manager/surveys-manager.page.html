@@ -81,10 +81,10 @@
             <h3>{{item.properties.localita}}</h3>
             <p>{{item.properties.short_date}}</p>
           </ion-label>
-          <ion-button slot="end" shape="round" color="secondary" size="small" (click)="editSurvey(item.id)">
+          <ion-button slot="end" shape="round" color="secondary" size="small" (click)="editSurvey(item.properties.id)">
             <ion-icon size="small" slot="icon-only" name="create"></ion-icon>
           </ion-button>
-          <ion-button slot="end" shape="round" color="danger" size="small" (click)="deleteSurvey(item.id)">
+          <ion-button slot="end" shape="round" color="danger" size="small" (click)="deleteSurvey(item.properties.id)">
             <ion-icon size="small" slot="icon-only" name="trash"></ion-icon>
           </ion-button>
          

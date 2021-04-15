@@ -44,7 +44,6 @@ export class SurveysService {
 
   //https://www.freakyjolly.com/ionic-firebase-crud-operations/#.X-mQOulKiEI
   read_user_surveys_collection() {
-    console.log("fsurveysService.read_surveys_collection")
 
     return this.firestore.collection(
       this.collectionName,
@@ -56,22 +55,38 @@ export class SurveysService {
 
   }
 
-  read_all_surveys_collection() {
-    console.log("surveysService.read_all_surveys_collection")
-
-    return this.firestore.collection(this.collectionName).snapshotChanges();
-
-  }
-
-  read_public_surveys_collection() {
-    console.log("surveysService.read_public_surveys_collection")
-
+  read_sent_surveys_collection() {
     return this.firestore.collection(
       this.collectionName,
-      ref => ref.where("status", "==", "public")
+      //https://stackoverflow.com/questions/49026589/angular-firestore-where-query-returning-error-property-does-not-exist-on
+      //.where("userUID", "==", firebase.auth().currentUser.uid)
+      ref => ref.where("status", "==", "sent")
       )
       .snapshotChanges();
+
   }
+
+  read_review_surveys_collection() {
+    return this.firestore.collection(
+      this.collectionName,
+      //https://stackoverflow.com/questions/49026589/angular-firestore-where-query-returning-error-property-does-not-exist-on
+      //.where("userUID", "==", firebase.auth().currentUser.uid)
+      ref => ref.where("status", "==", "review")
+      )
+      .snapshotChanges();
+
+  }
+
+  read_archived_surveys_collection() {
+    return this.firestore.collection(
+      this.collectionName,
+      //https://stackoverflow.com/questions/49026589/angular-firestore-where-query-returning-error-property-does-not-exist-on
+      //.where("userUID", "==", firebase.auth().currentUser.uid)
+      ref => ref.where("status", "==", "review")
+      )
+      .snapshotChanges();
+
+  } 
 
   async create_surveys_document(data,photos) {
     data['user_uid']=this.user.uid;
