@@ -317,8 +317,17 @@ export class SurveyEditPage implements OnInit {
             text: 'Ok',
             handler: () => {
               if(this.surveyId=="0"){
-                this.surveysService.create_surveys_document(this.surveyForm.value,this.photos).then(()=>{
-                  this.navController.back();
+                this.surveysService.create_surveys_document(this.surveyForm.value,this.photos).then(async()=>{
+                  const toast = await this.toastController.create({
+                    color: 'secondary',
+                    position: 'middle',
+                    duration: 4000,
+                    message: 'Grazie per la segnalazione!<br>Sarà presa in carico dal nostro team al più presto.',
+                  });
+                  await toast.present().then(()=>{
+                    this.navController.back();
+                  }); 
+                  
                 });
                 
               }else{
