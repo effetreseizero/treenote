@@ -36,6 +36,11 @@ import {Tile,WebGLPoints,Layer, Vector as VectorLayer} from "ol/layer";
 import {Point} from "ol/geom";
 import { fromLonLat , transform} from "ol/proj";
 
+
+import IconAnchorUnits from 'ol/style/IconAnchorUnits';
+import IconOrigin from 'ol/style/IconOrigin';
+
+
 //https://dev.to/saviosantos0808/real-time-localization-using-ionic-framework-and-google-spreadsheets-35pe
 import { Geolocation } from '@ionic-native/geolocation/ngx';
 
@@ -550,19 +555,20 @@ export class SurveyEditPage implements OnInit {
       width: 3,
     });
     
+    var iconStyle = new Style({
+      image: new Icon(/** @type {olx.style.IconOptions} */ ({
+        anchor: [0.5, 0],
+        scale: 0.3,
+        anchorOrigin: IconOrigin.BOTTOM_LEFT, 
+        anchorXUnits: IconAnchorUnits.FRACTION,
+        anchorYUnits: IconAnchorUnits.PIXELS,
+        opacity: 1,
+        src: 'https://image.flaticon.com/icons/png/128/149/149059.png'
+      }))
+    });
+
     function styleFunction(feature, resolution) {
-      var style = new Style({
-          image: new Circle({
-            radius: 10,
-            fill: new Fill({
-              color: '#AA0000'
-            }),
-            stroke: new Stroke({
-              color: '#fff',
-              width: 2
-            })
-          })
-        });
+      var style = iconStyle;
       return style;
     }
 

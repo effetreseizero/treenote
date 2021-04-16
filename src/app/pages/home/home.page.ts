@@ -32,7 +32,11 @@ import {createEmpty, extend, getHeight, getWidth} from 'ol/extent';
 
 
 
+
+
 import { User } from 'src/app/services/storage/user';
+import IconAnchorUnits from 'ol/style/IconAnchorUnits';
+import IconOrigin from 'ol/style/IconOrigin';
 
 
 @Component({
@@ -192,6 +196,18 @@ export class HomePage {
       width: 3,
     });
     
+    var iconStyle = new Style({
+      image: new Icon(/** @type {olx.style.IconOptions} */ ({
+        anchor: [0.5, 0],
+        scale: 0.3,
+        anchorOrigin: IconOrigin.BOTTOM_LEFT, 
+        anchorXUnits: IconAnchorUnits.FRACTION,
+        anchorYUnits: IconAnchorUnits.PIXELS,
+        opacity: 1,
+        src: 'https://image.flaticon.com/icons/png/128/149/149059.png'
+      }))
+    });
+
     function styleFunction(feature, resolution) {
       var style;
       var size = feature.get('features').length;
@@ -229,7 +245,8 @@ export class HomePage {
           }),
         });
       } else {
-        style = new Style({
+        style = iconStyle;
+        /*style = new Style({
           image: new Circle({
             radius: 10,
             fill: new Fill({
@@ -240,7 +257,7 @@ export class HomePage {
               width: 2
             })
           })
-        });
+        });*/
       }
       return style;
     }
