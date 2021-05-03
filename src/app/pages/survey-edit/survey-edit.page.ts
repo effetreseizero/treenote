@@ -215,6 +215,8 @@ export class SurveyEditPage implements OnInit,CanComponentDeactivate {
 
         this.newsurvey = true;
         this.editable = true;
+
+        this.surveyForm.get('data_ora_osservazione').patchValue(this.formatDate(new Date()));
         
         this.avanzateActivated = false;
 
@@ -285,6 +287,18 @@ export class SurveyEditPage implements OnInit,CanComponentDeactivate {
 
     //https://www.tektutorialshub.com/angular/valuechanges-in-angular-forms/#:~:text=The%20ValueChanges%20is%20an%20event,time%20and%20respond%20to%20it.
         
+  }
+
+  private formatDate(date) {
+    const d = new Date(date);
+    let month = '' + (d.getMonth() + 1);
+    let day = '' + d.getDate();
+    const year = d.getFullYear();
+    if (month.length < 2) month = '0' + month;
+    if (day.length < 2) day = '0' + day;
+    let hours = ''+d.getHours();
+    let minutes = ''+d.getMinutes();
+    return [year, month, day].join('-')+' '+hours+":"+minutes;
   }
 
   /**

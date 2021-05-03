@@ -62,7 +62,8 @@
     
             <ion-item [class.invalid]="!surveyForm.controls.data_ora_osservazione.valid && (surveyForm.controls.data_ora_osservazione.dirty || submitAttempt)">
               <ion-label type="text" position="floating">Data osservazione</ion-label>
-              <ion-datetime formControlName="data_ora_osservazione" displayFormat="DD/MM/YY HH:mm" cancelText="Annulla" doneText="Ok"></ion-datetime>
+              <ion-datetime formControlName="data_ora_osservazione" displayFormat="DD/MMM/YYYY HH:mm" cancelText="Annulla" doneText="Ok"
+              monthShortNames="gen, feb, mar, apr, mag, giu, lug, ago, set, ott, nov, dic"></ion-datetime>
             </ion-item>
     
             <ion-item [class.invalid]="!surveyForm.controls.tipologia.valid && (surveyForm.controls.tipologia.dirty || submitAttempt)">
