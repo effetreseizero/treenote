@@ -66,7 +66,7 @@ export class OlMapComponent implements AfterViewInit {
     //register(proj4)
     //this.projection = GetProjection('EPSG:3857');
     //this.projection.setExtent(this.extent);
-
+    
     this.view = new View({
       center: fromLonLat(this.center),
       zoom: this.zoom,
@@ -85,6 +85,7 @@ export class OlMapComponent implements AfterViewInit {
         new ScaleLine({}),
       ]),
     });
+    
   } 
 
   centerOn(longitude,latitude) {

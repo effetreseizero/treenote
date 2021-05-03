@@ -1,7 +1,7 @@
 import { Component, ViewChild } from '@angular/core';
 import { Observable } from 'rxjs';
 
-import { Router, RouterEvent } from '@angular/router';
+import { Router } from '@angular/router';
 
 import { PopoverController } from '@ionic/angular';
 
@@ -96,7 +96,7 @@ export class HomePage {
                 message: {
                   imageurl: "../../assets/images/helper_home_partecipa.png",
                   title: "Iscriviti",
-                  text: "Mandaci le tue segnalazioni sullo stato di salute delle piante"
+                  text: "Mandaci le tue segnalazioni sullo stato di salute dei boschi"
                 }
               },
               translucent: true
@@ -121,7 +121,7 @@ export class HomePage {
   }
 
   async createSurvey() {
-    this.router.navigate(['/menu/survey-edit']);
+    this.router.navigate(['/menu/surveys']);
   }
 
   async surveyPreviewPopover(ev: any,survey) {

@@ -49,6 +49,8 @@ import{ geohashForLocation } from 'geofire-common';
 import{ coordinateRelationship } from 'ol/extent';
 
 
+//https://stackoverflow.com/questions/58651389/router-guards-in-angular-8
+import { CanComponentDeactivate} from '../../services/deactivate/deactivate.guard';
 
 
 @Component({
@@ -56,7 +58,7 @@ import{ coordinateRelationship } from 'ol/extent';
   templateUrl: './survey-edit.page.html',
   styleUrls: ['./survey-edit.page.scss'],
 })
-export class SurveyEditPage implements OnInit {
+export class SurveyEditPage implements OnInit,CanComponentDeactivate {
   @ViewChild(IonContent) content: IonContent;
 
   private surveyId = "0";
@@ -85,6 +87,23 @@ export class SurveyEditPage implements OnInit {
   //https://www.pluralsight.com/guides/using-template-reference-variables-to-interact-with-nested-components
   @ViewChild('app_ol_map') olMapComponent:OlMapComponent;
   map: Map;
+
+  preventBack = true;
+
+  //https://stackoverflow.com/questions/58651389/router-guards-in-angular-8
+  canDeactivate =  () => {
+    console.log('back button');
+    if(this.preventBack){
+      this.cancelEdit();
+      
+
+      //https://stackoverflow.com/questions/12381563/how-can-i-stop-the-browser-back-button-using-javascript
+      history.pushState(null, document.title, location.href);
+      return false;
+    } else {
+      return true;
+    }
+  };
 
   surveyPositionVectorSource= new VectorSource({
     features: []
@@ -129,13 +148,19 @@ export class SurveyEditPage implements OnInit {
       avanzate: ['', []],
       specie: ['', []],
       nome_scientifico: ['',[]],
-      sintomi: ['', []],
+      sintomo_0: ['', []],
+      sintomo_1: ['', []],
+      sintomo_2: ['', []],
       diffusione_perc: ['', []],
       alberi_morti: ['', []],
     });
 
+    
+
 
   }
+
+  
 
   ngOnInit() {
 
@@ -207,9 +232,11 @@ export class SurveyEditPage implements OnInit {
           commenti: "",
           specie: "010_pino",
           nome_scientifico: "",
-          sintomi: "010_avvizzimento_fogliare",
+          sintomo_0: "010_avvizzimento_fogliare",
+          sintomo_1: "010_avvizzimento_fogliare",
+          sintomo_2: "010_avvizzimento_fogliare",
           diffusione_perc: "010_minore_20",
-          alberi_morti: "010_si", 
+          alberi_morti: "010_si",
         });
         */
 
@@ -235,7 +262,9 @@ export class SurveyEditPage implements OnInit {
                     this.surveyForm.patchValue({
                       specie: "",
                       nome_scientifico: "",
-                      sintomi: "",
+                      sintomo_0: "",
+                      sintomo_1: "",
+                      sintomo_2: "",
                       diffusione_perc: "",
                       alberi_morti: "", 
                     });
@@ -277,6 +306,7 @@ export class SurveyEditPage implements OnInit {
           {
             text: 'Ok',
             handler: () => {
+              this.preventBack = false;
               this.navController.back();
             }
           }
@@ -325,6 +355,7 @@ export class SurveyEditPage implements OnInit {
                     message: 'Grazie per la segnalazione!<br>Sarà presa in carico dal nostro team al più presto.',
                   });
                   await toast.present().then(()=>{
+                    this.preventBack = false;
                     this.navController.back();
                   }); 
                   
@@ -332,6 +363,7 @@ export class SurveyEditPage implements OnInit {
                 
               }else{
                 this.surveysService.update_surveys_document(this.surveyId, this.surveyForm.value).then(()=>{
+                  this.preventBack = false;
                   this.navController.back();
                 });
               }
@@ -448,7 +480,19 @@ export class SurveyEditPage implements OnInit {
     });
   }
 
-  getMapPosition(){
+  async getMapPosition(){
+    const toast = await this.toastController.create({
+      header: 'Posizione della segnalazionie',
+      message: "Indica sulla mappa la posizione",
+      position: 'bottom',
+      buttons: [
+       
+      ],
+      duration: 2000
+    });
+    toast.present();
+
+
     let mapClickCB = (evt)=>{
       // convert coordinate to EPSG-4326
       let coords = transform(evt.coordinate, 'EPSG:3857', 'EPSG:4326');
@@ -482,17 +526,17 @@ export class SurveyEditPage implements OnInit {
 
   async presentToastWithOptions() {
     let gps_data = "";
-    gps_data+="<p>latitudine: "+this.surveyForm.value["latitudine"];
-    gps_data+="<\p><p>longitudine: "+this.surveyForm.value["longitudine"];
-    gps_data+="<\p><p>quota: "+this.surveyForm.value["quota"];
-    gps_data+="<\p><p>accuratezza: "+this.surveyForm.value["accuratezza"]+"<\p>";
+    gps_data+="<p>Latitudine: "+this.surveyForm.value["latitudine"];
+    gps_data+="<\p><p>Longitudine: "+this.surveyForm.value["longitudine"];
+    gps_data+="<\p><p>Quota: "+this.surveyForm.value["quota"];
+    gps_data+=" Accuratezza: "+this.surveyForm.value["accuratezza"]+"";
     const toast = await this.toastController.create({
-      header: 'GPS Data',
+      header: 'Coordinate della segnalazione',
       message: gps_data,
       position: 'top',
       buttons: [
        {
-          text: 'Done',
+          text: 'Chiudi',
           role: 'cancel',
           handler: () => {
             

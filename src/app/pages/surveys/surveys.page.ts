@@ -4,7 +4,7 @@ import { Component, OnInit } from '@angular/core';
 
 import { SurveysService} from '../../services/firestore/surveys.service';
 
-import { Router, NavigationExtras } from "@angular/router";
+import { Router, ActivatedRoute, NavigationExtras } from "@angular/router";
 
 import { AlertController } from '@ionic/angular';
 
@@ -25,8 +25,8 @@ export class SurveysPage implements OnInit {
   constructor(
     private surveysService: SurveysService,
     private router: Router,
-    private alertController: AlertController
-    
+    private alertController: AlertController,
+    private activatedRoute: ActivatedRoute
   )
   {
    
@@ -34,7 +34,7 @@ export class SurveysPage implements OnInit {
 
   ngOnInit()
   {
-    
+
     this.surveysService.read_user_surveys_collection().subscribe(data => {
       this.userSurveyList = data.map(e => {
         let survey = {};

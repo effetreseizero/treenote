@@ -29,6 +29,8 @@ import { ServiceWorkerModule } from '@angular/service-worker';
 import { environment } from '../environments/environment';
 
 
+
+
 @NgModule({
   declarations: [AppComponent],
   entryComponents: [
@@ -50,7 +52,7 @@ import { environment } from '../environments/environment';
     SplashScreen,
     { provide: RouteReuseStrategy, useClass: IonicRouteStrategy },
     Geolocation,
-    OlMapComponent
+    OlMapComponent 
 
   ],
   bootstrap: [AppComponent]

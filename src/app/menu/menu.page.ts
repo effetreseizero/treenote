@@ -30,7 +30,7 @@ export class MenuPage implements OnInit {
     {
       name: 'Contattaci',
       path: '/menu/contact'
-    },
+    }
   ]
 
   constructor(

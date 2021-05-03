@@ -13,6 +13,7 @@ import { MenuPage } from './menu.page';
 
 import { AuthGuard } from '../services/auth/auth.guard';
 
+
 const routes: Routes = [
   {
     path: 'menu',
@@ -27,6 +28,7 @@ const routes: Routes = [
         loadChildren: () => import('../pages/contact/contact.module').then(m => m.ContactPageModule)
       },
       {
+        
         path: 'login',
         loadChildren: () => import('../pages/login/login.module').then(m => m.LoginPageModule)
       },
@@ -56,7 +58,7 @@ const routes: Routes = [
       {
         path: 'survey-edit',
         loadChildren: () => import('../pages/survey-edit/survey-edit.module').then( m => m.SurveyEditPageModule),
-        canActivate: [AuthGuard]
+        canActivate: [AuthGuard],
       }
       
     ]

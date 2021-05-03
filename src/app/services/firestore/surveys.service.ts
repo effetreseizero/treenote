@@ -128,7 +128,7 @@ export class SurveysService {
   }
 
   async delete_surveys_document(surveyID) {
-    debugger;
+    
     //delete survey photos directory
     this.firestore.doc(this.collectionName + '/' + surveyID).get().toPromise().then((survey)=>{
       var surveyStoragePath = 'users_photo/'+this.user.uid + '/' + surveyID;

@@ -15,7 +15,9 @@ export interface Survey {
     commenti: string;
     specie: string;
     nome_scientifico?: string;
-    sintomi: string;
+    sintomo_0: string;
+    sintomo_1: string;
+    sintomo_2: string;
     diffusione_perc: string;
     alberi_morti: string;
     photo_0_imageurl: string;
