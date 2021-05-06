@@ -52,6 +52,9 @@ import{ coordinateRelationship } from 'ol/extent';
 //https://stackoverflow.com/questions/58651389/router-guards-in-angular-8
 import { CanComponentDeactivate} from '../../services/deactivate/deactivate.guard';
 
+import { LoadingController } from '@ionic/angular';
+
+
 
 @Component({
   selector: 'app-survey-edit',
@@ -133,7 +136,8 @@ export class SurveyEditPage implements OnInit,CanComponentDeactivate {
     private toastController:ToastController,
     private geolocation: Geolocation,
     public photoService: PhotoService,
-    public modalController: ModalController
+    public modalController: ModalController,
+    public loadingController: LoadingController
   ) {
 
 
@@ -209,6 +213,7 @@ export class SurveyEditPage implements OnInit,CanComponentDeactivate {
           this.surveyPositionVectorSource.addFeature(surveyPositionFeature)
 
           this.olMapComponent.centerOn(this.survey.longitudine,this.survey.latitudine);
+          this.gpsPositionSetted=true;
         });
       }else{
         this.surveyId = "0";
@@ -359,9 +364,15 @@ export class SurveyEditPage implements OnInit,CanComponentDeactivate {
           },
           {
             text: 'Ok',
-            handler: () => {
+            handler: async () => {
+              const loading = await this.loadingController.create({
+                cssClass: 'my-custom-class',
+                message: 'Invio dati ...',
+              });
+              await loading.present();
               if(this.surveyId=="0"){
                 this.surveysService.create_surveys_document(this.surveyForm.value,this.photos).then(async()=>{
+                  loading.dismiss();
                   const toast = await this.toastController.create({
                     color: 'secondary',
                     position: 'middle',
@@ -372,11 +383,10 @@ export class SurveyEditPage implements OnInit,CanComponentDeactivate {
                     this.preventBack = false;
                     this.navController.back();
                   }); 
-                  
                 });
-                
               }else{
                 this.surveysService.update_surveys_document(this.surveyId, this.surveyForm.value).then(()=>{
+                  loading.dismiss();
                   this.preventBack = false;
                   this.navController.back();
                 });
@@ -435,10 +445,14 @@ export class SurveyEditPage implements OnInit,CanComponentDeactivate {
   }
 
 
-  async addPhotoToGallery() {
+  async addPhotoToGallery(position) {
     if(this.photos.length<3){
       const capturedPhoto = await this.photoService.addNewToGallery();
-      this.photos.push(capturedPhoto);
+      if(position!=null){
+        this.photos[position]= capturedPhoto;
+      }else{
+        this.photos.push(capturedPhoto);
+      }
     }else{
       const toast = await this.toastController.create({
         color: 'dark',
