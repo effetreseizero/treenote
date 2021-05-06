@@ -12,7 +12,8 @@
     </ion-buttons>
 
     <ion-buttons slot="end">
-      <ion-button *ngIf="editable" (click)="saveSurvey()" fill="outline" color="danger">Invia</ion-button>
+      <ion-button *ngIf="editable&&newsurvey" (click)="saveSurvey()" fill="outline" color="danger">Invia</ion-button>
+      <ion-button *ngIf="editable&&!newsurvey" (click)="saveSurvey()" fill="outline" color="danger">Aggiorna</ion-button>
     </ion-buttons>
 
   </ion-toolbar>
