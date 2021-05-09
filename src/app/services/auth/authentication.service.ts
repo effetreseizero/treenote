@@ -112,6 +112,11 @@ export class AuthenticationService {
     return this.ngFireAuth.signInWithPopup(new firebase.auth.GoogleAuthProvider);
   }
 
+  FacebookAuth() {
+    //https://github.com/angular/angularfire/blob/master/docs/auth/getting-started.md
+    return this.ngFireAuth.signInWithPopup(new firebase.auth.FacebookAuthProvider);
+  }
+
   // Sign-out 
   SignOut() {
     return this.ngFireAuth.signOut().then(() => {

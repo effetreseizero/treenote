@@ -25,6 +25,7 @@ import { Geolocation } from '@ionic-native/geolocation/ngx';
 
 //https://medium.com/runic-software/a-simple-guide-to-openlayers-in-angular-b10f6feb3df1
 import {OlMapComponent} from './components/ol-map/ol-map.component';
+import {OlMapComponentSurvey} from './components/ol-map-survey/ol-map-survey.component';
 import { ServiceWorkerModule } from '@angular/service-worker';
 import { environment } from '../environments/environment';
 
@@ -52,7 +53,8 @@ import { environment } from '../environments/environment';
     SplashScreen,
     { provide: RouteReuseStrategy, useClass: IonicRouteStrategy },
     Geolocation,
-    OlMapComponent 
+    OlMapComponent,
+    OlMapComponentSurvey
 
   ],
   bootstrap: [AppComponent]

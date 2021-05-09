@@ -53,6 +53,7 @@ import{ coordinateRelationship } from 'ol/extent';
 import { CanComponentDeactivate} from '../../services/deactivate/deactivate.guard';
 
 import { LoadingController } from '@ionic/angular';
+import { OlMapComponentSurvey } from 'src/app/components/ol-map-survey/ol-map-survey.component';
 
 
 
@@ -88,7 +89,7 @@ export class SurveyEditPage implements OnInit,CanComponentDeactivate {
   
 
   //https://www.pluralsight.com/guides/using-template-reference-variables-to-interact-with-nested-components
-  @ViewChild('app_ol_map') olMapComponent:OlMapComponent;
+  @ViewChild('app_ol_map_survey') olMapComponentSurvey:OlMapComponentSurvey;
   map: Map;
 
   preventBack = true;
@@ -212,7 +213,7 @@ export class SurveyEditPage implements OnInit,CanComponentDeactivate {
           surveyPositionFeature.setGeometry(this.survey.longitudine&&this.survey.latitudine ? new Point(fromLonLat([this.survey.longitudine, this.survey.latitudine])) : null);
           this.surveyPositionVectorSource.addFeature(surveyPositionFeature)
 
-          this.olMapComponent.centerOn(this.survey.longitudine,this.survey.latitudine);
+          this.olMapComponentSurvey.centerOn(this.survey.longitudine,this.survey.latitudine);
           this.gpsPositionSetted=true;
         });
       }else{
@@ -500,7 +501,7 @@ export class SurveyEditPage implements OnInit,CanComponentDeactivate {
       surveyPositionFeature.setGeometry(new Point(fromLonLat([this.surveyForm.value["longitudine"], this.surveyForm.value["latitudine"]])));
       this.surveyPositionVectorSource.addFeature(surveyPositionFeature)
 
-      this.olMapComponent.centerOn(this.surveyForm.value["longitudine"],this.surveyForm.value["latitudine"]);
+      this.olMapComponentSurvey.centerOn(this.surveyForm.value["longitudine"],this.surveyForm.value["latitudine"]);
 
       this.presentToastWithOptions();
     }).catch((error) => {
@@ -537,7 +538,7 @@ export class SurveyEditPage implements OnInit,CanComponentDeactivate {
       surveyPositionFeature.setGeometry(new Point(fromLonLat([this.surveyForm.value["longitudine"], this.surveyForm.value["latitudine"]])));
       this.surveyPositionVectorSource.addFeature(surveyPositionFeature)
 
-      this.olMapComponent.centerOn(this.surveyForm.value["longitudine"],this.surveyForm.value["latitudine"]);
+      this.olMapComponentSurvey.centerOn(this.surveyForm.value["longitudine"],this.surveyForm.value["latitudine"]);
 
       this.presentToastWithOptions();
       this.map.un('singleclick', mapClickCB);
@@ -601,7 +602,7 @@ export class SurveyEditPage implements OnInit,CanComponentDeactivate {
         this.gpsPositionVectorSource.addFeature(gpsPositionFeature)
 
         if(this.newsurvey){
-          this.olMapComponent.centerOn(this.lastcoords.longitude,this.lastcoords.latitude);
+          this.olMapComponentSurvey.centerOn(this.lastcoords.longitude,this.lastcoords.latitude);
         }
       }
     });
