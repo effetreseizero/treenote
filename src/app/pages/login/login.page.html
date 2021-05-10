@@ -14,34 +14,40 @@
 
 <ion-content [fullscreen]="true" class="background">
   <div id="container">
-    <form>    
-      <ion-item lines="full">
-        <ion-label position="floating">Email</ion-label>
-        <ion-input type="text" #email required></ion-input>
-      </ion-item> 
-  
-      <ion-item lines="full">
-        <ion-label position="floating">Password</ion-label>
-        <ion-input type="password" #password required></ion-input>
-      </ion-item>
-  
-      <ion-row>
-        <ion-col> 
-        <ion-button type="submit" (click)="emailLogin(email, password)" expand="block">Accedi</ion-button>
-        </ion-col>
-      </ion-row>
-      <ion-row>
-        <ion-col> 
-          <ion-button (click)="registration()" expand="block" color="light">Registrati con Email</ion-button>
-        </ion-col>
-      </ion-row>
-      <ion-row>
-        <ion-col> 
-          <ion-button (click)="googleLogin()" expand="block" color="dark">Login con Google</ion-button>
-        </ion-col>
-      </ion-row>
-      
-    </form>
+
     
+
+    <ion-card>
+      <ion-card-content>
+        <ion-button (click)="googleLogin()" expand="block" >
+          <ion-icon src="./../../../assets/google_icon.svg" size="large" slot="start"></ion-icon>
+          Login con Google
+        </ion-button>
+      </ion-card-content>
+    </ion-card>
+
+    <ion-card>
+      <ion-card-header>
+        <ion-card-title>Login con e-mail</ion-card-title>
+      </ion-card-header>
+      <ion-card-content>
+        <form>    
+          <ion-item lines="full">
+            <ion-label position="floating">Email</ion-label>
+            <ion-input type="text" #email required></ion-input>
+          </ion-item> 
+      
+          <ion-item lines="full">
+            <ion-label position="floating">Password</ion-label>
+            <ion-input type="password" #password required></ion-input>
+          </ion-item>
+ 
+          <ion-button type="submit" (click)="emailLogin(email, password)" color="secondary">Accedi</ion-button>
+    
+          <ion-button (click)="registration()">Registrati con Email</ion-button>      
+        </form>
+      </ion-card-content>
+    </ion-card>
+
   </div>
 </ion-content>
