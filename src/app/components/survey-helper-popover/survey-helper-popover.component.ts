@@ -1,32 +1,29 @@
-//https://edupala.com/ionic-popover-example/
-
 import { Component, OnInit } from '@angular/core';
+
 import { PopoverController, } from '@ionic/angular';
 
 
 import { UserOptionsService } from '../../services/options/user-options.service'
 
 @Component({
-  selector: 'app-helper-popover',
-  templateUrl: './helper-popover.component.html',
-  styleUrls: ['./helper-popover.component.scss'],
+  selector: 'app-survey-helper-popover',
+  templateUrl: './survey-helper-popover.component.html',
+  styleUrls: ['./survey-helper-popover.component.scss'],
 })
-export class HelperPopoverComponent implements OnInit {
-  message;
+export class SurveyHelperPopoverComponent implements OnInit {
 
   public hidehelper = false;
 
   constructor(
     private popoverController: PopoverController,
-    private userOptionsService: UserOptionsService
-  ) { }
+    private userOptionsService: UserOptionsService) { }
 
   ngOnInit() {}
 
   dismiss() {
     // code for dismiss
     if(this.hidehelper){
-      this.userOptionsService.setHomeHelper(false);
+      this.userOptionsService.setSurveyHelper(false);
     }
     this.popoverController.dismiss();
   }

@@ -17,7 +17,12 @@ import { Survey} from '../../services/firestore/survey';
 import { AlertController } from '@ionic/angular';
 import { ModalController } from '@ionic/angular';
 
-import { InfoListPage } from '../../modal/info-list/info-list.page'
+import { InfoListPage } from '../../modal/info-list/info-list.page';
+
+import { PopoverController } from '@ionic/angular';
+
+import { SurveyHelperPopoverComponent } from '../../components/survey-helper-popover/survey-helper-popover.component';
+
 
 
 //https://ionicframework.com/docs/angular/your-first-app/2-taking-photos
@@ -55,6 +60,7 @@ import { CanComponentDeactivate} from '../../services/deactivate/deactivate.guar
 import { LoadingController } from '@ionic/angular';
 import { OlMapComponentSurvey } from 'src/app/components/ol-map-survey/ol-map-survey.component';
 
+import { UserOptionsService } from '../../services/options/user-options.service';
 
 
 @Component({
@@ -138,7 +144,9 @@ export class SurveyEditPage implements OnInit,CanComponentDeactivate {
     private geolocation: Geolocation,
     public photoService: PhotoService,
     public modalController: ModalController,
-    public loadingController: LoadingController
+    public loadingController: LoadingController,
+    private popoverController: PopoverController,
+    private userOptionsService: UserOptionsService,
   ) {
 
 
@@ -294,6 +302,25 @@ export class SurveyEditPage implements OnInit,CanComponentDeactivate {
     //https://www.tektutorialshub.com/angular/valuechanges-in-angular-forms/#:~:text=The%20ValueChanges%20is%20an%20event,time%20and%20respond%20to%20it.
         
   }
+
+
+  ionViewDidEnter(){
+    this.userOptionsService.readSurveyHelper().then((toshow)=>{
+      if(!toshow.value){
+        setTimeout(async ()=>{
+          let popover = await this.popoverController.create({
+              component: SurveyHelperPopoverComponent,
+              cssClass: 'popover_setting',
+              translucent: true
+            });
+          
+          await popover.present();          
+      
+        },5000);
+      }
+    });
+  }
+  
 
   private formatDate(date) {
     const d = new Date(date);

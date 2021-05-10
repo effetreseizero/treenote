@@ -14,22 +14,21 @@
 
 <ion-content [fullscreen]="true" class="background">
   <div id="container">
-    
-    <ion-row>
-      <ion-col> 
+    <ion-card>
+      <ion-card-content>
+        <ion-avatar slot="start">
+          <img [src]="user.photoURL" >
+        </ion-avatar>
+        <h2>{{user.displayName}}</h2>
         <p>Email: {{user.email}}</p>
-        <p>Nome: {{user.displayName}}</p>
-        <p>Email verificata: {{user.emailVerified}}</p>
-        <p>Admin: {{user.isAdmin}}</p>
-        <p>ID: {{user.uid}}</p>
+        <ion-button (click)="logout()"  color="danger">Logout</ion-button>
+      </ion-card-content>
+    </ion-card>
 
-      </ion-col>
-    </ion-row>
+
     
-    <ion-row>
-      <ion-col> 
-        <ion-button (click)="logout()" expand="block" color="dark">Logout</ion-button>
-      </ion-col>
-    </ion-row>
+    
+    
+     
   </div>
 </ion-content>

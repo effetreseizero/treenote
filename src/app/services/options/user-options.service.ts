@@ -14,8 +14,8 @@ const { Storage } = Plugins;
 export class UserOptionsService extends Store<CoreState> {
 
   private readonly _prefix: string;
-  private readonly HIDE_HELPER = 'hideHelper';
-  private readonly DARK_MODE = 'darkMode';
+  private readonly HOME_HELPER = 'homeHelper';
+  private readonly SURVEY_HELPER = 'surveyHelper';
   public ready$: Promise<any[]>;
 
   constructor(
@@ -28,26 +28,26 @@ export class UserOptionsService extends Store<CoreState> {
 
       // read initial values from storage
       this.ready$ = Promise.all([
-        this.initValue(this.HIDE_HELPER),
-        this.initValue(this.DARK_MODE),
+        this.initValue(this.HOME_HELPER),
+        this.initValue(this.SURVEY_HELPER),
       ]);
   }
 
-  public setHideHelper(value: boolean): Promise<any> {
-    return this.setValue(this.HIDE_HELPER, value);
+  public setHomeHelper(value: boolean): Promise<any> {
+    return this.setValue(this.HOME_HELPER, value);
   }
 
-  public readHideHelper(): Promise<any> {
-    return this.readValue(this.HIDE_HELPER);
+  public readHomeHelper(): Promise<any> {
+    return this.readValue(this.HOME_HELPER);
   }
 
 
-  public setDarkMode(value: boolean): Promise<any> {
-    return this.setValue(this.DARK_MODE, value);
+  public setSurveyHelper(value: boolean): Promise<any> {
+    return this.setValue(this.SURVEY_HELPER, value);
   }
 
-  public readDarkMode(): Promise<any> {
-    return this.readValue(this.DARK_MODE);
+  public readSurveyHelper(): Promise<any> {
+    return this.readValue(this.SURVEY_HELPER);
   }
 
   private initValue(prop: keyof CoreState): Promise<any> {

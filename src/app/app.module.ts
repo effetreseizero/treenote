@@ -39,7 +39,9 @@ import { environment } from '../environments/environment';
   ],
   imports: [
     BrowserModule,
-    IonicModule.forRoot(),
+    IonicModule.forRoot({
+      mode: 'md'
+    }),
     AppRoutingModule,
     AngularFireModule.initializeApp(firebaseConfig),
     AngularFireDatabaseModule,

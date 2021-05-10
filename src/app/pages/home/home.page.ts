@@ -71,7 +71,7 @@ export class HomePage {
   }
 
   ionViewDidEnter(){
-    this.userOptionsService.readHideHelper().then((toshow)=>{
+    this.userOptionsService.readHomeHelper().then((toshow)=>{
       if(!toshow.value){
         setTimeout(async ()=>{
           let popover;
