@@ -15,39 +15,45 @@
 <ion-content [fullscreen]="true" class="background">
   <div id="container">
 
-    
-
-    <ion-card>
-      <ion-card-content>
-        <ion-button (click)="googleLogin()" expand="block" >
-          <ion-icon src="./../../../assets/google_icon.svg" size="large" slot="start"></ion-icon>
-          Login con Google
-        </ion-button>
-      </ion-card-content>
-    </ion-card>
-
-    <ion-card>
-      <ion-card-header>
-        <ion-card-title>Login con e-mail</ion-card-title>
-      </ion-card-header>
-      <ion-card-content>
-        <form>    
-          <ion-item lines="full">
-            <ion-label position="floating">Email</ion-label>
-            <ion-input type="text" #email required></ion-input>
-          </ion-item> 
+    <ion-grid >
+      <ion-row class="ion-justify-content-center">
+        <ion-col size="auto">
+          <ion-card>
+            <ion-card-content>
+              <ion-button (click)="googleLogin()" >
+                <ion-icon src="./../../../assets/google_icon.svg" size="large" slot="start"></ion-icon>
+                Login con Google
+              </ion-button>
+            </ion-card-content>
+          </ion-card>
+        </ion-col>
+      </ion-row>
+      <ion-row class="ion-justify-content-center">
+        <ion-col size="auto">
+          <ion-card>
+            <ion-card-header>
+              <ion-card-title>Login con e-mail</ion-card-title>
+            </ion-card-header>
+            <ion-card-content>
+              <form>    
+                <ion-item lines="full">
+                  <ion-label position="floating">Email</ion-label>
+                  <ion-input type="text" #email required></ion-input>
+                </ion-item> 
+            
+                <ion-item lines="full">
+                  <ion-label position="floating">Password</ion-label>
+                  <ion-input type="password" #password required></ion-input>
+                </ion-item>
       
-          <ion-item lines="full">
-            <ion-label position="floating">Password</ion-label>
-            <ion-input type="password" #password required></ion-input>
-          </ion-item>
- 
-          <ion-button type="submit" (click)="emailLogin(email, password)" >Accedi</ion-button>
-    
-          <ion-button (click)="registration()" color="secondary">Registrati con Email</ion-button>      
-        </form>
-      </ion-card-content>
-    </ion-card>
-
+                <ion-button type="submit" (click)="emailLogin(email, password)" >Accedi</ion-button>
+          
+                <ion-button (click)="registration()" fill="outline">Registrati con e-mail</ion-button>      
+              </form>
+            </ion-card-content>
+          </ion-card>
+        </ion-col>
+      </ion-row>
+    </ion-grid>
   </div>
 </ion-content>
