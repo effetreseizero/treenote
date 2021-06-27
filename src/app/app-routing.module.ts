@@ -10,6 +10,10 @@ const routes: Routes = [
   {
     path: 'info-list',
     loadChildren: () => import('./modal/info-list/info-list.module').then( m => m.InfoListPageModule)
+  },
+  {
+    path: 'home-helper',
+    loadChildren: () => import('./modal/home-helper/home-helper.module').then( m => m.HomeHelperPageModule)
   }
 
 ];

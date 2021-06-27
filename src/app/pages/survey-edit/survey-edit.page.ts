@@ -15,8 +15,8 @@ import { SurveysService} from '../../services/firestore/surveys.service';
 import { Survey} from '../../services/firestore/survey';
 
 import { AlertController } from '@ionic/angular';
-import { ModalController } from '@ionic/angular';
 
+import { ModalController } from '@ionic/angular';
 import { InfoListPage } from '../../modal/info-list/info-list.page';
 
 import { PopoverController } from '@ionic/angular';

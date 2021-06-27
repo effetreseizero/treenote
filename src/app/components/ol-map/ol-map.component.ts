@@ -6,7 +6,7 @@ import {Component, NgZone, AfterViewInit, Output, Input, EventEmitter, ChangeDet
 
 import {Map,View, Feature} from "ol";
 import {Tile,WebGLPoints,Layer, Vector as VectorLayer} from "ol/layer";
-import {Vector as VectorSource ,OSM,Cluster} from "ol/source";
+import {Vector as VectorSource ,XYZ,OSM,Cluster} from "ol/source";
 import {GeoJSON} from "ol/format";
 import { fromLonLat } from "ol/proj";
 
@@ -66,6 +66,8 @@ export class OlMapComponent implements AfterViewInit {
     //register(proj4)
     //this.projection = GetProjection('EPSG:3857');
     //this.projection.setExtent(this.extent);
+
+
     
     this.view = new View({
       center: fromLonLat(this.center),
@@ -73,10 +75,21 @@ export class OlMapComponent implements AfterViewInit {
       //projection: this.projection,
     });
 
+    var attributions =
+  '<a href="https://www.maptiler.com/copyright/" target="_blank">&copy; MapTiler</a> ' +
+  '<a href="https://www.openstreetmap.org/copyright" target="_blank">&copy; OpenStreetMap contributors</a>';
+
+
     this.Map = new Map({
+      
+      pixelRatio: 1,
       layers: [
         new Tile({
-          source: new OSM({})
+          source: new XYZ({
+            attributions: attributions,
+            url: 'http://{a-c}.tile.openstreetmap.org/{z}/{x}/{y}.png',
+            tileSize:512
+          }),
         })
       ],
       target: document.getElementById('map'),

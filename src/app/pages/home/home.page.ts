@@ -18,6 +18,9 @@ import { SurveysService} from '../../services/firestore/surveys.service';
 
 import { UserOptionsService } from '../../services/options/user-options.service'
 
+import { ModalController } from '@ionic/angular';
+import { HomeHelperPage } from '../../modal/home-helper/home-helper.page';
+
 //https://medium.com/runic-software/a-simple-guide-to-openlayers-in-angular-b10f6feb3df1
 import {OlMapComponent} from '../../components/ol-map/ol-map.component';
 import {Map,View, Feature} from "ol";
@@ -29,9 +32,6 @@ import {Point} from "ol/geom";
 import { fromLonLat, toUserExtent } from "ol/proj";
 
 import {createEmpty, extend, getHeight, getWidth} from 'ol/extent';
-
-
-
 
 
 import { User } from 'src/app/services/storage/user';
@@ -54,6 +54,7 @@ export class HomePage {
   constructor(
     private router: Router,
     private popoverController: PopoverController,
+    public modalController: ModalController,
     public authService: AuthenticationService,
     private coreFacade: CoreFacade,
     private surveyService: SurveysService,
@@ -63,7 +64,7 @@ export class HomePage {
 
 
   ngOnInit() {
-
+    
     this.coreFacade.getUser().subscribe((user)=>{
       this.user=user;
     });
@@ -74,9 +75,10 @@ export class HomePage {
     this.userOptionsService.readHomeHelper().then((toshow)=>{
       if(!toshow.value){
         setTimeout(async ()=>{
-          let popover;
+          
+          let modal;
           if(this.user){
-            popover = await this.popoverController.create({
+            modal = await this.popoverController.create({
               component: HelperPopoverComponent,
               cssClass: 'popover_setting',
               componentProps: {
@@ -89,23 +91,13 @@ export class HomePage {
               translucent: true
             });
           }else{
-            popover = await this.popoverController.create({
-              component: HelperPopoverComponent,
-              cssClass: 'popover_setting',
-              componentProps: {
-                message: {
-                  imageurl: "../../assets/images/helper_home_partecipa.png",
-                  title: "Iscriviti",
-                  text: "Mandaci le tue segnalazioni sullo stato di salute dei boschi"
-                }
-              },
-              translucent: true
+            modal = await this.modalController.create({
+              component: HomeHelperPage,
             });
           }
+
+          await modal.present();
           
-          await popover.present();
-          
-      
         },5000);
       }
     });
