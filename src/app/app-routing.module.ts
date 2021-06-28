@@ -14,6 +14,10 @@ const routes: Routes = [
   {
     path: 'home-helper',
     loadChildren: () => import('./modal/home-helper/home-helper.module').then( m => m.HomeHelperPageModule)
+  },
+  {
+    path: 'survey-new',
+    loadChildren: () => import('./pages/survey-new/survey-new.module').then( m => m.SurveyNewPageModule)
   }
 
 ];
