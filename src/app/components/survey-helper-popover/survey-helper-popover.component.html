@@ -1,7 +1,12 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-title>Guida</ion-title>
+  </ion-toolbar>
+</ion-header>
 <ion-card>
-  <img src="../../../assets/images/survey_helper_1_info.png" />
+  <img src="../../../assets/images/survey_helper_0_info.png" />
   <ion-card-header>
-    <ion-card-title>Passo 1: Dati</ion-card-title>
+    <b>Passo 1: Dati</b>
   </ion-card-header>
   <ion-card-content>
     Aggiungi informazioni sulla segnalazione
@@ -10,7 +15,7 @@
 <ion-card>
   <img src="../../../assets/images/survey_helper_2_photo.png" />
   <ion-card-header>
-    <ion-card-title>Passo 2: Foto</ion-card-title>
+    <b>Passo 2: Foto</b>
   </ion-card-header>
   <ion-card-content>
     Allega almeno una foto descrittiva
@@ -19,16 +24,17 @@
 <ion-card>
   <img src="../../../assets/images/survey_helper_3_map.png" />
   <ion-card-header>
-    <ion-card-title>Passo 3: Mappa</ion-card-title>
+    <b>Passo 3: Mappa</b>
   </ion-card-header>
   <ion-card-content>
     Segna con lo spillo il luogo della segnalazione
   </ion-card-content>
 </ion-card>
-<ion-button (click)="dismiss()">
-  Chiudi
-</ion-button>
+
 <ion-item>
-  <ion-toggle [(ngModel)]="hidehelper" (ionChange)="changeToggle()" slot="start"></ion-toggle>
-  <ion-label>Non vizualizzare più</ion-label>
+  <ion-button item-start (click)="dismiss()">
+    Chiudi
+  </ion-button>
+  <ion-toggle item-end [(ngModel)]="hidehelper" (ionChange)="changeToggle()"></ion-toggle>
+  <ion-label item-end >Nascondi</ion-label>
 </ion-item>

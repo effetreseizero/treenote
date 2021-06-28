@@ -18,12 +18,14 @@ export class SurveyHelperPopoverComponent implements OnInit {
     private popoverController: PopoverController,
     private userOptionsService: UserOptionsService) { }
 
-  ngOnInit() {}
+  ngOnInit() {
+
+  }
 
   dismiss() {
     // code for dismiss
     if(this.hidehelper){
-      this.userOptionsService.setSurveyHelper(false);
+      this.userOptionsService.setSurveyHelper(true);
     }
     this.popoverController.dismiss();
   }

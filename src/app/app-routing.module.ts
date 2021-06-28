@@ -18,6 +18,10 @@ const routes: Routes = [
   {
     path: 'survey-new',
     loadChildren: () => import('./pages/survey-new/survey-new.module').then( m => m.SurveyNewPageModule)
+  },
+  {
+    path: 'new-survey-helper',
+    loadChildren: () => import('./modal/new-survey-helper/new-survey-helper.module').then( m => m.NewSurveyHelperPageModule)
   }
 
 ];

@@ -18,7 +18,7 @@ import { AlertController } from '@ionic/angular';
 
 import { ModalController } from '@ionic/angular';
 import { InfoListPage } from '../../modal/info-list/info-list.page';
-
+import { NewSurveyHelperPage } from '../../modal/new-survey-helper/new-survey-helper.page';
 import { PopoverController } from '@ionic/angular'; 
 
 import { SurveyHelperPopoverComponent } from '../../components/survey-helper-popover/survey-helper-popover.component';
@@ -93,7 +93,7 @@ export class SurveyNewPage implements OnInit,CanComponentDeactivate {
   slideDisablePrevBtn = true;
   slideDisableNextBtn = false;
   slideSelected = 0;
-  slideNameArray = ["Dati","Avanzate","Foto","Mappa"];
+  slideNameArray = ["Passo 1: Dati","Passo 1: Avanzate","Passo 2: Foto","Passo 3: Mappa"];
   
 
   //https://www.pluralsight.com/guides/using-template-reference-variables-to-interact-with-nested-components
@@ -318,9 +318,18 @@ export class SurveyNewPage implements OnInit,CanComponentDeactivate {
           
           await popover.present();          
       
-        },5000);
+        },2000);
       }
     });
+  }
+
+  private async showNewSurveyHelper(){
+  
+    const modal = await this.modalController.create({
+      component: NewSurveyHelperPage,
+    });
+    return await modal.present();
+  
   }
   
 

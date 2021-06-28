@@ -28,19 +28,7 @@
       <ion-icon name="add"></ion-icon>
     </ion-fab-button>
   </ion-fab-->
-  <ion-fab *ngIf="segmentSelected==2" horizontal="end" vertical="top" slot="fixed">
-    <ion-fab-button color="danger">
-      <ion-icon name="pin-outline" (click)="getMapPosition()"></ion-icon>
-    </ion-fab-button>
-    <!--ion-fab-list>
-      <ion-fab-button color="light" (click)="getGpsPosition()">
-        <ion-icon name="navigate-circle-outline"></ion-icon>
-      </ion-fab-button>
-      <ion-fab-button color="light" (click)="getMapPosition()">
-        <ion-icon name="map-outline"></ion-icon>
-      </ion-fab-button>
-    </ion-fab-list-->
-  </ion-fab>
+  
 
 
 
@@ -114,6 +102,16 @@
                 <ion-input formControlName="commenti"></ion-input>
               </ion-item>
             </ion-item-group>
+          </ion-list>
+        </form>
+      </ion-grid>
+    </ion-slide>
+
+    <!--avanzate slide-->
+    <ion-slide>
+      <ion-grid fixed>
+        <form [formGroup]="surveyForm" (ngSubmit)="saveSurvey()">
+          <ion-list>
             <ion-item-group>
               <ion-item-divider>
                 <ion-label color="primary">
@@ -231,8 +229,9 @@
             </ion-item-group>
           </ion-list>
         </form>
+     
       </ion-grid>
-    </ion-slide>
+    </ion-slide>   
 
     <!--photo slide-->
 
@@ -267,14 +266,7 @@
             <ion-button *ngIf="photos.length==2"  (click)="addPhotoToGallery()" color = "danger" shape="round"><ion-icon name="camera" size="large"></ion-icon><ion-label>Aggiungi un ulteriore dettaglio</ion-label></ion-button>
           </ion-col>
         </ion-row>
-        <ion-row>
-          <ion-col size=12>
-            <ion-card>
-              <label>Si consiglia di inquadrare il fenomeno osservato, ad esclusione di minorenni, targhe, ecc. ; in
-                caso contrario questo comporterà la mancata pubblicazione della foto relativa alla segnalazione</label>
-            </ion-card>
-          </ion-col>
-        </ion-row>
+    
       </ion-grid>
 
     </ion-slide>
@@ -282,7 +274,11 @@
     <!--map slide-->
 
     <ion-slide>
-
+      <ion-fab horizontal="end" vertical="top" slot="fixed">
+        <ion-fab-button color="danger">
+          <ion-icon name="pin-outline" (click)="getMapPosition()"></ion-icon>
+        </ion-fab-button>
+      </ion-fab>
       <app-ol-map-survey class="map_survey" [center]="[12.5,42]" [zoom]="5.5" (mapReady)="onMapReady($event)" #app_ol_map_survey>
       </app-ol-map-survey>
 
@@ -298,9 +294,12 @@
         <ion-label>Dati</ion-label>
       </ion-segment-button>
       <ion-segment-button value="1">
-        <ion-label>Foto</ion-label>
+        <ion-label>Avanzate</ion-label>
       </ion-segment-button>
       <ion-segment-button value="2">
+        <ion-label>Foto</ion-label>
+      </ion-segment-button>
+      <ion-segment-button value="3">
         <ion-label>Mappa</ion-label>
       </ion-segment-button>
     </ion-segment>

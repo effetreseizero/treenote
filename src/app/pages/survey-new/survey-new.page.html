@@ -12,8 +12,9 @@
     </ion-buttons>
 
     <ion-buttons slot="end">
-      
-      <ion-button *ngIf="editable&&!newsurvey" (click)="saveSurvey()" fill="outline" color="danger">Aggiorna</ion-button>
+      <ion-button (click)="showNewSurveyHelper()">
+        <ion-icon size="large" name="help-circle-outline"></ion-icon>
+      </ion-button>
     </ion-buttons>
 
   </ion-toolbar>
@@ -220,6 +221,13 @@
           </ion-item-group>
         </ion-list>
       </form>
+      <ion-row *ngIf="!this.avanzateActivated">
+        <ion-col size=12>
+          <ion-card>
+            <label>Questa sezione permette di specificare dettagli della segnalazione per i quali servono specifiche competenze forestali, non preoccuparti di lasciarla disattivata se non sai come compilarla</label>
+          </ion-card>
+        </ion-col>
+      </ion-row>
       </ion-grid>
     </ion-slide>
     <!--photo slide-->
@@ -258,8 +266,7 @@
         <ion-row>
           <ion-col size=12>
             <ion-card>
-              <label>Si consiglia di inquadrare il fenomeno osservato, ad esclusione di minorenni, targhe, ecc. ; in
-                caso contrario questo comporterà la mancata pubblicazione della foto relativa alla segnalazione</label>
+              <label>Si consiglia di inquadrare il fenomeno osservato facendo attenzione a non riprendere minorenni o altre persone, targhe di veicoli o altri dati sensibili. Per motivi legati alla privacy lo staff può comunque riservarsi di non pubblicare le foto relative alla segnalazione</label>
             </ion-card>
           </ion-col>
         </ion-row>

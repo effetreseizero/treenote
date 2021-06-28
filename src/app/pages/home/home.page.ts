@@ -72,35 +72,34 @@ export class HomePage {
   }
 
   ionViewDidEnter(){
-    this.userOptionsService.readHomeHelper().then((toshow)=>{
-      if(!toshow.value){
-        setTimeout(async ()=>{
-          
-          let modal;
-          if(this.user){
-            modal = await this.popoverController.create({
-              component: HelperPopoverComponent,
-              cssClass: 'popover_setting',
-              componentProps: {
-                message: {
-                  imageurl: "../../assets/images/helper_home_add.png",
-                  title: "Segnalazione",
-                  text: "Inviaci una segnalazione con questo bottone o dalla voce di menu Segnalazioni"
-                }
-              },
-              translucent: true
-            });
-          }else{
+    
+    setTimeout(async ()=>{
+      let modal;
+      if(this.user){
+        modal = await this.popoverController.create({
+          component: HelperPopoverComponent,
+          cssClass: 'popover_setting',
+          componentProps: {
+            message: {
+              imageurl: "../../assets/images/helper_home_add.png",
+              title: "Segnalazione",
+              text: "Inviaci una segnalazione con questo bottone o dalla voce di menu Segnalazioni"
+            }
+          },
+          translucent: true
+        });
+        await modal.present();
+      }else{
+        this.userOptionsService.readHomeHelper().then(async (toshow)=>{
+          if(!toshow.value){
             modal = await this.modalController.create({
               component: HomeHelperPage,
             });
+            await modal.present();
           }
-
-          await modal.present();
-          
-        },5000);
+        });
       }
-    });
+    },2000);
   }
   
 
