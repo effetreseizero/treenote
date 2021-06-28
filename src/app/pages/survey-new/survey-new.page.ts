@@ -86,12 +86,14 @@ export class SurveyNewPage implements OnInit,CanComponentDeactivate {
   @ViewChild('surveySlider', { static: true }) surveySlider: IonSlides;
   slideOptsSurveySlider = {
     initialSlide: 0,  
-
     //with autoHeigth Openlayers Map is not correctly resized, even if map.autoSize() is called onSlideChanged
     //autoHeight: true
   };
-  segmentSelected = 0;
 
+  slideDisablePrevBtn = true;
+  slideDisableNextBtn = false;
+  slideSelected = 0;
+  slideNameArray = ["Dati","Avanzate","Foto","Mappa"];
   
 
   //https://www.pluralsight.com/guides/using-template-reference-variables-to-interact-with-nested-components
@@ -376,9 +378,9 @@ export class SurveyNewPage implements OnInit,CanComponentDeactivate {
     if(!this.surveyForm.valid){
         this.surveySlider.slideTo(0);
     } else if(this.photos.length==0){
-      this.surveySlider.slideTo(1);
-    } else if(!this.gpsPositionSetted){
       this.surveySlider.slideTo(2);
+    } else if(!this.gpsPositionSetted){
+      this.surveySlider.slideTo(3);
     }
     else{
       const alert = await this.alertController.create({
@@ -459,17 +461,18 @@ export class SurveyNewPage implements OnInit,CanComponentDeactivate {
    * @param $event 
    */
   //https://gist.github.com/mdorchain/90ee6a0b391b6c51b2e27c2b000f9bdd
-  async segmentChanged($event){
-    
-    this.surveySlider.slideTo(this.segmentSelected);
-    this.surveySlider.getSwiper().then((swiper)=>{
-      swiper.updateAutoHeight(0);
+ 
+
+  async slideChange($event) {
+    let prom1 = this.surveySlider.isBeginning();
+    let prom2 = this.surveySlider.isEnd();
+
+    Promise.all([prom1, prom2]).then((data) => {
+      data[0] ? this.slideDisablePrevBtn = true : this.slideDisablePrevBtn = false;
+      data[1] ? this.slideDisableNextBtn = true : this.slideDisableNextBtn = false;
     });
 
-    
-  }
-  async slideChanged($event) {
-    this.segmentSelected = await this.surveySlider.getActiveIndex();
+    this.slideSelected = await this.surveySlider.getActiveIndex();
   }
 
 
