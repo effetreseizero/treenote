@@ -78,7 +78,7 @@ export class SurveysPage implements OnInit {
 
 
   async createSurvey() {
-    this.router.navigate(['/menu/survey-edit']);
+    this.router.navigate(['/menu/survey-new']);
   }
 
   async deleteSurvey(recordId) {

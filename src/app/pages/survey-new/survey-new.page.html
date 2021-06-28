@@ -12,7 +12,7 @@
     </ion-buttons>
 
     <ion-buttons slot="end">
-      <ion-button *ngIf="editable&&newsurvey" (click)="saveSurvey()" fill="outline" color="danger">Invia</ion-button>
+      
       <ion-button *ngIf="editable&&!newsurvey" (click)="saveSurvey()" fill="outline" color="danger">Aggiorna</ion-button>
     </ion-buttons>
 
@@ -21,16 +21,9 @@
 </ion-header>
 
 <ion-content fullscreen [fullscreen]="true" class="background" [scrollEvents]="true">
-
-  <ion-fab *ngIf="segmentSelected==3" horizontal="end" vertical="top" slot="fixed">
-    <ion-fab-button color="danger">
-      <ion-icon name="pin-outline" (click)="getMapPosition()"></ion-icon>
-    </ion-fab-button>
-  </ion-fab>
-
   
   <ion-slides [options]="slideOptsSurveySlider" id="surveySlider" #surveySlider
-    (ionSlideDidChange)="slideChanged($event)">
+    (ionSlideWillChange)="slideChange($event)">
     <!--survey slide-->
     <ion-slide>
       
@@ -277,7 +270,11 @@
     <!--map slide-->
 
     <ion-slide>
-
+      <ion-fab horizontal="end" vertical="top" slot="fixed">
+        <ion-fab-button color="danger">
+          <ion-icon name="pin-outline" (click)="getMapPosition()"></ion-icon>
+        </ion-fab-button>
+      </ion-fab>
       <app-ol-map-survey class="map_survey" [center]="[12.5,42]" [zoom]="5.5" (mapReady)="onMapReady($event)" #app_ol_map_survey>
       </app-ol-map-survey>
 
@@ -285,21 +282,23 @@
 
   </ion-slides>
 </ion-content>
-<ion-footer class="ion-no-border">
+
+<ion-footer>
   <ion-toolbar>
-    <ion-segment [(ngModel)]="segmentSelected" (ionChange)="segmentChanged($event)">
-      <ion-segment-button value="0">
-        <ion-label>Dati</ion-label>
-      </ion-segment-button>
-      <ion-segment-button value="1">
-        <ion-label>Avanzate</ion-label>
-      </ion-segment-button>
-      <ion-segment-button value="2">
-        <ion-label>Foto</ion-label>
-      </ion-segment-button>
-      <ion-segment-button value="3">
-        <ion-label>Mappa</ion-label>
-      </ion-segment-button>
-    </ion-segment>
+    
+    <ion-buttons slot="start">
+      <ion-button *ngIf="!slideDisablePrevBtn" (click)="surveySlider.slidePrev()" >
+        <ion-icon size="large"  name="chevron-back-circle-outline"></ion-icon>
+      </ion-button>
+    </ion-buttons>
+
+    <ion-title class="ion-text-center">{{slideNameArray[slideSelected]}}</ion-title>
+    
+    <ion-buttons slot="end">
+      <ion-button *ngIf="!slideDisableNextBtn" (click)="surveySlider.slideNext()" >
+        <ion-icon size="large" name="chevron-forward-circle-outline"></ion-icon>
+      </ion-button>
+      <ion-button *ngIf="slideDisableNextBtn" (click)="saveSurvey()" fill="outline" color="danger">Invia</ion-button>
+    </ion-buttons>
   </ion-toolbar>
 </ion-footer>
