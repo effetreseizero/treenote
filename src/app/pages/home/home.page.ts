@@ -3,7 +3,7 @@ import { Observable } from 'rxjs';
 
 import { Router } from '@angular/router';
 
-import { PopoverController } from '@ionic/angular';
+import { PopoverController, ToastController } from '@ionic/angular';
 
 import { SurveyPreviewPopoverComponent } from '../../components/survey-preview-popover/survey-preview-popover.component';
 import { HelperPopoverComponent } from '../../components/helper-popover/helper-popover.component';
@@ -49,6 +49,7 @@ export class HomePage {
   //https://www.pluralsight.com/guides/using-template-reference-variables-to-interact-with-nested-components
   @ViewChild('app_ol_map') olMapComponent:OlMapComponent;
   map: Map;
+  baseMap:String;
   user: User;
 
   constructor(
@@ -60,6 +61,7 @@ export class HomePage {
     private surveyService: SurveysService,
     private userOptionsService: UserOptionsService,
     private firestorage: AngularFireStorage,
+    private toastController: ToastController
   ) {}
 
 
@@ -281,6 +283,25 @@ export class HomePage {
       this.map.updateSize();
     },500);
 
+  }
+
+  switchBaseMap(){
+    if(this.baseMap==="WSM"){
+      this.olMapComponent.setMapType("WI");
+      this.baseMap="WI";
+    }else{
+      this.olMapComponent.setMapType("WSM");
+      this.baseMap="WSM";
+    }
+  }
+
+  async showMapAttributions() {
+    const toast = await this.toastController.create({
+      message: 'Tiles © <a href="https://services.arcgisonline.com/ArcGIS/' + 'rest/services/World_Imagery/MapServer">ArcGIS</a>',
+      duration: 2000,
+      color:"light"
+    });
+    toast.present();
   }
 
 }

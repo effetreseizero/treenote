@@ -5,8 +5,8 @@ import {Component, NgZone, AfterViewInit, Output, Input, EventEmitter, ChangeDet
 
 
 import {Map,View, Feature} from "ol";
-import {Tile,WebGLPoints,Layer, Vector as VectorLayer} from "ol/layer";
-import {Vector as VectorSource ,XYZ,OSM,Cluster} from "ol/source";
+import {Tile,WebGLPoints,Layer, Vector as VectorLayer, Group} from "ol/layer";
+import {Vector as VectorSource ,XYZ,OSM,BingMaps,Cluster} from "ol/source";
 import {GeoJSON} from "ol/format";
 import { fromLonLat } from "ol/proj";
 
@@ -23,6 +23,8 @@ import {get as GetProjection} from 'ol/proj'
 import {Extent} from 'ol/extent';
 
 import {Style,Icon,Fill,Circle,Stroke, Text as TextStyle, RegularShape} from 'ol/style';
+import { OlMapComponentSurvey } from '../ol-map-survey/ol-map-survey.component';
+import { FormGroupName } from '@angular/forms';
 
 @Component({
   selector: 'app-ol-map',
@@ -40,6 +42,10 @@ export class OlMapComponent implements AfterViewInit {
   extent: Extent = [-20026376.39, -20048966.10,20026376.39, 20048966.10];
 
   Map: Map;
+
+  layersWSM: Group;
+  layersWI: Group;
+
   gpsPositionFeature: Feature;
   surveysFeatureSource: VectorSource;
 
@@ -79,22 +85,43 @@ export class OlMapComponent implements AfterViewInit {
   '<a href="https://www.maptiler.com/copyright/" target="_blank">&copy; MapTiler</a> ' +
   '<a href="https://www.openstreetmap.org/copyright" target="_blank">&copy; OpenStreetMap contributors</a>';
 
+ 
+    var urlTemplate = 'http://services.arcgisonline.com/arcgis/rest/services/' + 'World_Street_Map/MapServer/tile/{z}/{y}/{x}';
+
+
+    this.layersWSM = new Group({
+      layers: [
+          new Tile({
+            source: new XYZ({
+              attributions: 'Tiles © <a href="https://services.arcgisonline.com/ArcGIS/' + 'rest/services/World_Street_Map/MapServer">ArcGIS</a>',
+              url: 'https://server.arcgisonline.com/ArcGIS/rest/services/World_Street_Map/MapServer/tile/{z}/{y}/{x}',
+              crossOrigin: "Anonymous",
+            })
+          })
+        ]
+    });
+    
+    this.layersWI = new Group({
+      layers: [
+          new Tile({
+            source: new XYZ({
+              attributions: 'Tiles © <a href="https://services.arcgisonline.com/ArcGIS/' + 'rest/services/World_Imagery/MapServer">ArcGIS</a>',
+              url: 'https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}',
+              crossOrigin: "Anonymous",
+            })
+          })
+        ]
+    });
 
     this.Map = new Map({
       
-      pixelRatio: 1,
       layers: [
-        new Tile({
-          source: new XYZ({
-            attributions: attributions,
-            url: 'http://{a-c}.tile.openstreetmap.org/{z}/{x}/{y}.png',
-            tileSize:512
-          }),
-        })
+        this.layersWSM,
+        this.layersWI
       ],
       target: document.getElementById('map'),
       view: this.view,
-      controls: DefaultControls().extend([
+      controls: DefaultControls({ attribution: false }).extend([
         new ScaleLine({}),
       ]),
     });
@@ -109,6 +136,15 @@ export class OlMapComponent implements AfterViewInit {
     },500);
   }
   
+  //https://stackoverflow.com/questions/27658280/layer-switching-in-openlayers-3
+  setMapType(newType) {
+    if(newType == 'WSM') {
+        this.Map.setLayerGroup(this.layersWSM);
+    } else if (newType == 'WI') {
+        this.Map.setLayerGroup(this.layersWI);
+    }
+  }
+
 
 }
 
