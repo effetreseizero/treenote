@@ -99,6 +99,7 @@ export class SurveyNewPage implements OnInit,CanComponentDeactivate {
   //https://www.pluralsight.com/guides/using-template-reference-variables-to-interact-with-nested-components
   @ViewChild('app_ol_map_survey') olMapComponentSurvey:OlMapComponentSurvey;
   map: Map;
+  baseMap: String;
 
   preventBack = true;
 
@@ -695,7 +696,8 @@ export class SurveyNewPage implements OnInit,CanComponentDeactivate {
 
     vector = new VectorLayer({
       source: this.surveyPositionVectorSource,
-      style: styleFunction
+      style: styleFunction,
+      zIndex: 1
     });
 
     this.map.addLayer(vector);
@@ -723,12 +725,31 @@ export class SurveyNewPage implements OnInit,CanComponentDeactivate {
 
     vector = new VectorLayer({
       source: this.gpsPositionVectorSource,
-      style: styleFunction
+      style: styleFunction,
+      zIndex: 1
     });
 
     this.map.addLayer(vector);
 
   }
 
+  switchBaseMap(){
+    if(this.baseMap==="WSM"){
+      this.olMapComponentSurvey.setMapType("WI");
+      this.baseMap="WI";
+    }else{
+      this.olMapComponentSurvey.setMapType("WSM");
+      this.baseMap="WSM";
+    }
+  }
+
+  async showMapAttributions() {
+    const toast = await this.toastController.create({
+      message: 'Tiles © <a href="https://services.arcgisonline.com/ArcGIS/' + 'rest/services/World_Imagery/MapServer">ArcGIS</a>',
+      duration: 2000,
+      color:"light"
+    });
+    toast.present();
+  }
 
 }

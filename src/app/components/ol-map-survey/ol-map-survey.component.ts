@@ -5,8 +5,8 @@ import {Component, NgZone, AfterViewInit, Output, Input, EventEmitter, ChangeDet
 
 
 import {Map,View, Feature} from "ol";
-import {Tile,WebGLPoints,Layer, Vector as VectorLayer} from "ol/layer";
-import {Vector as VectorSource ,OSM,Cluster} from "ol/source";
+import {Tile,WebGLPoints,Layer, Vector as VectorLayer, Group} from "ol/layer";
+import {Vector as VectorSource ,OSM,Cluster, XYZ} from "ol/source";
 import {GeoJSON} from "ol/format";
 import { fromLonLat } from "ol/proj";
 
@@ -40,6 +40,8 @@ export class OlMapComponentSurvey implements AfterViewInit {
   extent: Extent = [-20026376.39, -20048966.10,20026376.39, 20048966.10];
 
   Map: Map;
+  layersWSM: Group;
+  layersWI: Group;
   gpsPositionFeature: Feature;
   surveysFeatureSource: VectorSource;
 
@@ -73,15 +75,40 @@ export class OlMapComponentSurvey implements AfterViewInit {
       //projection: this.projection,
     });
 
+    this.layersWSM = new Group({
+      layers: [
+          new Tile({
+            source: new XYZ({
+              attributions: 'Tiles © <a href="https://services.arcgisonline.com/ArcGIS/' + 'rest/services/World_Street_Map/MapServer">ArcGIS</a>',
+              url: 'https://server.arcgisonline.com/ArcGIS/rest/services/World_Street_Map/MapServer/tile/{z}/{y}/{x}',
+              crossOrigin: "Anonymous",
+            })
+          })
+        ],
+      zIndex: 0
+    });
+    
+    this.layersWI = new Group({
+      layers: [
+          new Tile({
+            source: new XYZ({
+              attributions: 'Tiles © <a href="https://services.arcgisonline.com/ArcGIS/' + 'rest/services/World_Imagery/MapServer">ArcGIS</a>',
+              url: 'https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}',
+              crossOrigin: "Anonymous",
+            })
+          })
+        ],
+      zIndex: 0
+    });
+
     this.Map = new Map({
       layers: [
-        new Tile({
-          source: new OSM({})
-        })
+        this.layersWSM,
+        this.layersWI
       ],
       target: document.getElementById('map-survey'),
       view: this.view,
-      controls: DefaultControls().extend([
+      controls: DefaultControls({ attribution: false }).extend([
         new ScaleLine({}),
       ]),
     });
@@ -96,6 +123,16 @@ export class OlMapComponentSurvey implements AfterViewInit {
     },500);
   }
   
+  //https://stackoverflow.com/questions/27658280/layer-switching-in-openlayers-3
+  setMapType(newType) {
+    if(newType == 'WSM') {
+        this.layersWSM.setVisible(true);
+        this.layersWI.setVisible(false);
+    } else if (newType == 'WI') {
+      this.layersWI.setVisible(true);
+      this.layersWSM.setVisible(false);
+    }
+  }
 
 }
 

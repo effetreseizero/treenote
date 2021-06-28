@@ -139,10 +139,12 @@ export class OlMapComponent implements AfterViewInit {
   //https://stackoverflow.com/questions/27658280/layer-switching-in-openlayers-3
   setMapType(newType) {
     if(newType == 'WSM') {
-        this.Map.setLayerGroup(this.layersWSM);
-    } else if (newType == 'WI') {
-        this.Map.setLayerGroup(this.layersWI);
-    }
+      this.layersWSM.setVisible(true);
+      this.layersWI.setVisible(false);
+  } else if (newType == 'WI') {
+    this.layersWI.setVisible(true);
+    this.layersWSM.setVisible(false);
+  }
   }
 
 
