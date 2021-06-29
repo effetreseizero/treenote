@@ -648,6 +648,10 @@ export class SurveyNewPage implements OnInit,CanComponentDeactivate {
 
   }
 
+  public centerOnGPS(){
+    this.olMapComponentSurvey.centerOn(this.lastcoords.longitude,this.lastcoords.latitude);
+  }
+
   /**
    * OpenLayers Map Init
    * @param event 
