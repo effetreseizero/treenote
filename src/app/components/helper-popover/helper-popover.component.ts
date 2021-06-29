@@ -26,7 +26,7 @@ export class HelperPopoverComponent implements OnInit {
   dismiss() {
     // code for dismiss
     if(this.hidehelper){
-      this.userOptionsService.setHomeHelper(false);
+      this.userOptionsService.setHomeHelper(true);
     }
     this.popoverController.dismiss();
   }

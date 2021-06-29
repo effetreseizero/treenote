@@ -20,24 +20,20 @@
     </ion-slide>
 
     <ion-slide>
-      <img src="./../../../assets/guida/silvacuore_accedi-228x300.png"/>
+      <img src="./../../../assets/images/survey_woman.jpg"/>
       <h2>Contribuisci alla ricerca</h2>
       <p>E' sufficiente registrarsi con una mail per poter facilmente inviare una segnalazione di un sito in deperimento</p>
+      <p>Bastano poche informazioni, una foto e l'indicazione della posizione per poter contribuire ad un progetto importante per tutti.</p>
     </ion-slide>
 
     <ion-slide>
-      <img src="./../../../assets/guida/silvacuore_dati-243x300.png"/>
-      <h2>Pochi dati, molto valore</h2>
-      <p>Bastano poche informazioni, una foto e l'indicazione della posizione per poter contribuire ad un importante progetto.</p>
-    </ion-slide>
-
-    <ion-slide>
-      <img src="./../../../assets/images/helper_home_partecipa.png">
+      <img src="./../../../assets/silvacuore_logo.png"/>
+      
       <h2>Registrati e invia una segnalazione</h2>
       <p>Fai click sul bottone Partecipa e inviaci una segnalazione quando individui un potenziale sito forestale in deperimento </p>
+      <ion-button *ngIf="!(user!=null)" (click)="logIn()" fill="outline" color="danger">Partecipa</ion-button>
       <p>Maggiori informazioni sul sito:</p>
       <p><a href="https://www.silvacuore.org"><ion-button>Silvacuore.it</ion-button></a></p>
-      <ion-button (click)="dismissModal()" fill="clear"><ion-icon size="large" name="close-circle-outline"></ion-icon></ion-button>
     </ion-slide>
 
   </ion-slides>

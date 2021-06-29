@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 
 import { ModalController } from '@ionic/angular';
 
+import { Router } from '@angular/router';
 
 
 @Component({
@@ -12,8 +13,8 @@ import { ModalController } from '@ionic/angular';
 export class HomeHelperPage implements OnInit {
 
   constructor(
-    public modalCtrl: ModalController
-
+    public modalCtrl: ModalController,
+    public router:Router
   ) { }
 
   ngOnInit() {
@@ -23,5 +24,10 @@ export class HomeHelperPage implements OnInit {
     // using the injected ModalController this page
     // can "dismiss" itself and optionally pass back data
     this.modalCtrl.dismiss();
+  }
+
+  public logIn(): void{
+    this.router.navigate(['/menu/login']);
+    this.dismissModal();
   }
 }

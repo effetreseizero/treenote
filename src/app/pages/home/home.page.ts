@@ -78,28 +78,28 @@ export class HomePage {
     setTimeout(async ()=>{
       let modal;
       if(this.user){
-        modal = await this.popoverController.create({
-          component: HelperPopoverComponent,
-          cssClass: 'popover_setting',
-          componentProps: {
-            message: {
-              imageurl: "../../assets/images/helper_home_add.png",
-              title: "Segnalazione",
-              text: "Inviaci una segnalazione con questo bottone o dalla voce di menu Segnalazioni"
-            }
-          },
-          translucent: true
-        });
-        await modal.present();
-      }else{
         this.userOptionsService.readHomeHelper().then(async (toshow)=>{
           if(!toshow.value){
-            modal = await this.modalController.create({
-              component: HomeHelperPage,
+            modal = await this.popoverController.create({
+              component: HelperPopoverComponent,
+              cssClass: 'popover_setting',
+              componentProps: {
+                message: {
+                  imageurl: "../../assets/images/helper_home_add.png",
+                  title: "Segnalazione",
+                  text: "Inviaci una segnalazione con questo bottone o dalla voce di menu Segnalazioni"
+                }
+              },
+              translucent: true
             });
             await modal.present();
           }
         });
+      }else{
+        modal = await this.modalController.create({
+          component: HomeHelperPage,
+        });
+        await modal.present();
       }
     },2000);
   }
@@ -175,6 +175,11 @@ export class HomePage {
         
       }
      })
+
+    //https://forum.ionicframework.com/t/generating-a-openlayers-map-as-a-component/161373/4
+    setTimeout(()=>{
+      this.map.updateSize();
+    },500);
     
   }
 

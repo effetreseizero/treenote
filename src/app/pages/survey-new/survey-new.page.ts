@@ -637,12 +637,13 @@ export class SurveyNewPage implements OnInit,CanComponentDeactivate {
 
         this.gpsPositionVectorSource.clear();
         let gpsPositionFeature = new Feature();
-        
-        gpsPositionFeature.setGeometry(this.lastcoords.longitudine&&this.lastcoords.latitudine ? new Point(fromLonLat([this.lastcoords.longitudine, this.lastcoords.latitudine])) : null);
-        this.gpsPositionVectorSource.addFeature(gpsPositionFeature)
-
+        if(this.lastcoords.longitudine&&this.lastcoords.latitudine ){
+          gpsPositionFeature.setGeometry(new Point(fromLonLat([this.lastcoords.longitudine, this.lastcoords.latitudine])));
+          this.gpsPositionVectorSource.addFeature(gpsPositionFeature)
+          debugger;
+        }
         if(this.newsurvey){
-          this.olMapComponentSurvey.centerOn(this.lastcoords.longitude,this.lastcoords.latitude);
+          //this.olMapComponentSurvey.centerOn(this.lastcoords.longitude,this.lastcoords.latitude);
         }
       }
     });
@@ -697,7 +698,7 @@ export class SurveyNewPage implements OnInit,CanComponentDeactivate {
     vector = new VectorLayer({
       source: this.surveyPositionVectorSource,
       style: styleFunction,
-      zIndex: 1
+      zIndex: 2
     });
 
     this.map.addLayer(vector);
