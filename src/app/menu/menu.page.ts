@@ -28,7 +28,7 @@ export class MenuPage implements OnInit {
       path: '/menu/surveys'
     },
     {
-      name: 'Contattaci',
+      name: 'Informazioni',
       path: '/menu/contact'
     }
   ]

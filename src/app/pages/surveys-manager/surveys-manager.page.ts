@@ -290,7 +290,7 @@ export class SurveysManagerPage implements OnInit {
   async promoteToArchiveFromPublic(recordId){
 
     const alert = await this.alertController.create({
-      header: 'Sposta in revisione?',
+      header: 'Sposta in archivio?',
       buttons: [
         {
           text: 'Cancel',

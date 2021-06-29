@@ -72,6 +72,7 @@ export class SurveyEditPage implements OnInit,CanComponentDeactivate {
   @ViewChild(IonContent) content: IonContent;
 
   private surveyId = "0";
+  private surveyEmail="";
   private survey=null;
 
   private editable = true;
@@ -190,8 +191,8 @@ export class SurveyEditPage implements OnInit,CanComponentDeactivate {
         this.surveysService.read_surveys_document(this.surveyId).subscribe((data)=>{
 
           this.newsurvey = false;
-
           this.survey=data.data();
+          this.surveyEmail = this.survey.user_email;
 
           //https://angular.io/guide/deprecations#ngmodel-with-reactive-forms
           //https://ultimatecourses.com/blog/angular-2-form-controls-patch-value-set-value

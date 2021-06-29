@@ -37,7 +37,7 @@
     <!--survey slide-->
     <ion-slide>
       <ion-grid fixed>
-        <!--p>ID: {{surveyId}}</p-->
+       
         <form [formGroup]="surveyForm" (ngSubmit)="saveSurvey()">
 
           <ion-list>
@@ -101,6 +101,16 @@
                 <ion-label type="text" position="floating">Commenti</ion-label>
                 <ion-input formControlName="commenti"></ion-input>
               </ion-item>
+      
+              <ion-item>
+                ID: {{surveyId}}
+              </ion-item>
+      
+              <ion-item>
+                email:  {{surveyEmail}}
+              </ion-item>
+      
+     
             </ion-item-group>
           </ion-list>
         </form>
