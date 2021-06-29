@@ -118,8 +118,8 @@ export class OlMapComponent implements AfterViewInit {
     this.Map = new Map({
       
       layers: [
-        this.layersWSM,
-        this.layersWI
+        this.layersWI,
+        this.layersWSM
       ],
       target: document.getElementById('map'),
       view: this.view,

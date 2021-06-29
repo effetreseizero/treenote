@@ -621,7 +621,6 @@ export class SurveyNewPage implements OnInit,CanComponentDeactivate {
    */
 
   public geolocationInit(){
-    debugger;
     this.geoLocationWatch = this.geolocation.watchPosition({maximumAge: 1000, timeout: 5000, enableHighAccuracy: true});
     this.geoLocationWatch.subscribe((resp) => {
       this.geoLocationWatchStarted = true;

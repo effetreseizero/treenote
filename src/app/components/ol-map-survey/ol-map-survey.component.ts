@@ -105,8 +105,8 @@ export class OlMapComponentSurvey implements AfterViewInit {
 
     this.Map = new Map({
       layers: [
-        this.layersWSM,
-        this.layersWI
+        this.layersWI,
+        this.layersWSM
       ],
       target: document.getElementById('map-survey'),
       view: this.view,

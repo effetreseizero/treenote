@@ -126,7 +126,6 @@ export class PublicSurveysStore extends Store<CoreState> {
   async removePublicSurvey(surveyId,newStatus){
     this.surveysService.read_surveys_document(surveyId).subscribe((data)=>{
 
-      debugger;
       //add new public survey to the beggining of array
       this.state['features'] = this.state['features'].filter((x)=>(!(x.properties.id===surveyId)));
 
