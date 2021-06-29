@@ -16,6 +16,7 @@ import {Point} from "ol/geom";
 
 import {Coordinate} from 'ol/coordinate';
 import { ScaleLine, defaults as DefaultControls} from 'ol/control';
+import { defaults as DefaultInteractions} from 'ol//interaction';
 import * as proj4 from 'proj4';
 import Projection from 'ol/proj/Projection';
 import {register}  from 'ol/proj/proj4';
@@ -111,6 +112,7 @@ export class OlMapComponentSurvey implements AfterViewInit {
       controls: DefaultControls({ attribution: false }).extend([
         new ScaleLine({}),
       ]),
+      interactions: DefaultInteractions({altShiftDragRotate:false, pinchRotate:false}) 
     });
     
   } 
