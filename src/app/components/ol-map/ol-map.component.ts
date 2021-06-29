@@ -79,6 +79,7 @@ export class OlMapComponent implements AfterViewInit {
     this.view = new View({
       center: fromLonLat(this.center),
       zoom: this.zoom,
+      maxZoom: 19
       //projection: this.projection,
     });
 
@@ -109,7 +110,7 @@ export class OlMapComponent implements AfterViewInit {
               attributions: 'Tiles © <a href="https://services.arcgisonline.com/ArcGIS/' + 'rest/services/World_Imagery/MapServer">ArcGIS</a>',
               url: 'https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}',
               crossOrigin: "Anonymous",
-            })
+            }),
           })
         ]
     });

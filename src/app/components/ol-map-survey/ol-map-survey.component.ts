@@ -73,6 +73,7 @@ export class OlMapComponentSurvey implements AfterViewInit {
     this.view = new View({
       center: fromLonLat(this.center),
       zoom: this.zoom,
+      maxZoom: 19
       //projection: this.projection,
     });
 
