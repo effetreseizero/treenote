@@ -621,7 +621,7 @@ export class SurveyNewPage implements OnInit,CanComponentDeactivate {
    */
 
   public geolocationInit(){
-    
+    debugger;
     this.geoLocationWatch = this.geolocation.watchPosition({maximumAge: 1000, timeout: 5000, enableHighAccuracy: true});
     this.geoLocationWatch.subscribe((resp) => {
       this.geoLocationWatchStarted = true;
@@ -637,11 +637,9 @@ export class SurveyNewPage implements OnInit,CanComponentDeactivate {
 
         this.gpsPositionVectorSource.clear();
         let gpsPositionFeature = new Feature();
-        if(this.lastcoords.longitudine&&this.lastcoords.latitudine ){
-          gpsPositionFeature.setGeometry(new Point(fromLonLat([this.lastcoords.longitudine, this.lastcoords.latitudine])));
-          this.gpsPositionVectorSource.addFeature(gpsPositionFeature)
-          debugger;
-        }
+        gpsPositionFeature.setGeometry(new Point(fromLonLat([this.lastcoords.longitude, this.lastcoords.latitude])));
+        this.gpsPositionVectorSource.addFeature(gpsPositionFeature)
+        
         if(this.newsurvey){
           //this.olMapComponentSurvey.centerOn(this.lastcoords.longitude,this.lastcoords.latitude);
         }
@@ -711,13 +709,13 @@ export class SurveyNewPage implements OnInit,CanComponentDeactivate {
     function styleFunction(feature, resolution) {
       var style = new Style({
           image: new Circle({
-            radius: 5,
+            radius: 7,
             fill: new Fill({
               color: '#0000AA'
             }),
             stroke: new Stroke({
               color: '#fff',
-              width: 2
+              width: 3
             })
           })
         });
