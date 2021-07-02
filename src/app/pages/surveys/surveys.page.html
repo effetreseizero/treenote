@@ -1,19 +1,23 @@
 <ion-header>
-  <ion-toolbar>
-    <ion-title>Segnalazioni</ion-title>
-
+  <ion-toolbar color="primary">
     <!-- Side menu button -->
     <ion-buttons slot="start">
-      <ion-menu-button autoHide="false"></ion-menu-button>
+      <ion-menu-button autoHide="false" color="light"></ion-menu-button>
+      <ion-icon src="./../../../assets/silvacuore_small_white.svg" size="large"></ion-icon>
     </ion-buttons>
+    <ion-title color="light">Segnalazioni</ion-title>
+
+    
   </ion-toolbar>
 </ion-header>
 
 <ion-content [fullscreen]="true" class="ion-padding background">
   <ion-grid fixed>
+    
   <ion-button expand="block" (click)="createSurvey()" color = "danger" shape="round">Invia una segnalazione</ion-button>
 
-  <ion-list>
+  <!-- https://forum.ionicframework.com/t/ion-items-not-transparent-ionic-4/153287/2 -->
+  <ion-list class="bg-transparent">
     <ion-list-header>
       <h1>
       <ion-chip outline color="secondary">
@@ -22,7 +26,7 @@
       </ion-chip>
       </h1>
     </ion-list-header>
-    <ion-item *ngFor="let item of sentSurveyList" lines="inset">
+    <ion-item *ngFor="let item of sentSurveyList" lines="inset" color="none">
       <ion-label>
         <h2>{{item.localita}}</h2>
         <h3>{{item.short_date}}</h3>
@@ -37,17 +41,17 @@
     </ion-item>
   </ion-list>
 
-  <ion-list>
+  <ion-list class="bg-transparent">
     <ion-list-header>
       <h1>
-        <ion-chip outline color="secondary">
+        <ion-chip outline color="primary">
           <ion-icon name="checkbox-outline"></ion-icon>
           <ion-label>{{reviewSurveyList.length}} Segnalazioni in revisione</ion-label>
         </ion-chip>
         </h1>
     </ion-list-header>
     
-    <ion-item *ngFor="let item of reviewSurveyList" lines="inset">
+    <ion-item *ngFor="let item of reviewSurveyList" lines="inset" color="none">
       <ion-label>
         <h2>{{item.localita}}</h2>
         <h3>{{item.short_date}}</h3>
@@ -58,17 +62,17 @@
     </ion-item>
   </ion-list>
 
-  <ion-list>
+  <ion-list class="bg-transparent">
     <ion-list-header>
       <h1>
-        <ion-chip outline color="secondary">
+        <ion-chip outline color="warning">
           <ion-icon name="star"></ion-icon>
           <ion-label>{{publicSurveyList.length}} Segnalazioni pubblicate</ion-label>
         </ion-chip>
         </h1>
     </ion-list-header>
     
-    <ion-item *ngFor="let item of publicSurveyList" lines="inset">
+    <ion-item *ngFor="let item of publicSurveyList" lines="inset" color="none">
       <ion-label>
         <h2>{{item.localita}}</h2>
         <h3>{{item.short_date}}</h3>
@@ -79,17 +83,17 @@
     </ion-item>
   </ion-list>
 
-  <ion-list>
+  <ion-list class="bg-transparent">
     <ion-list-header>
       <h1>
-        <ion-chip outline color="secondary">
+        <ion-chip outline color="danger">
           <ion-icon name="library-outline"></ion-icon>
           <ion-label>{{archiveSurveyList.length}} Segnalazioni archiviate</ion-label>
         </ion-chip>
         </h1>
     </ion-list-header>
     
-    <ion-item *ngFor="let item of archiveSurveyList" lines="inset">
+    <ion-item *ngFor="let item of archiveSurveyList" lines="inset" color="none">
       <ion-label>
         <h2>{{item.localita}}</h2>
         <h3>{{item.short_date}}</h3>

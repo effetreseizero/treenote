@@ -1,19 +1,23 @@
 <!-- https://www.joshmorony.com/advanced-forms-validation-in-ionic-2/-->
 <ion-header [translucent]="true">
-  <ion-toolbar>
-    <ion-title>
-      Nuova segnalazione
-    </ion-title>
+  <ion-toolbar color="primary">
 
     <ion-buttons slot="start">
       <ion-button (click)="cancelEdit()">
-        <ion-icon size="large" name="close-circle-outline"></ion-icon>
+        <ion-icon size="large" name="close-circle-outline" color="light"></ion-icon>
       </ion-button>
+      <ion-icon src="./../../../assets/silvacuore_small_white.svg" size="large" ></ion-icon>
     </ion-buttons>
+
+    <ion-title color="light">  
+      Nuova segnalazione
+    </ion-title>
+
+   
 
     <ion-buttons slot="end">
       <ion-button (click)="showNewSurveyHelper()">
-        <ion-icon size="large" name="help-circle-outline"></ion-icon>
+        <ion-icon size="large" name="help-circle-outline" color="light"></ion-icon>
       </ion-button>
     </ion-buttons>
 
@@ -285,8 +289,8 @@
       <app-ol-map-survey class="map_survey" [center]="[12.5,42]" [zoom]="5.5" (mapReady)="onMapReady($event)" #app_ol_map_survey>
       </app-ol-map-survey>
       <ion-fab horizontal="end" vertical="bottom" slot="fixed">
-        <ion-fab-button color="light">
-          <ion-icon md="caret-back" ios="chevron-back-circle-outline"></ion-icon>
+        <ion-fab-button color="primary">
+          <ion-icon md="caret-back" ios="chevron-back-circle-outline" color="light"></ion-icon>
         </ion-fab-button>
         <ion-fab-list side="start">
           <ion-fab-button (click)="switchBaseMap()" color="light">

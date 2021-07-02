@@ -1,9 +1,14 @@
 <ion-header>
-  <ion-toolbar>
+  <ion-toolbar color="primary">
     <ion-buttons slot="start">
-      <ion-button (click)="dismissModal()"><ion-icon size="large" name="close-circle-outline"></ion-icon></ion-button>
+      <ion-icon src="./../../../assets/silvacuore_small_white.svg" size="large"></ion-icon>
     </ion-buttons>
-    <ion-title>SilvaCuore</ion-title>
+    
+    <ion-title color="light">SilvaCuore</ion-title>
+
+    <ion-buttons slot="end">
+      <ion-button (click)="dismissModal()"><ion-icon size="large" name="close-circle-outline" color="light"></ion-icon></ion-button>
+    </ion-buttons>
   </ion-toolbar>
   
 </ion-header>
@@ -33,7 +38,7 @@
       <p>Fai click sul bottone Partecipa e inviaci una segnalazione quando individui un potenziale sito forestale in deperimento </p>
       <ion-button *ngIf="!(user!=null)" (click)="logIn()" fill="outline" color="danger">Partecipa</ion-button>
       <p>Maggiori informazioni sul sito:</p>
-      <p><a href="https://www.silvacuore.org"><ion-button>Silvacuore.it</ion-button></a></p>
+      <p><a href="https://www.silvacuore.org"><ion-button color="primary">Silvacuore.it</ion-button></a></p>
     </ion-slide>
 
   </ion-slides>

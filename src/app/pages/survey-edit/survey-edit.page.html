@@ -291,6 +291,22 @@
       </ion-fab>
       <app-ol-map-survey class="map_survey" [center]="[12.5,42]" [zoom]="5.5" (mapReady)="onMapReady($event)" #app_ol_map_survey>
       </app-ol-map-survey>
+      <ion-fab horizontal="end" vertical="bottom" slot="fixed">
+        <ion-fab-button color="primary">
+          <ion-icon md="caret-back" ios="chevron-back-circle-outline" color="light"></ion-icon>
+        </ion-fab-button>
+        <ion-fab-list side="start">
+          <ion-fab-button (click)="switchBaseMap()" color="light">
+            <ion-icon name="map-outline"></ion-icon>
+          </ion-fab-button>
+          <ion-fab-button (click)="centerOnGPS()" color="light">
+            <ion-icon name="locate-outline"></ion-icon>
+          </ion-fab-button>
+          <ion-fab-button color="light" (click)="showMapAttributions()">
+            <ion-icon name="information-circle-outline"></ion-icon>
+          </ion-fab-button>
+        </ion-fab-list>
+      </ion-fab>
 
     </ion-slide>
 

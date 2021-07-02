@@ -32,7 +32,7 @@
           <ion-button slot="end" shape="round" color="danger" size="small" (click)="promoteToArchive(item.id)">
             <ion-icon size="small" slot="icon-only" name="library-outline"></ion-icon>
           </ion-button>
-          <ion-button slot="end" shape="round" color="tertiary" size="small" (click)="promoteToReview(item.id)">
+          <ion-button slot="end" shape="round" color="primary" size="small" (click)="promoteToReview(item.id)">
             <ion-icon size="small" slot="icon-only" name="checkbox-outline"></ion-icon>
           </ion-button>
           
@@ -60,7 +60,7 @@
           <ion-button slot="end" shape="round" color="danger" size="small" (click)="promoteToArchive(item.id)">
             <ion-icon size="small" slot="icon-only" name="library-outline"></ion-icon>
           </ion-button>
-          <ion-button slot="end" shape="round" color="tertiary" size="small" (click)="promoteToPublic(item.id)">
+          <ion-button slot="end" shape="round" color="warning" size="small" (click)="promoteToPublic(item.id)">
             <ion-icon size="small" slot="icon-only" name="star"></ion-icon>
           </ion-button>
         </ion-item>
@@ -81,13 +81,13 @@
             <h3>{{item.properties.user_email}}</h3>
             <p>{{item.properties.localita}} {{item.properties.short_date}}</p>
           </ion-label>
-          <ion-button slot="end" shape="round" color="tertiary" size="small" (click)="promoteToReviewFromPublic(item.properties.id)">
+          <ion-button slot="end" shape="round" color="primary" size="small" (click)="promoteToReviewFromPublic(item.properties.id)">
             <ion-icon size="small" slot="icon-only" name="checkbox-outline"></ion-icon>
           </ion-button>
           <ion-button slot="end" shape="round" color="secondary" size="small" (click)="editSurvey(item.properties.id)">
             <ion-icon size="small" slot="icon-only" name="document-text-outline"></ion-icon>
           </ion-button>
-          <ion-button slot="end" shape="round" color="danger" size="small" (click)="promoteToArchiveFromPublic(item.properties.properties.id)">
+          <ion-button slot="end" shape="round" color="danger" size="small" (click)="promoteToArchiveFromPublic(item.properties.id)">
             <ion-icon size="small" slot="icon-only" name="library-outline"></ion-icon>
           </ion-button>
          
@@ -117,13 +117,13 @@
             <h3>{{item.user_email}}</h3>
             <p>{{item.localita}}  {{item.short_date}}<p>
           </ion-label>
-          <ion-button slot="end" shape="round" color="tertiary" size="small" (click)="promoteToReview(item.id)">
+          <ion-button slot="end" shape="round" color="primary" size="small" (click)="promoteToReview(item.id)">
             <ion-icon size="small" slot="icon-only" name="checkbox-outline"></ion-icon>
           </ion-button>
           <ion-button slot="end" shape="round" color="secondary" size="small" (click)="editSurvey(item.id)">
             <ion-icon size="small" slot="icon-only" name="document-text-outline"></ion-icon>
           </ion-button>
-          <ion-button slot="end" shape="round" color="danger" size="small" (click)="deleteSurvey(item.id)">
+          <ion-button slot="end" shape="round" color="black" size="small" (click)="deleteSurvey(item.id)">
             <ion-icon size="small" slot="icon-only" name="trash"></ion-icon>
           </ion-button>
         </ion-item>
