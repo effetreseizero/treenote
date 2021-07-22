@@ -11,8 +11,10 @@ import { User } from 'src/app/services/storage/user';
 
 import * as firebase from 'firebase/app';
 import 'firebase/firestore';
-import { TimeoutError } from 'rxjs';
+import { from, TimeoutError } from 'rxjs';
 import { FirebaseApp } from '@angular/fire';
+
+import {compress, compressAccurately} from 'image-conversion';
 
 
 @Injectable({
@@ -106,12 +108,23 @@ export class SurveysService {
           contentType: 'image/'+photos[i].filetype,
         };
         let blob = await fetch(photos[i].webviewPath).then(r => r.blob());
-        const fileSnapshot = await this.firestorage.ref(filePath).put(blob,metadata);
-        const url = await fileSnapshot.ref.getDownloadURL();
-        let imagedata = {};
-        imagedata["photo_"+i+"_imageurl"] = url;
-        imagedata["photo_"+i+"_storageuri"] = fileSnapshot.metadata.fullPath;
-        await messageRef.update(imagedata);
+
+        //compress
+        //https://github.com/WangYuLue/image-conversion
+        //https://stackoverflow.com/questions/14672746/how-to-compress-an-image-via-javascript-in-the-browser
+
+        compress(blob,{
+            quality: 0.6,
+            width: 1024,
+          }).then(async(res)=>{
+            const fileSnapshot = await this.firestorage.ref(filePath).put(res,metadata);
+            const url = await fileSnapshot.ref.getDownloadURL();
+            let imagedata = {};
+            imagedata["photo_"+i+"_imageurl"] = url;
+            imagedata["photo_"+i+"_storageuri"] = fileSnapshot.metadata.fullPath;
+            await messageRef.update(imagedata);
+        })
+        
       }
       
     } catch (error) {
