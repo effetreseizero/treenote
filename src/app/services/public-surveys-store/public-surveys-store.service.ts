@@ -126,7 +126,7 @@ export class PublicSurveysStore extends Store<CoreState> {
   async removePublicSurvey(surveyId,newStatus){
     this.surveysService.read_surveys_document(surveyId).subscribe((data)=>{
 
-      //add new public survey to the beggining of array
+      //fileter out matching id element from publicsurvey array
       this.state['features'] = this.state['features'].filter((x)=>(!(x.properties.id===surveyId)));
 
       //upload json array in firebase storage

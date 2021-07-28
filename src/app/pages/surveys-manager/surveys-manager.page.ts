@@ -198,7 +198,10 @@ export class SurveysManagerPage implements OnInit {
               status: "review"
             }
         
-            this.surveysService.update_surveys_document(recordId, data);
+            this.surveysService.update_surveys_document(recordId, data).then(()=>{
+              debugger;
+              this.segmentSelected = 1;
+            });
           }
         }
       ]
@@ -223,7 +226,10 @@ export class SurveysManagerPage implements OnInit {
         {
           text: 'Ok',
           handler: () => {
-            this.publicSurveysStore.removePublicSurvey(recordId,"review");
+            this.publicSurveysStore.removePublicSurvey(recordId,"review").then(()=>{
+              debugger;
+              this.segmentSelected = 1;
+            });
           }
         }
       ]
@@ -248,7 +254,10 @@ export class SurveysManagerPage implements OnInit {
         {
           text: 'Ok',
           handler: () => {
-            this.publicSurveysStore.addPublicSurvey(recordId);
+            this.publicSurveysStore.addPublicSurvey(recordId).then(()=>{
+              debugger;
+              this.segmentSelected = 2;
+            });
           }
         }
       ]
@@ -276,7 +285,10 @@ export class SurveysManagerPage implements OnInit {
               status: "archive"
             }
             
-            this.surveysService.update_surveys_document(recordId, data);
+            this.surveysService.update_surveys_document(recordId, data).then(()=>{
+              debugger;
+              this.segmentSelected = 3;
+            });;
           }
         }
       ]
@@ -301,7 +313,10 @@ export class SurveysManagerPage implements OnInit {
         {
           text: 'Ok',
           handler: () => {
-            this.publicSurveysStore.removePublicSurvey(recordId,"archive");
+            this.publicSurveysStore.removePublicSurvey(recordId,"archive").then(()=>{
+              debugger;
+              this.segmentSelected = 3;
+            });;
           }
         }
       ]

@@ -23,8 +23,8 @@
 
         <ion-item *ngFor="let item of sentSurveyList" class="ion-text-wrap">
           <ion-label >
-            <h3>{{item.user_email}}</h3>
-            <p>{{item.localita}}  {{item.short_date}}<p>
+            <h3>{{item.localita}}  {{item.short_date}}</h3>
+            <p>{{item.user_email}}<p>
           </ion-label>
           <ion-button slot="end" shape="round" color="secondary" size="small" (click)="editSurvey(item.id)">
             <ion-icon size="small" slot="icon-only" name="document-text-outline"></ion-icon>
@@ -51,8 +51,8 @@
 
         <ion-item *ngFor="let item of reviewSurveyList">
           <ion-label>
-            <h3>{{item.user_email}}</h3>
-            <p>{{item.localita}}  {{item.short_date}}<p>
+            <h3>{{item.localita}}  {{item.short_date}}</h3>
+            <p>{{item.user_email}}<p>
           </ion-label>
           <ion-button slot="end" shape="round" color="secondary" size="small" (click)="editSurvey(item.id)">
             <ion-icon size="small" slot="icon-only" name="create"></ion-icon>
@@ -78,8 +78,8 @@
 
         <ion-item *ngFor="let item of publicSurveyList | slice:0:publicInfiniteScrollSlice; let i=index">
           <ion-label>
-            <h3>{{item.properties.user_email}}</h3>
-            <p>{{item.properties.localita}} {{item.properties.short_date}}</p>
+            <h3>{{item.properties.localita}} {{item.properties.short_date}}</h3>
+            <p>{{item.properties.user_email}}</p>
           </ion-label>
           <ion-button slot="end" shape="round" color="primary" size="small" (click)="promoteToReviewFromPublic(item.properties.id)">
             <ion-icon size="small" slot="icon-only" name="checkbox-outline"></ion-icon>
@@ -114,8 +114,8 @@
 
         <ion-item *ngFor="let item of archiveSurveyList">
           <ion-label>
-            <h3>{{item.user_email}}</h3>
-            <p>{{item.localita}}  {{item.short_date}}<p>
+            <h3>{{item.localita}}  {{item.short_date}}</h3>
+            <p>{{item.user_email}}<p>
           </ion-label>
           <ion-button slot="end" shape="round" color="primary" size="small" (click)="promoteToReview(item.id)">
             <ion-icon size="small" slot="icon-only" name="checkbox-outline"></ion-icon>

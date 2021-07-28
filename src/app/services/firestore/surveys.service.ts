@@ -58,6 +58,7 @@ export class SurveysService {
   }
 
   read_sent_surveys_collection() {
+    console.log("read_sent_surveys_collection");
     return this.firestore.collection(
       this.collectionName,
       //https://stackoverflow.com/questions/49026589/angular-firestore-where-query-returning-error-property-does-not-exist-on
@@ -69,6 +70,7 @@ export class SurveysService {
   }
 
   read_review_surveys_collection() {
+    console.log("read_review_surveys_collection");
     return this.firestore.collection(
       this.collectionName,
       //https://stackoverflow.com/questions/49026589/angular-firestore-where-query-returning-error-property-does-not-exist-on
@@ -80,6 +82,7 @@ export class SurveysService {
   }
 
   read_archive_surveys_collection() {
+    console.log("read_archive_surveys_collection");
     return this.firestore.collection(
       this.collectionName,
       //https://stackoverflow.com/questions/49026589/angular-firestore-where-query-returning-error-property-does-not-exist-on
@@ -134,11 +137,13 @@ export class SurveysService {
 
 
   read_surveys_document(surveyID) {
+    console.log("read_surveys_document");
     return this.firestore.doc(this.collectionName + '/' + surveyID).get();
   }
 
-  async update_surveys_document(surveyID, data) {
-    return await this.firestore.doc(this.collectionName + '/' + surveyID).update(data);
+   update_surveys_document(surveyID, data) {
+    console.log("update_surveys_document");
+    return  this.firestore.doc(this.collectionName + '/' + surveyID).update(data);
   }
 
   async delete_surveys_document(surveyID) {
