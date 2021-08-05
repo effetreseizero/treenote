@@ -1,23 +1,22 @@
-ion-content.background {
-  --background: url(./../../../assets/silvacuore_logo_crop_transp.png) no-repeat right 0px bottom 0px / 150px ;
+ion-grid {
+  margin: 0px 0 0px; 
 }
 
-ion-slides {
-    height: 100%;    
-  }
 
   .swiper-slide {
     display: block;
+    margin: 0px 0 0px;
+
   }
 
   .swiper-slide h2 {
-    margin-top: 1.8rem;
+    margin: 0px 0 0px;
   }
 
   .swiper-slide img {
     max-height: 30%;
     max-width: 40%;
-    margin: 20px 0 20px;
+    margin: 0px 0 0px;
     pointer-events: none;
   }
 
@@ -26,7 +25,7 @@ ion-slides {
   }
 
   p {
-    padding: 0 20px;
+    padding: 0 5px;
     font-size: 14px;
     line-height: 1.5;
     color: var(--ion-color-step-600, #60646b);
@@ -35,3 +34,4 @@ ion-slides {
   p b {
     color: var(--ion-text-color, #000000);
   }
+

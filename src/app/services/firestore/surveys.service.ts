@@ -117,8 +117,8 @@ export class SurveysService {
         //https://stackoverflow.com/questions/14672746/how-to-compress-an-image-via-javascript-in-the-browser
 
         compress(blob,{
-            quality: 0.6,
-            width: 1024,
+            quality: 0.7,
+            height: 1080,
           }).then(async(res)=>{
             const fileSnapshot = await this.firestorage.ref(filePath).put(res,metadata);
             const url = await fileSnapshot.ref.getDownloadURL();
