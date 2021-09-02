@@ -16,19 +16,20 @@ export class PhotoService {
 
   constructor() { }
 
-  public async addNewToGallery(): Promise<Photo> {
+  public async addNewToGallery(role): Promise<Photo> {
     // Take a photo
 
-    //TO DO 
-    //discover how to resize captured images
+   
     const capturedPhoto = await Camera.getPhoto({
       resultType: CameraResultType.Uri, 
-      source: CameraSource.Camera, 
+      source: role, 
       width:800,
       preserveAspectRatio:true,
       quality: 70,
       correctOrientation: true 
+
     });
+    
 
     return {
         filetype: capturedPhoto.format,

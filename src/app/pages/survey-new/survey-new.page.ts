@@ -9,6 +9,7 @@ import { Component, OnInit,ViewChild, ElementRef } from '@angular/core';
 import { Router, ActivatedRoute, RouteReuseStrategy } from '@angular/router';
 import { IonContent,IonSlides, NavController,Platform, ToastController  } from '@ionic/angular';
 
+
 import { FormGroup, Validators, FormBuilder } from '@angular/forms';
 
 import { SurveysService} from '../../services/firestore/surveys.service';
@@ -20,6 +21,7 @@ import { ModalController } from '@ionic/angular';
 import { InfoListPage } from '../../modal/info-list/info-list.page';
 import { NewSurveyHelperPage } from '../../modal/new-survey-helper/new-survey-helper.page';
 import { PopoverController } from '@ionic/angular'; 
+import { ActionSheetController } from '@ionic/angular';
 
 import { SurveyHelperPopoverComponent } from '../../components/survey-helper-popover/survey-helper-popover.component';
 
@@ -149,7 +151,9 @@ export class SurveyNewPage implements OnInit,CanComponentDeactivate {
     public modalController: ModalController,
     public loadingController: LoadingController,
     private popoverController: PopoverController,
+    public actionSheetController: ActionSheetController,
     private userOptionsService: UserOptionsService,
+    public platform: Platform
   ) {
 
 
@@ -488,7 +492,33 @@ export class SurveyNewPage implements OnInit,CanComponentDeactivate {
 
   async addPhotoToGallery(position) {
     if(this.photos.length<3){
-      const capturedPhoto = await this.photoService.addNewToGallery();
+      let role = "";
+      if(this.platform.is("desktop")){
+        role = "PHOTOS"
+      } else{
+        const actionSheet = await this.actionSheetController.create({
+          header: 'Aggiungi foto',
+          buttons: [
+            {
+              text: 'Fotocamera',
+              icon: 'camera-outline',
+              role: 'CAMERA',
+              handler: () => {
+              }
+            }, {
+              text: 'Galleria',
+              icon: 'images-outline',
+              role: 'PHOTOS',
+              handler: () => {
+              }
+            }
+          ]
+        });
+        await actionSheet.present();
+    
+         role = await (await actionSheet.onDidDismiss()).role;
+      }
+      const capturedPhoto = await this.photoService.addNewToGallery(role);
       if(position!=null){
         this.photos[position]= capturedPhoto;
       }else{

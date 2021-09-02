@@ -20,6 +20,8 @@ import { ModalController } from '@ionic/angular';
 import { InfoListPage } from '../../modal/info-list/info-list.page';
 
 import { PopoverController } from '@ionic/angular';
+import { ActionSheetController } from '@ionic/angular';
+
 
 import { SurveyHelperPopoverComponent } from '../../components/survey-helper-popover/survey-helper-popover.component';
 
@@ -148,7 +150,10 @@ export class SurveyEditPage implements OnInit,CanComponentDeactivate {
     public modalController: ModalController,
     public loadingController: LoadingController,
     private popoverController: PopoverController,
+    public actionSheetController: ActionSheetController,
     private userOptionsService: UserOptionsService,
+    public platform: Platform
+
   ) {
 
 
@@ -477,7 +482,33 @@ export class SurveyEditPage implements OnInit,CanComponentDeactivate {
 
   async addPhotoToGallery(position) {
     if(this.photos.length<3){
-      const capturedPhoto = await this.photoService.addNewToGallery();
+      let role = "";
+      if(this.platform.is("desktop")){
+        role = "PHOTOS"
+      } else{
+        const actionSheet = await this.actionSheetController.create({
+          header: 'Aggiungi foto',
+          buttons: [
+            {
+              text: 'Fotocamera',
+              icon: 'camera-outline',
+              role: 'CAMERA',
+              handler: () => {
+              }
+            }, {
+              text: 'Galleria',
+              icon: 'images-outline',
+              role: 'PHOTOS',
+              handler: () => {
+              }
+            }
+          ]
+        });
+        await actionSheet.present();
+    
+         role = await (await actionSheet.onDidDismiss()).role;
+      }
+      const capturedPhoto = await this.photoService.addNewToGallery(role);
       if(position!=null){
         this.photos[position]= capturedPhoto;
       }else{
