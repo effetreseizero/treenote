@@ -101,7 +101,7 @@ export class HomePage {
         });
         await modal.present();
       }
-    },2000);
+    },0);
   }
   
 

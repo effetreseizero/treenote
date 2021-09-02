@@ -319,7 +319,7 @@ export class SurveyNewPage implements OnInit,CanComponentDeactivate {
           
           await popover.present();          
       
-        },2000);
+        },500);
       }
     });
   }

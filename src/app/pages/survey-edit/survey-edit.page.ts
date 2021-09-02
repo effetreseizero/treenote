@@ -318,7 +318,7 @@ export class SurveyEditPage implements OnInit,CanComponentDeactivate {
           
           await popover.present();          
       
-        },5000);
+        },500);
       }
     });
   }
