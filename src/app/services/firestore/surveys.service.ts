@@ -119,7 +119,6 @@ export class SurveysService {
       }
       await Promise.all(promiseArray).then((values)=>{
         for(let i=0;i<values.length;i++){
-          debugger;
           var filePath = 'users_photo/'+this.user.uid + '/' + messageRef.id + '/' + i +"."+photos[i].filetype;
           // Create file metadata including the content type
           var metadata = {
@@ -135,7 +134,6 @@ export class SurveysService {
           });
         }
       })
-      debugger;
     } catch (error) {
       console.error('There was an error uploading a file to Cloud Storage:', error);
     }
