@@ -26,8 +26,16 @@
 
 <ion-content [fullscreen]="true" class="background">
   <ion-fab *ngIf="(user!=null)" vertical="top" horizontal="end"  slot="fixed" (click)="createSurvey()">
-    <ion-fab-button id="add-survey-button" color="danger" >
-      <ion-icon name="add"></ion-icon>
+    <ion-fab-button id="add-survey-button" color="danger" style ="
+      --border-radius: 20px;
+      max-width: unset;
+      min-width: unset;
+      width: 120px;
+    "
+    >
+      SEGNALA 
+      <ion-icon name="arrow-forward-outline"></ion-icon>
+      <!--ion-icon src="./../../../assets/icon/forest-svgrepo-com.svg" size="large"></ion-icon-->
     </ion-fab-button>
   </ion-fab>
   <app-ol-map
@@ -39,16 +47,8 @@
   >
   </app-ol-map>
   <ion-fab horizontal="end" vertical="bottom" slot="fixed">
-    <ion-fab-button color="primary">
-      <ion-icon md="caret-back" ios="chevron-back-circle-outline" color="light" ></ion-icon>
+    <ion-fab-button (click)="switchBaseMap()" color="primary">
+      <ion-icon name="map-outline"></ion-icon>
     </ion-fab-button>
-    <ion-fab-list side="start">
-      <ion-fab-button (click)="switchBaseMap()" color="light">
-        <ion-icon name="map-outline"></ion-icon>
-      </ion-fab-button>
-      <ion-fab-button color="light" (click)="showMapAttributions()">
-        <ion-icon name="information-circle-outline"></ion-icon>
-      </ion-fab-button>
-    </ion-fab-list>
   </ion-fab>
 </ion-content>

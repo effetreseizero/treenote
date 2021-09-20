@@ -41,10 +41,10 @@ export class SurveyPreviewPopoverComponent implements OnInit {
 
     switch(this.survey.identificazione){
       case "010_conifera":
-        this.desc+=" di latifoglie";
+        this.desc+=" di conifere";
         break;
       case "020_latifoglia":
-          this.desc+=" di conifere";
+          this.desc+=" di latifoglie";
           break;
       case "030_misto":
           this.desc+=" misto, latifoglie e conifere";
