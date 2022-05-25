@@ -57,6 +57,9 @@
           <ion-button slot="end" shape="round" color="secondary" size="small" (click)="editSurvey(item.id)">
             <ion-icon size="small" slot="icon-only" name="create"></ion-icon>
           </ion-button>
+          <ion-button slot="end" shape="round" color="light" size="small" (click)="promoteToSent(item.id)">
+            <ion-icon size="small" slot="icon-only" name="mail"></ion-icon>
+          </ion-button>
           <ion-button slot="end" shape="round" color="danger" size="small" (click)="promoteToArchive(item.id)">
             <ion-icon size="small" slot="icon-only" name="library-outline"></ion-icon>
           </ion-button>

@@ -197,12 +197,12 @@ export class HomePage {
     var iconStyle = new Style({
       image: new Icon(/** @type {olx.style.IconOptions} */ ({
         anchor: [0.5, 0],
-        scale: 0.3,
+        scale: 0.5,
         anchorOrigin: IconOrigin.BOTTOM_LEFT, 
         anchorXUnits: IconAnchorUnits.FRACTION,
         anchorYUnits: IconAnchorUnits.PIXELS,
         opacity: 1,
-        src: 'https://image.flaticon.com/icons/png/128/149/149059.png'
+        src: '../../assets/icons/icon_pin_128x128.png'
       }))
     });
 
