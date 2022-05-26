@@ -259,24 +259,30 @@
           <ion-col *ngFor="let photo of photos; index as position">
             <ion-card>
               <ion-img [src]="photo.webviewPath"></ion-img>
-              <!--ion-icon *ngIf="newsurvey&&position==0" [class.badge-one]="true" name="refresh-circle" color="danger" size="large"
+              <ion-icon *ngIf="position==0" [class.badge-one]="true" name="refresh-circle" color="danger" size="large"
                 (click)="addPhotoToGallery(position);">
               </ion-icon>
-              <ion-icon *ngIf="newsurvey&&position>0" [class.badge-one]="true" name="trash" color="danger" size="large"
+              <ion-icon *ngIf="position>0" [class.badge-one]="true" name="trash" color="danger" size="large"
                 (click)="removePhoto(position);">
-              </ion-icon-->
+              </ion-icon>
             </ion-card>
           </ion-col>
         </ion-row>
-        <!--ion-row>
+        <ion-row>
           
           <ion-col size=12>
             <ion-button *ngIf="photos.length==0"  (click)="addPhotoToGallery()" color = "danger" shape="round"><ion-icon name="camera" size="large"></ion-icon><ion-label>Aggiungi una foto panoramica</ion-label></ion-button>
             <ion-button *ngIf="photos.length==1"  (click)="addPhotoToGallery()" color = "danger" shape="round"><ion-icon name="camera" size="large"></ion-icon><ion-label>Aggiungi un dettaglio</ion-label></ion-button>
             <ion-button *ngIf="photos.length==2"  (click)="addPhotoToGallery()" color = "danger" shape="round"><ion-icon name="camera" size="large"></ion-icon><ion-label>Aggiungi un ulteriore dettaglio</ion-label></ion-button>
           </ion-col>
-        </ion-row-->
-    
+        </ion-row>
+        <ion-row>
+          <ion-col size=12>
+            <ion-card>
+              <label>Si consiglia di inquadrare il fenomeno osservato facendo attenzione a non riprendere minorenni o altre persone, targhe di veicoli o altri dati sensibili. Per motivi legati alla privacy lo staff può comunque riservarsi di non pubblicare le foto relative alla segnalazione</label>
+            </ion-card>
+          </ion-col>
+        </ion-row>
       </ion-grid>
 
     </ion-slide>

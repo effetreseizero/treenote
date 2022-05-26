@@ -250,10 +250,10 @@
           <ion-col *ngFor="let photo of photos; index as position">
             <ion-card>
               <ion-img [src]="photo.webviewPath"></ion-img>
-              <ion-icon *ngIf="newsurvey&&position==0" [class.badge-one]="true" name="refresh-circle" color="danger" size="large"
+              <ion-icon *ngIf="position==0" [class.badge-one]="true" name="refresh-circle" color="danger" size="large"
                 (click)="addPhotoToGallery(position);">
               </ion-icon>
-              <ion-icon *ngIf="newsurvey&&position>0" [class.badge-one]="true" name="trash" color="danger" size="large"
+              <ion-icon *ngIf="position>0" [class.badge-one]="true" name="trash" color="danger" size="large"
                 (click)="removePhoto(position);">
               </ion-icon>
             </ion-card>

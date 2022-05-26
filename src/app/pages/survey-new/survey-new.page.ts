@@ -429,7 +429,7 @@ export class SurveyNewPage implements OnInit,CanComponentDeactivate {
                   }); 
                 });
               }else{
-                this.surveysService.update_surveys_document(this.surveyId, this.surveyForm.value).then(()=>{
+                this.surveysService.update_surveys_document(this.surveyId, this.surveyForm.value,[]).then(()=>{
                   loading.dismiss();
                   this.preventBack = false;
                   this.navController.back();
@@ -717,7 +717,7 @@ export class SurveyNewPage implements OnInit,CanComponentDeactivate {
         anchorXUnits: IconAnchorUnits.FRACTION,
         anchorYUnits: IconAnchorUnits.PIXELS,
         opacity: 1,
-        src: 'https://image.flaticon.com/icons/png/128/149/149059.png'
+        src: '../../assets/icon/map_poi.png'
       }))
     });
 

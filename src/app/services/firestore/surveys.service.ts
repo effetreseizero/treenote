@@ -145,9 +145,46 @@ export class SurveysService {
     return this.firestore.doc(this.collectionName + '/' + surveyID).get();
   }
 
-   update_surveys_document(surveyID, data) {
+  async update_surveys_document(surveyID, data, photos) {
     console.log("update_surveys_document");
-    return  this.firestore.doc(this.collectionName + '/' + surveyID).update(data);
+    await this.firestore.doc(this.collectionName + '/' + surveyID).update(data);
+    if(photos.length>0){
+      try {
+        // 2 - Upload the image to Cloud Storage.
+        const promiseArray = [];
+        for (let i=0;i<photos.length; i++){
+          
+          let blob = await fetch(photos[i].webviewPath).then(r => r.blob());
+          //compress
+          //https://github.com/WangYuLue/image-conversion
+          //https://stackoverflow.com/questions/14672746/how-to-compress-an-image-via-javascript-in-the-browser
+
+          promiseArray.push(compress(blob,{
+              quality: 0.7,
+              height: 1080,
+          }))
+        }
+        await Promise.all(promiseArray).then((values)=>{
+          for(let i=0;i<values.length;i++){
+            var filePath = 'users_photo/'+this.user.uid + '/' + surveyID + '/' + i +"."+photos[i].filetype;
+            // Create file metadata including the content type
+            var metadata = {
+              contentType: 'image/'+photos[i].filetype,
+            };
+            this.firestorage.ref(filePath).put(values[i],metadata).then((fileSnapshot)=>{
+              fileSnapshot.ref.getDownloadURL().then((url)=>{
+                let imagedata = {};
+                imagedata["photo_"+i+"_imageurl"] = url;
+                imagedata["photo_"+i+"_storageuri"] = fileSnapshot.metadata.fullPath;
+                this.firestore.doc(this.collectionName + '/' + surveyID).update(imagedata);
+              });
+            });
+          }
+        })
+      } catch (error) {
+        console.error('There was an error uploading a file to Cloud Storage:', error);
+      }
+    }
   }
 
   async delete_surveys_document(surveyID) {
