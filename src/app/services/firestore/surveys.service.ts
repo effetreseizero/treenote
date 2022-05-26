@@ -151,6 +151,16 @@ export class SurveysService {
     if(photos.length>0){
       try {
         // 2 - Upload the image to Cloud Storage.
+
+        //delete photo field
+
+        let imagedata = {};
+        for(let i=0;i<3;i++){
+          imagedata["photo_"+i+"_imageurl"] = ""
+          imagedata["photo_"+i+"_storageuri"] = "";
+                
+        }
+        await this.firestore.doc(this.collectionName + '/' + surveyID).update(imagedata);
         const promiseArray = [];
         for (let i=0;i<photos.length; i++){
           
