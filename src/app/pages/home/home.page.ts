@@ -91,6 +91,23 @@ export class HomePage {
                 }
               },
               translucent: true
+              
+            });
+            modal.onDidDismiss().then(async ()=>{
+              let modalPWA = await this.popoverController.create({
+                component: HelperPopoverComponent,
+                cssClass: 'popover_setting',
+                componentProps: {
+                  message: {
+                    imageurl: "../../assets/images/helper_home_add.png",
+                    title: "Installazione",
+                    text: "Puoi installare la App da Android e da iOS"
+                  }
+                },
+                translucent: true
+                
+              });
+              await modalPWA.present();
             });
             await modal.present();
           }
