@@ -1,8 +1,8 @@
 {
   "name": "silvacuore",
-  "version": "0.0.1",
-  "author": "Ionic Framework",
-  "homepage": "https://ionicframework.com/",
+  "version": "1.0.0",
+  "author": "Giacomo Colle @F360",
+  "homepage": "https://f360.it/",
   "scripts": {
     "ng": "ng",
     "start": "ng serve",
@@ -68,5 +68,5 @@
     "tslint": "~6.1.0",
     "typescript": "~3.9.5"
   },
-  "description": "An Ionic project"
+  "description": "silvacuore"
 }
