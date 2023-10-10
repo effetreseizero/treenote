@@ -79,7 +79,7 @@ export class SurveyNewPage implements OnInit,CanComponentDeactivate {
   private editable = true;
   private newsurvey = false;
 
-  private avanzateActivated = false;
+  public avanzateActivated = false;
 
   public surveyForm: FormGroup;
   public submitAttempt: boolean = false;
@@ -328,7 +328,7 @@ export class SurveyNewPage implements OnInit,CanComponentDeactivate {
     });
   }
 
-  private async showNewSurveyHelper(){
+  async showNewSurveyHelper(){
   
     const modal = await this.modalController.create({
       component: NewSurveyHelperPage,
@@ -338,7 +338,7 @@ export class SurveyNewPage implements OnInit,CanComponentDeactivate {
   }
   
 
-  private formatDate(date) {
+  formatDate(date) {
     const d = new Date(date);
     let month = '' + (d.getMonth() + 1);
     let day = '' + d.getDate();

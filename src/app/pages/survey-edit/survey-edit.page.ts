@@ -73,14 +73,14 @@ import { UserOptionsService } from '../../services/options/user-options.service'
 export class SurveyEditPage implements OnInit,CanComponentDeactivate {
   @ViewChild(IonContent) content: IonContent;
 
-  private surveyId = "0";
-  private surveyEmail="";
-  private survey=null;
+  public surveyId = "0";
+  public surveyEmail="";
+  public survey=null;
 
-  private editable = true;
-  private newsurvey = false;
+  public editable = true;
+  public newsurvey = false;
 
-  private avanzateActivated = false;
+  public avanzateActivated = false;
 
   public surveyForm: FormGroup;
   public submitAttempt: boolean = false;
@@ -564,6 +564,15 @@ export class SurveyEditPage implements OnInit,CanComponentDeactivate {
       this.olMapComponentSurvey.centerOn(this.surveyForm.value["longitudine"],this.surveyForm.value["latitudine"]);
 
       this.presentToastWithOptions();
+    }).catch((error) => {
+      console.log('Error getting location', error);
+    });
+  }
+
+  centerOnGPS(){
+    this.geolocation.getCurrentPosition().then((resp) => {
+      this.olMapComponentSurvey.centerOn(resp.coords.longitude,resp.coords.latitude);
+      
     }).catch((error) => {
       console.log('Error getting location', error);
     });

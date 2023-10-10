@@ -2,6 +2,8 @@ import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 import { RouteReuseStrategy } from '@angular/router';
 
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+
 import { IonicModule, IonicRouteStrategy } from '@ionic/angular';
 import { SplashScreen } from '@ionic-native/splash-screen/ngx';
 import { StatusBar } from '@ionic-native/status-bar/ngx';
@@ -24,20 +26,32 @@ import { AngularFireAuthModule } from '@angular/fire/auth';
 import { Geolocation } from '@ionic-native/geolocation/ngx';
 
 //https://medium.com/runic-software/a-simple-guide-to-openlayers-in-angular-b10f6feb3df1
+import {HelperPopoverComponent} from './components/helper-popover/helper-popover.component'
 import {OlMapComponent} from './components/ol-map/ol-map.component';
 import {OlMapComponentSurvey} from './components/ol-map-survey/ol-map-survey.component';
 import { ServiceWorkerModule } from '@angular/service-worker';
 import { environment } from '../environments/environment';
-
+import { SurveyHelperPopoverComponent } from './components/survey-helper-popover/survey-helper-popover.component';
+import { SurveyPreviewPopoverComponent } from './components/survey-preview-popover/survey-preview-popover.component';
 
 
 
 @NgModule({
-  declarations: [AppComponent],
+  declarations: [
+    AppComponent,
+    SurveyHelperPopoverComponent,
+    HelperPopoverComponent,
+    SurveyPreviewPopoverComponent,
+    OlMapComponentSurvey
+  ],
+  exports:[
+    OlMapComponentSurvey
+  ],
   entryComponents: [
     
   ],
   imports: [
+    FormsModule,
     BrowserModule,
     IonicModule.forRoot({
       mode: 'md'
