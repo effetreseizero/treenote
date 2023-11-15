@@ -37,43 +37,39 @@ import { SurveyPreviewPopoverComponent } from './components/survey-preview-popov
 
 
 @NgModule({
-  declarations: [
-    AppComponent,
-    SurveyHelperPopoverComponent,
-    HelperPopoverComponent,
-    SurveyPreviewPopoverComponent,
-    OlMapComponentSurvey
-  ],
-  exports:[
-    OlMapComponentSurvey
-  ],
-  entryComponents: [
-    
-  ],
-  imports: [
-    FormsModule,
-    BrowserModule,
-    IonicModule.forRoot({
-      mode: 'md'
-    }),
-    AppRoutingModule,
-    AngularFireModule.initializeApp(firebaseConfig),
-    AngularFireDatabaseModule,
-    AngularFirestoreModule,
-    AngularFirestoreModule.enablePersistence(),
-    AngularFireAuthModule,
-    ServiceWorkerModule.register('ngsw-worker.js', { enabled: environment.production }),
-    HttpClientModule
-  ],
-  providers: [
-    StatusBar,
-    SplashScreen,
-    { provide: RouteReuseStrategy, useClass: IonicRouteStrategy },
-    Geolocation,
-    OlMapComponent,
-    OlMapComponentSurvey
-
-  ],
-  bootstrap: [AppComponent]
+    declarations: [
+        AppComponent,
+        SurveyHelperPopoverComponent,
+        HelperPopoverComponent,
+        SurveyPreviewPopoverComponent,
+        OlMapComponentSurvey
+    ],
+    exports: [
+        OlMapComponentSurvey
+    ],
+    imports: [
+        FormsModule,
+        BrowserModule,
+        IonicModule.forRoot({
+            mode: 'md'
+        }),
+        AppRoutingModule,
+        AngularFireModule.initializeApp(firebaseConfig),
+        AngularFireDatabaseModule,
+        AngularFirestoreModule,
+        AngularFirestoreModule.enablePersistence(),
+        AngularFireAuthModule,
+        ServiceWorkerModule.register('ngsw-worker.js', { enabled: environment.production }),
+        HttpClientModule
+    ],
+    providers: [
+        StatusBar,
+        SplashScreen,
+        { provide: RouteReuseStrategy, useClass: IonicRouteStrategy },
+        Geolocation,
+        OlMapComponent,
+        OlMapComponentSurvey
+    ],
+    bootstrap: [AppComponent]
 })
 export class AppModule {}
