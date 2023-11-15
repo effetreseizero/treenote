@@ -55,7 +55,7 @@ export class SurveysPage implements OnInit {
             minute:"numeric"
         };
         
-        survey["short_date"] =  date.toLocaleDateString("it", options) //en is language option, you may specify..
+        survey["short_date"] =  date.toLocaleDateString("it") //en is language option, you may specify..
         return survey;
       })
       .sort(
