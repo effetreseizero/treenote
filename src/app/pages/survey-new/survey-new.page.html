@@ -285,6 +285,9 @@
         <ion-fab-button color="danger">
           <ion-icon name="pin-outline" (click)="getMapPosition()"></ion-icon>
         </ion-fab-button>
+        <ion-fab-button color="primary">
+          <ion-icon name="map-outline" (click)="editMapPosition()"></ion-icon>
+        </ion-fab-button>
       </ion-fab>
       <app-ol-map-survey class="map_survey" [center]="[12.5,42]" [zoom]="5.5" (mapReady)="onMapReady($event)" #app_ol_map_survey>
       </app-ol-map-survey>

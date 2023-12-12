@@ -22,7 +22,11 @@ const routes: Routes = [
   {
     path: 'new-survey-helper',
     loadChildren: () => import('./modal/new-survey-helper/new-survey-helper.module').then( m => m.NewSurveyHelperPageModule)
+  },  {
+    path: 'coords-edit',
+    loadChildren: () => import('./modal/coords-edit/coords-edit.module').then( m => m.CoordsEditPageModule)
   }
+
 
 ];
 

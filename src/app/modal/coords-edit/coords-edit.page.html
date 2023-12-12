@@ -1,0 +1,15 @@
+<ion-header color="tertiary">
+  <ion-toolbar>
+    <ion-title>Modifica dati posizione</ion-title>
+    <ion-buttons slot="end">
+      <ion-button (click)="closeModal()" color="success"><ion-icon size="large" name="add-circle"></ion-icon></ion-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content fullscreen>
+  <ion-item color="primary">
+    <ion-label>Latitudine</ion-label>
+    <ion-input [(ngModel)]="latitude" ></ion-input>
+  </ion-item>
+</ion-content>

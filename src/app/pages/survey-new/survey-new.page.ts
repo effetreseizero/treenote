@@ -20,6 +20,8 @@ import { AlertController } from '@ionic/angular';
 import { ModalController } from '@ionic/angular';
 import { InfoListPage } from '../../modal/info-list/info-list.page';
 import { NewSurveyHelperPage } from '../../modal/new-survey-helper/new-survey-helper.page';
+import { CoordsEditPage } from '../../modal/coords-edit/coords-edit.page'
+
 import { PopoverController } from '@ionic/angular'; 
 import { ActionSheetController } from '@ionic/angular';
 
@@ -616,7 +618,41 @@ export class SurveyNewPage implements OnInit,CanComponentDeactivate {
     this.map.on('singleclick', mapClickCB);
   }
 
+  async editMapPosition(){
+    const modal = await this.modalController.create({
+      component: CoordsEditPage,
+      cssClass: 'coords-edit-css',
+      showBackdrop: true,
+      componentProps: {
+        'latitude': this.surveyForm.value["latitudine"],
+        'longitude': this.surveyForm.value["longitudine"],
+        'altitude': this.surveyForm.value["quota"],
+        'accuracy': this.surveyForm.value["accuratezza"],
 
+      }
+    });
+    let model_inserted = false;
+    modal.onDidDismiss().then(async(modalDataResponse) => {
+      if (modalDataResponse !== null) {
+        this.surveyForm.value["latitudine"] = modalDataResponse.data.latitude;
+        this.surveyForm.value["longitudine"] = modalDataResponse.data.longitude;
+        this.surveyForm.value["quota"] = modalDataResponse.data.altitude;
+        this.surveyForm.value["accuratezza"] = modalDataResponse.data.accuracy;
+
+        this.gpsPositionSetted = true;
+
+        this.surveyPositionVectorSource.clear();
+        let surveyPositionFeature = new Feature();
+        
+        surveyPositionFeature.setGeometry(new Point(fromLonLat([this.surveyForm.value["longitudine"], this.surveyForm.value["latitudine"]])));
+        this.surveyPositionVectorSource.addFeature(surveyPositionFeature)
+
+        this.olMapComponentSurvey.centerOn(this.surveyForm.value["longitudine"],this.surveyForm.value["latitudine"]);
+        
+      }
+    });
+    return await modal.present();
+  }
 
 
   /**
