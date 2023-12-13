@@ -175,6 +175,10 @@ export class SurveyNewPage implements OnInit,CanComponentDeactivate {
       sintomo_2: ['', []],
       diffusione_perc: ['', []],
       alberi_morti: ['', []],
+      latitudine: ['', []],
+      longitudine: ['', []],
+      quota: ['', []],
+      accuratezza: ['', []],
     });
 
     
