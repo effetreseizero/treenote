@@ -2,14 +2,29 @@
   <ion-toolbar>
     <ion-title>Modifica dati posizione</ion-title>
     <ion-buttons slot="end">
-      <ion-button (click)="closeModal()" color="success"><ion-icon size="large" name="add-circle"></ion-icon></ion-button>
+      <ion-button (click)="closeModal()" color="secondary"><ion-icon size="large" name="save-outline"></ion-icon></ion-button>
     </ion-buttons>
   </ion-toolbar>
 </ion-header>
 
 <ion-content fullscreen>
-  <ion-item color="primary">
-    <ion-label>Latitudine</ion-label>
-    <ion-input [(ngModel)]="latitude" ></ion-input>
+  <ion-item>
+    <ion-label type="text" position="floating">Latitudine WGS84 (sessadecimale)</ion-label>
+    <ion-input [(ngModel)]="latitude"></ion-input>
+  </ion-item>
+  
+  <ion-item>
+    <ion-label type="text" position="floating">Longitudine WGS84 (sessadecimale)</ion-label>
+    <ion-input [(ngModel)]="longitude" ></ion-input>
+  </ion-item>
+  
+  <ion-item>
+    <ion-label type="text" position="floating">Quota (m)</ion-label>
+    <ion-input [(ngModel)]="altitude" ></ion-input>
+  </ion-item>
+  
+  <ion-item>
+    <ion-label type="text" position="floating">Precisione (m)</ion-label>
+    <ion-input [(ngModel)]="accuracy" ></ion-input>
   </ion-item>
 </ion-content>
