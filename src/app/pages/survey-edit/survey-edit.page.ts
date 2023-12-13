@@ -195,7 +195,6 @@ export class SurveyEditPage implements OnInit,CanComponentDeactivate {
     //https://ionicacademy.com/pass-data-angular-router-ionic-4/
     this.activatedRoute.queryParams.subscribe(params => {
       if (this.router.getCurrentNavigation().extras.state) {
-        debugger;
         this.surveyId = this.router.getCurrentNavigation().extras.state.id;
 
         //read survey data
@@ -650,7 +649,6 @@ export class SurveyEditPage implements OnInit,CanComponentDeactivate {
     });
     let model_inserted = false;
     modal.onDidDismiss().then(async(modalDataResponse) => {
-      debugger;
       if (
         modalDataResponse.data && 
         modalDataResponse.data.latitude &&

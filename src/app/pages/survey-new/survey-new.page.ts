@@ -661,7 +661,6 @@ export class SurveyNewPage implements OnInit,CanComponentDeactivate {
     });
     let model_inserted = false;
     modal.onDidDismiss().then(async(modalDataResponse) => {
-      debugger;
       if (
         modalDataResponse.data && 
         modalDataResponse.data.latitude &&
