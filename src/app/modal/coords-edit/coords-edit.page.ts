@@ -12,6 +12,8 @@ import {
 })
 export class CoordsEditPage implements OnInit {
 
+  isDisabled;
+
   @Input() latitude;
 
   @Input() longitude;
@@ -20,11 +22,16 @@ export class CoordsEditPage implements OnInit {
 
   @Input() accuracy;
 
+  @Input() status;  
+
   constructor(
     private modalController: ModalController,
-  ) { }
+  ) {
+
+  }
 
   ngOnInit() {
+    this.isDisabled = this.status==="public"||this.status==="archive"
   }
 
   async closeModal() {

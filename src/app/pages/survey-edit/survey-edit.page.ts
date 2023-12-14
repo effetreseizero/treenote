@@ -645,6 +645,7 @@ export class SurveyEditPage implements OnInit,CanComponentDeactivate {
         'longitude': this.surveyForm.value["longitudine"],
         'altitude': this.surveyForm.value["quota"],
         'accuracy': this.surveyForm.value["accuratezza"],
+        'status': this.survey["status"]
       }
     });
     let model_inserted = false;
