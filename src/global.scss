@@ -28,3 +28,19 @@
 //Openlayers CSS
 //https://medium.com/runic-software/a-simple-guide-to-openlayers-in-angular-b10f6feb3df1
 @import "../node_modules/ol/ol.css";
+
+
+.coords-edit-css .modal-wrapper {
+    height: 50%;
+    top: 50%;
+    position: absolute; 
+    display: block;  
+ }
+
+ ion-toast.basic-toast {
+    --background: #f4f4fa;
+    --box-shadow: 3px 3px 10px 0 rgba(0, 0, 0, 0.2);
+    --color: #4b4a50;
+    text-align: center;
+    font-weight: bold;
+}

@@ -20,6 +20,8 @@ import { AlertController } from '@ionic/angular';
 import { ModalController } from '@ionic/angular';
 import { InfoListPage } from '../../modal/info-list/info-list.page';
 import { NewSurveyHelperPage } from '../../modal/new-survey-helper/new-survey-helper.page';
+import { CoordsEditPage } from '../../modal/coords-edit/coords-edit.page'
+
 import { PopoverController } from '@ionic/angular'; 
 import { ActionSheetController } from '@ionic/angular';
 
@@ -173,6 +175,10 @@ export class SurveyNewPage implements OnInit,CanComponentDeactivate {
       sintomo_2: ['', []],
       diffusione_perc: ['', []],
       alberi_morti: ['', []],
+      latitudine: ['', []],
+      longitudine: ['', []],
+      quota: ['', []],
+      accuratezza: ['', []],
     });
 
     
@@ -556,8 +562,8 @@ export class SurveyNewPage implements OnInit,CanComponentDeactivate {
     await alert.present();
   }
 
-  getGpsPosition(){
-    this.geolocation.getCurrentPosition().then((resp) => {
+  async getGpsPosition(){
+    this.geolocation.getCurrentPosition().then(async(resp) => {
       this.surveyForm.value["latitudine"]=resp.coords.latitude;
       this.surveyForm.value["longitudine"]=resp.coords.longitude;
       this.surveyForm.value["quota"]=resp.coords.altitude||0;
@@ -573,21 +579,45 @@ export class SurveyNewPage implements OnInit,CanComponentDeactivate {
 
       this.olMapComponentSurvey.centerOn(this.surveyForm.value["longitudine"],this.surveyForm.value["latitudine"]);
 
-      this.presentToastWithOptions();
-    }).catch((error) => {
+      const toast = await this.toastController.create({
+        cssClass:"basic-toast",
+        color:"light",
+        message: "Posizione GPS acquisita",
+        position: 'top',
+        buttons: [
+         
+        ],
+        duration: 4000
+      });
+      toast.present();
+
+    }).catch(async(error) => {
+      const toast = await this.toastController.create({
+        cssClass:"basic-toast",
+        color:"light",
+        message: "Errore nella posizione GPS",
+        position: 'top',
+        buttons: [
+         
+        ],
+        duration: 4000
+      });
+      toast.present();
       console.log('Error getting location', error);
     });
   }
 
   async getMapPosition(){
     const toast = await this.toastController.create({
-      header: 'Posizione della segnalazionie',
+      cssClass:"basic-toast",
+      color:"light",
+      header: 'Posizione della segnalazione',
       message: "Indica sulla mappa la posizione",
-      position: 'bottom',
+      position: 'top',
       buttons: [
        
       ],
-      duration: 2000
+      duration: 4000
     });
     toast.present();
 
@@ -610,13 +640,53 @@ export class SurveyNewPage implements OnInit,CanComponentDeactivate {
 
       this.olMapComponentSurvey.centerOn(this.surveyForm.value["longitudine"],this.surveyForm.value["latitudine"]);
 
-      this.presentToastWithOptions();
+      //this.presentToastWithOptions();
       this.map.un('singleclick', mapClickCB);
     };
     this.map.on('singleclick', mapClickCB);
   }
 
+  async editMapPosition(){
+    const modal = await this.modalController.create({
+      component: CoordsEditPage,
+      cssClass: 'coords-edit-css',
+      showBackdrop: true,
+      componentProps: {
+        'latitude': this.surveyForm.value["latitudine"],
+        'longitude': this.surveyForm.value["longitudine"],
+        'altitude': this.surveyForm.value["quota"],
+        'accuracy': this.surveyForm.value["accuratezza"],
 
+      }
+    });
+    let model_inserted = false;
+    modal.onDidDismiss().then(async(modalDataResponse) => {
+      if (
+        modalDataResponse.data && 
+        modalDataResponse.data.latitude &&
+        modalDataResponse.data.longitude &&
+        modalDataResponse.data.altitude &&
+        modalDataResponse.data.accuracy 
+      ) {
+        this.surveyForm.value["latitudine"] = modalDataResponse.data.latitude;
+        this.surveyForm.value["longitudine"] = modalDataResponse.data.longitude;
+        this.surveyForm.value["quota"] = modalDataResponse.data.altitude;
+        this.surveyForm.value["accuratezza"] = modalDataResponse.data.accuracy;
+
+        this.gpsPositionSetted = true;
+
+        this.surveyPositionVectorSource.clear();
+        let surveyPositionFeature = new Feature();
+        
+        surveyPositionFeature.setGeometry(new Point(fromLonLat([this.surveyForm.value["longitudine"], this.surveyForm.value["latitudine"]])));
+        this.surveyPositionVectorSource.addFeature(surveyPositionFeature)
+
+        this.olMapComponentSurvey.centerOn(this.surveyForm.value["longitudine"],this.surveyForm.value["latitudine"]);
+        
+      }
+    });
+    return await modal.present();
+  }
 
 
   /**
