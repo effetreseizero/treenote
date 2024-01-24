@@ -1,0 +1,19 @@
+// For format details, see https://aka.ms/vscode-remote/devcontainer.json or this file's README at:
+// https://github.com/microsoft/vscode-dev-containers/tree/v0.112.0/containers/docker-existing-dockerfile
+{
+    "name": "docker-ionic-capacitor-dev",
+    "context": "..",
+    "build": { "dockerfile": "Dockerfile" },
+    "settings": {
+        "terminal.integrated.shell.linux": "/bin/bash",
+        "terminal.integrated.shellArgs.linux": [
+            "-l"
+        ]
+    },
+    "extensions": [],
+    "forwardPorts": [
+        8100,
+        9876
+    ],
+    "initializeCommand": "echo 'Welcome Inoic dev container!'"
+}

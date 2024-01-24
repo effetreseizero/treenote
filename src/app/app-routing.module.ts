@@ -5,8 +5,7 @@ const routes: Routes = [
   //https://www.positronx.io/add-dynamic-side-menu-in-ionic-with-active-class/
   {
     path: '',
-    redirectTo:'home',
-    pathMatch:'full'
+    loadChildren: './menu/menu.module#MenuPageModule'
   },
   {
     path: 'info-list',
@@ -23,13 +22,18 @@ const routes: Routes = [
   {
     path: 'new-survey-helper',
     loadChildren: () => import('./modal/new-survey-helper/new-survey-helper.module').then( m => m.NewSurveyHelperPageModule)
+  },
+  {
+    path: 'coords-edit',
+    loadChildren: () => import('./modal/coords-edit/coords-edit.module').then( m => m.CoordsEditPageModule)
   }
+
 
 ];
 
 @NgModule({
   imports: [
-    RouterModule.forRoot(routes, { preloadingStrategy: PreloadAllModules, relativeLinkResolution: 'legacy' })
+    RouterModule.forRoot(routes, { preloadingStrategy: PreloadAllModules })
   ],
   exports: [RouterModule]
 })
