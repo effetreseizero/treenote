@@ -5,7 +5,8 @@ const routes: Routes = [
   //https://www.positronx.io/add-dynamic-side-menu-in-ionic-with-active-class/
   {
     path: '',
-    loadChildren: './menu/menu.module#MenuPageModule'
+    redirectTo:'home',
+    pathMatch:'full'
   },
   {
     path: 'info-list',

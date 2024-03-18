@@ -2,10 +2,10 @@
 import { Injectable } from '@angular/core';
 
 //https://www.freakyjolly.com/ionic-firebase-crud-operations/#.X-mQOulKiEI
-import { FirebaseApp } from '@angular/fire';
-import { AngularFirestore } from '@angular/fire/firestore';
-import { AngularFireAuth } from '@angular/fire/auth';
-import { AngularFireStorage } from '@angular/fire/storage';
+import { FirebaseApp } from '@angular/fire/compat';
+import { AngularFirestore } from '@angular/fire/compat/firestore';
+import { AngularFireAuth } from '@angular/fire/compat/auth';
+import { AngularFireStorage } from '@angular/fire/compat/storage';
 
 import { CoreFacade } from "../storage/core.facade";
 import { User } from 'src/app/services/storage/user';

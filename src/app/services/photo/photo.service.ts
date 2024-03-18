@@ -2,7 +2,7 @@
 import { Injectable } from '@angular/core';
 
 
-import {Camera, CameraResultType} from '@capacitor/core'
+import {Camera, CameraResultType} from '@capacitor/camera'
 
 
 @Injectable({

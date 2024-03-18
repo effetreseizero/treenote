@@ -12,7 +12,7 @@ import { HelperPopoverComponent } from '../../components/helper-popover/helper-p
 import { AuthenticationService } from "../../services/auth/authentication.service";
 import {CoreFacade} from "../../services/storage/core.facade"
 
-import { AngularFireStorage } from '@angular/fire/storage';
+import { AngularFireStorage } from '@angular/fire/compat/storage';
 
 import { SurveysService} from '../../services/firestore/surveys.service';
 
