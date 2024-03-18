@@ -10,7 +10,7 @@ import { Router, ActivatedRoute, RouteReuseStrategy } from '@angular/router';
 import { IonContent,IonSlides, NavController,Platform, ToastController  } from '@ionic/angular';
 
 
-import { UntypedFormGroup, Validators, UntypedFormBuilder } from '@angular/forms';
+import { FormGroup, Validators, FormBuilder } from '@angular/forms';
 
 import { SurveysService} from '../../services/firestore/surveys.service';
 import { Survey} from '../../services/firestore/survey';
@@ -83,7 +83,7 @@ export class SurveyNewPage implements OnInit,CanComponentDeactivate {
 
   public avanzateActivated = false;
 
-  public surveyForm: UntypedFormGroup;
+  public surveyForm: FormGroup;
   public submitAttempt: boolean = false;
 
   //https://gist.github.com/mdorchain/90ee6a0b391b6c51b2e27c2b000f9bdd
@@ -144,7 +144,7 @@ export class SurveyNewPage implements OnInit,CanComponentDeactivate {
     private activatedRoute:ActivatedRoute,
     private navController: NavController,
     private router:Router,
-    public formBuilder: UntypedFormBuilder,
+    public formBuilder: FormBuilder,
     private surveysService:SurveysService,
     private alertController:AlertController,
     private toastController:ToastController,

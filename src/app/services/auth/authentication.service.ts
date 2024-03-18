@@ -2,10 +2,10 @@
 import { Injectable, NgZone } from '@angular/core';
 import { User } from "../storage/user";
 import { Router } from "@angular/router";
-import { AngularFireAuth } from "@angular/fire/compat/auth";
+import { AngularFireAuth } from "@angular/fire/auth";
 //https://github.com/angular/angularfire/blob/master/docs/auth/getting-started.md
-import firebase from 'firebase/compat/app';
-import { AngularFirestore, AngularFirestoreDocument } from '@angular/fire/compat/firestore';
+import firebase from 'firebase/app';
+import { AngularFirestore, AngularFirestoreDocument } from '@angular/fire/firestore';
 
 //ionic storage service
 import { CoreStore } from '../storage/core.store';

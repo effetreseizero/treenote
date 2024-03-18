@@ -6,7 +6,7 @@ import { Observable } from 'rxjs';
 
 
 //https://www.freakyjolly.com/ionic-firebase-crud-operations/#.X-mQOulKiEI
-import { AngularFireStorage } from '@angular/fire/compat/storage';
+import { AngularFireStorage } from '@angular/fire/storage';
 
 //https://www.techiediaries.com/angular-local-json-files/
 import { HttpClient } from "@angular/common/http";
@@ -19,7 +19,7 @@ import { SurveysService} from '../../services/firestore/surveys.service';
 import * as firebase from 'firebase/app';
 import 'firebase/firestore';
 import { TimeoutError } from 'rxjs';
-import { FirebaseApp } from '@angular/fire/compat';
+import { FirebaseApp } from '@angular/fire';
 
 
 @Injectable({
