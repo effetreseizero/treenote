@@ -51,7 +51,7 @@ import IconOrigin from 'ol/style/IconOrigin';
 
 
 //https://dev.to/saviosantos0808/real-time-localization-using-ionic-framework-and-google-spreadsheets-35pe
-import { Geolocation } from '@ionic-native/geolocation/ngx';
+import { Geolocation } from '@capacitor/geolocation';
 
 //https://firebase.google.com/docs/firestore/solutions/geoqueries
 import{ geohashForLocation } from 'geofire-common';
@@ -552,7 +552,7 @@ export class SurveyEditPage implements OnInit,CanComponentDeactivate {
   }
 
   async getGpsPosition(){
-    this.geolocation.getCurrentPosition().then(async(resp) => {
+    Geolocation.getCurrentPosition().then(async(resp) => {
       this.surveyForm.value["latitudine"]=resp.coords.latitude;
       this.surveyForm.value["longitudine"]=resp.coords.longitude;
       this.surveyForm.value["quota"]=resp.coords.altitude||0;
@@ -597,7 +597,7 @@ export class SurveyEditPage implements OnInit,CanComponentDeactivate {
   }
 
   centerOnGPS(){
-    this.geolocation.getCurrentPosition().then((resp) => {
+    Geolocation.getCurrentPosition().then((resp) => {
       this.olMapComponentSurvey.centerOn(resp.coords.longitude,resp.coords.latitude);
       
     }).catch((error) => {
@@ -722,30 +722,32 @@ export class SurveyEditPage implements OnInit,CanComponentDeactivate {
 
   public geolocationInit(){
     
-    this.geoLocationWatch = this.geolocation.watchPosition({maximumAge: 1000, timeout: 5000, enableHighAccuracy: true});
-    this.geoLocationWatch.subscribe((resp) => {
-      this.geoLocationWatchStarted = true;
-      if("coords" in resp){
-        this.coords.push({
-          latitude:resp.coords.latitude,
-          longitude:resp.coords.longitude,
-          altitude: resp.coords.altitude,
-          accuracy:resp.coords.accuracy,
-          timestamp:resp.timestamp
-        });
-        this.lastcoords = this.coords[this.coords.length-1];
-
-        this.gpsPositionVectorSource.clear();
-        let gpsPositionFeature = new Feature();
-        
-        gpsPositionFeature.setGeometry(this.lastcoords.longitudine&&this.lastcoords.latitudine ? new Point(fromLonLat([this.lastcoords.longitudine, this.lastcoords.latitudine])) : null);
-        this.gpsPositionVectorSource.addFeature(gpsPositionFeature)
-
-        if(this.newsurvey){
-          this.olMapComponentSurvey.centerOn(this.lastcoords.longitude,this.lastcoords.latitude);
+    Geolocation.watchPosition(
+      {maximumAge: 1000, timeout: 5000, enableHighAccuracy: true},
+      (resp) => {
+        this.geoLocationWatchStarted = true;
+        if("coords" in resp){
+          this.coords.push({
+            latitude:resp.coords.latitude,
+            longitude:resp.coords.longitude,
+            altitude: resp.coords.altitude,
+            accuracy:resp.coords.accuracy,
+            timestamp:resp.timestamp
+          });
+          this.lastcoords = this.coords[this.coords.length-1];
+  
+          this.gpsPositionVectorSource.clear();
+          let gpsPositionFeature = new Feature();
+          
+          gpsPositionFeature.setGeometry(this.lastcoords.longitudine&&this.lastcoords.latitudine ? new Point(fromLonLat([this.lastcoords.longitudine, this.lastcoords.latitudine])) : null);
+          this.gpsPositionVectorSource.addFeature(gpsPositionFeature)
+  
+          if(this.newsurvey){
+            this.olMapComponentSurvey.centerOn(this.lastcoords.longitude,this.lastcoords.latitude);
+          }
         }
       }
-    });
+    );
 
   }
 

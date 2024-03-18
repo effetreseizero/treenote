@@ -5,8 +5,7 @@ import { Store } from './abstract.store';
 import { Injectable } from '@angular/core';
 
 //https://capacitorjs.com/docs/guides/storage
-import { Plugins } from '@capacitor/core';
-const { Storage } = Plugins;
+import { Storage } from '@capacitor/storage';
 
 import {User} from './user';
 
