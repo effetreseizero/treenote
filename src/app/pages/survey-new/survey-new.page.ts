@@ -157,7 +157,7 @@ export class SurveyNewPage implements OnInit,CanComponentDeactivate {
     private userOptionsService: UserOptionsService,
     public platform: Platform
   ) {
-
+    debugger;
 
     this.surveyForm = this.formBuilder.group({
       data_ora_osservazione: ['', [Validators.required]],

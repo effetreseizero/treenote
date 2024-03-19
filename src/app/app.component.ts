@@ -19,15 +19,18 @@ export class AppComponent {
   pages = [
     {
       name: 'Home',
-      path: '/menu/home'
+      path: '/home',
+      icon: 'home'
     },
     {
       name: 'Segnalazioni',
-      path: '/menu/surveys'
+      path: '/surveys',
+      icon: 'albums'
     },
     {
       name: 'Informazioni',
-      path: '/menu/contact'
+      path: '/contact',
+      icon: 'mail'
     }
     
   ];
@@ -50,7 +53,8 @@ export class AppComponent {
       else if(this.user.isAdmin){
         this.pages.push({
           name: 'Manager',
-          path: '/menu/surveys-manager'
+          path: '/surveys-manager',
+          icon: 'settings'
         });
       }
     });

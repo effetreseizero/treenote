@@ -3,10 +3,10 @@
     <ion-content>
       <ion-list id="inbox-list">
         <ion-menu-toggle auto-hide="false" *ngFor="let page of pages; let i = index">
-          <ion-item (click)="activeIndex = i" routerDirection="root" [routerLink]="[page.url]" lines="none"
+          <ion-item (click)="activeIndex = i" routerDirection="root" [routerLink]="[page.path]" lines="none"
             detail="false" [class.selected]="activeIndex == i">
             <ion-icon slot="start" [ios]="page.icon + '-outline'" [md]="page.icon + '-sharp'" color="primary"></ion-icon>
-            <ion-label color="primary">{{ page.title }}</ion-label>
+            <ion-label color="primary">{{ page.name }}</ion-label>
           </ion-item>
         </ion-menu-toggle>
       </ion-list>
