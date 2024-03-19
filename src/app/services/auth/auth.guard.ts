@@ -27,7 +27,7 @@ export class AuthGuard implements CanActivate {
             resolve(true);
           } else {
             console.log('User is not logged in or email is not verifed!');
-            this.router.navigate(['/menu/login']);
+            this.router.navigate(['/login']);
             resolve(false);
           }
         });

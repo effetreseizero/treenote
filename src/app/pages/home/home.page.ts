@@ -106,15 +106,15 @@ export class HomePage {
   
 
   public logIn(): void{
-    this.router.navigate(['/menu/login']);
+    this.router.navigate(['/login']);
   }
 
   public userAccout(): void{
-    this.router.navigate(['/menu/user-account']);
+    this.router.navigate(['/user-account']);
   }
 
   async createSurvey() {
-    this.router.navigate(['/menu/survey-new']);
+    this.router.navigate(['/survey-new']);
   }
 
   async surveyPreviewPopover(ev: any,survey) {

@@ -1,6 +1,8 @@
 import { NgModule } from '@angular/core';
 import { PreloadAllModules, RouterModule, Routes } from '@angular/router';
 
+import { AuthGuard } from './services/auth/auth.guard';
+
 const routes: Routes = [
   //https://www.positronx.io/add-dynamic-side-menu-in-ionic-with-active-class/
   {
@@ -10,39 +12,49 @@ const routes: Routes = [
   },
   {
     path: 'home',
-    loadChildren: () => import('./pages/home/home.module').then( m => m.HomePageModule)
+    loadChildren: () => import('./pages/home/home.module').then(m => m.HomePageModule)
   },
   {
+    path: 'contact',
+    loadChildren: () => import('./pages/contact/contact.module').then(m => m.ContactPageModule)
+  },
+  {
+    
     path: 'login',
-    loadChildren: () => import('./pages/login/login.module').then( m => m.LoginPageModule)
+    loadChildren: () => import('./pages/login/login.module').then(m => m.LoginPageModule)
   },
   {
     path: 'registration',
     loadChildren: () => import('./pages/registration/registration.module').then(m => m.RegistrationPageModule)
   },
   {
+    path: 'user-account',
+    loadChildren: () => import('./pages/user-account/user-account.module').then( m => m.UserAccountPageModule),
+    canActivate: [AuthGuard]
+  },
+  {
     path: 'verify-email',
     loadChildren: () => import('./pages/verify-email/verify-email.module').then( m => m.VerifyEmailPageModule)
   },
   {
-    path: 'info-list',
-    loadChildren: () => import('./modal/info-list/info-list.module').then( m => m.InfoListPageModule)
+    path: 'surveys',
+    loadChildren: () => import('./pages/surveys/surveys.module').then( m => m.SurveysPageModule),
+    canActivate: [AuthGuard]
   },
   {
-    path: 'home-helper',
-    loadChildren: () => import('./modal/home-helper/home-helper.module').then( m => m.HomeHelperPageModule)
+    path: 'surveys-manager',
+    loadChildren: () => import('./pages/surveys-manager/surveys-manager.module').then( m => m.SurveysManagerPageModule),
+    canActivate: [AuthGuard]
   },
   {
     path: 'survey-new',
-    loadChildren: () => import('./pages/survey-new/survey-new.module').then( m => m.SurveyNewPageModule)
+    loadChildren: () => import('./pages/survey-new/survey-new.module').then( m => m.SurveyNewPageModule),
+    canActivate: [AuthGuard],
   },
   {
-    path: 'new-survey-helper',
-    loadChildren: () => import('./modal/new-survey-helper/new-survey-helper.module').then( m => m.NewSurveyHelperPageModule)
-  },
-  {
-    path: 'coords-edit',
-    loadChildren: () => import('./modal/coords-edit/coords-edit.module').then( m => m.CoordsEditPageModule)
+    path: 'survey-edit',
+    loadChildren: () => import('./pages/survey-edit/survey-edit.module').then( m => m.SurveyEditPageModule),
+    canActivate: [AuthGuard],
   }
 
 
