@@ -42,10 +42,8 @@ import { SurveyPreviewPopoverComponent } from './components/survey-preview-popov
         SurveyHelperPopoverComponent,
         HelperPopoverComponent,
         SurveyPreviewPopoverComponent,
-        OlMapComponentSurvey
     ],
     exports: [
-        OlMapComponentSurvey
     ],
     imports: [
         FormsModule,
@@ -64,8 +62,7 @@ import { SurveyPreviewPopoverComponent } from './components/survey-preview-popov
     ],
     providers: [
         { provide: RouteReuseStrategy, useClass: IonicRouteStrategy },
-        OlMapComponent,
-        OlMapComponentSurvey
+        OlMapComponent
     ],
     bootstrap: [AppComponent]
 })
