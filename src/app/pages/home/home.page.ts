@@ -114,7 +114,7 @@ export class HomePage {
   }
 
   async createSurvey() {
-    this.router.navigate(['/survey-new']);
+    this.router.navigate(['/survey']);
   }
 
   async surveyPreviewPopover(ev: any,survey) {
