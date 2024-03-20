@@ -148,7 +148,6 @@ export class SurveyPage implements OnInit {
     private surveysService:SurveysService,
     private alertController:AlertController,
     private toastController:ToastController,
-    //private geolocation: Geolocation,
     public photoService: PhotoService,
     public modalController: ModalController,
     public loadingController: LoadingController,
@@ -242,26 +241,6 @@ export class SurveyPage implements OnInit {
 
         this.surveyForm.get("avanzate").setValue(false);
         
-        /*
-        this.surveyForm.patchValue({
-          data_ora_osservazione: (new Date).toJSON(),
-          //DUMMY DATA
-          localita: "Trento",
-          tipologia: "010_gruppo",
-          identificazione: "010_conifera",      
-          nome_comune: "",
-          loc_problema: "010_chioma",
-          commenti: "",
-          specie: "010_pino",
-          nome_scientifico: "",
-          sintomo_0: "010_avvizzimento_fogliare",
-          sintomo_1: "010_avvizzimento_fogliare",
-          sintomo_2: "010_avvizzimento_fogliare",
-          diffusione_perc: "010_minore_20",
-          alberi_morti: "010_si",
-        });
-        */
-
         this.surveyForm.get("avanzate").valueChanges.subscribe(async (checked)=>{
           if(!checked){
             const alert = await this.alertController.create({

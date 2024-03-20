@@ -108,7 +108,7 @@ export class SurveysPage implements OnInit {
         id: recordId 
       }
     };
-      this.router.navigate(['/survey-edit'],navigationExtras);
+      this.router.navigate(['/survey'],navigationExtras);
   }
 
 }
