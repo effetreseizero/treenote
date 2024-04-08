@@ -101,39 +101,50 @@ export class SurveysService {
     //https://www.nuomiphp.com/eplan/en/2152.html
     let dt = new Date();
     data['created_time']=dt.getTime();
+    debugger;
     try {
-      const messageRef = await this.firestore.collection(this.collectionName).add(data);
-      // 2 - Upload the image to Cloud Storage.
-      const promiseArray = [];
-      for (let i=0;i<photos.length; i++){
-        
-        let blob = await fetch(photos[i].webviewPath).then(r => r.blob());
-        //compress
-        //https://github.com/WangYuLue/image-conversion
-        //https://stackoverflow.com/questions/14672746/how-to-compress-an-image-via-javascript-in-the-browser
+      
 
-        promiseArray.push(compress(blob,{
-            quality: 0.7,
-            height: 1080,
-        }))
-      }
-      await Promise.all(promiseArray).then((values)=>{
-        for(let i=0;i<values.length;i++){
-          var filePath = 'users_photo/'+this.user.uid + '/' + messageRef.id + '/' + i +"."+photos[i].filetype;
-          // Create file metadata including the content type
-          var metadata = {
-            contentType: 'image/'+photos[i].filetype,
-          };
-          this.firestorage.ref(filePath).put(values[i],metadata).then((fileSnapshot)=>{
-            fileSnapshot.ref.getDownloadURL().then((url)=>{
-              let imagedata = {};
-              imagedata["photo_"+i+"_imageurl"] = url;
-              imagedata["photo_"+i+"_storageuri"] = fileSnapshot.metadata.fullPath;
-              messageRef.update(imagedata);
-            });
-          });
+      // If Online Upload the image to Cloud Storage.
+      if(navigator.onLine){
+        const messageRef = await this.firestore.collection(this.collectionName).add(data);
+        const promiseArray = [];
+        for (let i=0;i<photos.length; i++){
+          
+          let blob = await fetch(photos[i].webviewPath).then(r => r.blob());
+          //compress
+          //https://github.com/WangYuLue/image-conversion
+          //https://stackoverflow.com/questions/14672746/how-to-compress-an-image-via-javascript-in-the-browser
+
+          promiseArray.push(compress(blob,{
+              quality: 0.7,
+              height: 1080,
+          }))
         }
-      })
+        await Promise.all(promiseArray).then((values)=>{
+          for(let i=0;i<values.length;i++){
+            var filePath = 'users_photo/'+this.user.uid + '/' + messageRef.id + '/' + i +"."+photos[i].filetype;
+            // Create file metadata including the content type
+            var metadata = {
+              contentType: 'image/'+photos[i].filetype,
+            };
+            this.firestorage.ref(filePath).put(values[i],metadata).then((fileSnapshot)=>{
+              fileSnapshot.ref.getDownloadURL().then((url)=>{
+                let imagedata = {};
+                imagedata["photo_"+i+"_imageurl"] = url;
+                imagedata["photo_"+i+"_storageuri"] = fileSnapshot.metadata.fullPath;
+                messageRef.update(imagedata);
+              });
+            });
+          }
+        })
+      }
+      else{
+        /*
+        TO DO UPLOAD OFFILE PHOTO
+        */
+        this.firestore.collection(this.collectionName).add(data);
+      }
     } catch (error) {
       console.error('There was an error uploading a file to Cloud Storage:', error);
     }

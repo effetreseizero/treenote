@@ -394,6 +394,7 @@ export class SurveyPage implements OnInit {
                 message: 'Invio dati ...',
               });
               await loading.present();
+              //new survey
               if(this.surveyId=="0"){
                 this.surveysService.create_surveys_document(this.surveyForm.value,this.photos).then(async()=>{
                   loading.dismiss();
@@ -408,6 +409,7 @@ export class SurveyPage implements OnInit {
                     this.navController.back();
                   }); 
                 });
+              //edit survey
               }else{
                 this.surveysService.update_surveys_document(this.surveyId, this.surveyForm.value,[]).then(()=>{
                   loading.dismiss();

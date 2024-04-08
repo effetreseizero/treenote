@@ -55,6 +55,7 @@ import { SurveyPreviewPopoverComponent } from './components/survey-preview-popov
         AngularFireModule.initializeApp(firebaseConfig),
         AngularFireDatabaseModule,
         AngularFirestoreModule,
+        
         AngularFirestoreModule.enablePersistence(),
         AngularFireAuthModule,
         ServiceWorkerModule.register('ngsw-worker.js', { enabled: environment.production }),

@@ -40,6 +40,9 @@ export class SurveysPage implements OnInit {
         let survey = {};
         //add id of syrvey
         survey["id"]=e.payload.doc.id;
+        //firestore offline cache info
+        survey["fromCache"] = e.payload.doc.metadata.fromCache
+        survey["hasPendingWrites"] = e.payload.doc.metadata.hasPendingWrites
         //add all other properties
         for (let key of Object.keys(e.payload.doc.data())){
           survey[key] = e.payload.doc.data()[key];
@@ -78,7 +81,7 @@ export class SurveysPage implements OnInit {
 
 
   async createSurvey() {
-    this.router.navigate(['/survey-new']);
+    this.router.navigate(['/survey']);
   }
 
   async deleteSurvey(recordId) {
