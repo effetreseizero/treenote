@@ -470,6 +470,22 @@ export class SurveyPage implements OnInit {
 
   async addPhotoToGallery(position) {
     if(this.photos.length<3){
+      if(!navigator.onLine){
+        const alert = await this.alertController.create({
+          header: 'Assenza connessione Internet!',
+          subHeader: 'Le foto,anche se inserite, non verrano inviate in caso di assenza di connessione',
+          message: 'Si consiglia di scattare le foto con la App del dispositivo e salvarle in memoria. La segnalazione sarà salavata in bozza e le foto potranno essere inserite successivamente quando si avrà una connessione ad Internet',
+          buttons: [
+                       {
+              text: 'Ok',
+              handler: () => {
+              }
+            }
+          ]
+        });
+        await alert.present();
+        await alert.onDidDismiss();
+      }
       let role = "";
       if(this.platform.is("desktop")){
         role = "PHOTOS"
@@ -494,7 +510,7 @@ export class SurveyPage implements OnInit {
         });
         await actionSheet.present();
     
-         role = await (await actionSheet.onDidDismiss()).role;
+        role = await (await actionSheet.onDidDismiss()).role;
       }
       const capturedPhoto = await this.photoService.addNewToGallery(role);
       if(position!=null){
@@ -502,6 +518,7 @@ export class SurveyPage implements OnInit {
       }else{
         this.photos.push(capturedPhoto);
       }
+      
     }else{
       const toast = await this.toastController.create({
         color: 'dark',
