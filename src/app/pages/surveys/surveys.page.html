@@ -17,12 +17,12 @@
   <ion-button expand="block" (click)="createSurvey()" color = "danger" shape="round">Invia una segnalazione</ion-button>
 
   <!-- https://forum.ionicframework.com/t/ion-items-not-transparent-ionic-4/153287/2 -->
-  <ion-list class="bg-transparent">
+  <ion-list *ngIf="nophotoSurveyList.length>0" class="bg-transparent">
     <ion-list-header>
       <h1>
       <ion-chip outline color="secondary">
         <ion-icon name="alert"></ion-icon>
-        <ion-label>{{sentSurveyList.length}} Segnalazioni senza foto</ion-label>
+        <ion-label>{{nophotoSurveyList.length}} Segnalazioni senza foto</ion-label>
       </ion-chip>
       </h1>
     </ion-list-header>
