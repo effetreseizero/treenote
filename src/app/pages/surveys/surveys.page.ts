@@ -17,6 +17,7 @@ import { AlertController } from '@ionic/angular';
 export class SurveysPage implements OnInit {
 
   userSurveyList = [];
+  nophotoSurveyList = [];
   sentSurveyList = [];
   reviewSurveyList = [];
   publicSurveyList = [];
@@ -68,6 +69,8 @@ export class SurveysPage implements OnInit {
       );
 
       let notDeletedSurveys = this.userSurveyList.filter(x => (!x.deleted));
+
+      this.nophotoSurveyList = notDeletedSurveys.filter(x => (x.status=="sent_nophoto"));
 
       this.sentSurveyList = notDeletedSurveys.filter(x => (x.status=="sent"));
 

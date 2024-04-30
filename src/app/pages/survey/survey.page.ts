@@ -367,18 +367,37 @@ export class SurveyPage implements OnInit {
    * Save survey button
    */
   async saveSurvey() {
+
+    let online = navigator.onLine;
+
     this.submitAttempt = true;
 
+
     if(!this.surveyForm.valid){
-        this.surveySlider.slideTo(0);
-    } else if(this.photos.length==0){
-      this.surveySlider.slideTo(2);
+      this.surveySlider.slideTo(0);
     } else if(!this.gpsPositionSetted){
       this.surveySlider.slideTo(3);
-    }
-    else{
+    } else if(this.photos.length==0 && online){
+        this.surveySlider.slideTo(2);
+    } else{
+      if(!online){
+        const alert = await this.alertController.create({
+          header: 'Assenza connessione Internet!',
+          subHeader: 'La segnalazione verrà salvata sul dispositivo, ad eccezione delle foto',
+          message: 'Si consiglia di scattare le foto con la App del dispositivo e salvarle in memoria. La segnalazione sarà salavata in bozza e le foto potranno essere inserite successivamente quando si avrà una connessione ad Internet',
+          buttons: [
+                       {
+              text: 'Ok',
+              handler: () => {
+              }
+            }
+          ]
+        });
+        await alert.present();
+        await alert.onDidDismiss();
+      }
       const alert = await this.alertController.create({
-        header: 'Confermi modifiche?',
+        header: 'Confermi salvataggio segnalazione?',
         buttons: [
           {
             text: 'Cancel',
@@ -389,6 +408,11 @@ export class SurveyPage implements OnInit {
           {
             text: 'Ok',
             handler: async () => {
+              
+              // TO DO FOR ALL Controller pop up !
+              // https://github.com/ionic-team/ionic-framework/issues/17450
+              //
+
               const loading = await this.loadingController.create({
                 cssClass: 'my-custom-class',
                 message: 'Invio dati ...',
@@ -411,10 +435,18 @@ export class SurveyPage implements OnInit {
                 });
               //edit survey
               }else{
-                this.surveysService.update_surveys_document(this.surveyId, this.surveyForm.value,[]).then(()=>{
+                this.surveysService.update_surveys_document(this.surveyId, this.surveyForm.value,this.photos).then(async()=>{
                   loading.dismiss();
-                  this.preventBack = false;
-                  this.navController.back();
+                  const toast = await this.toastController.create({
+                    color: 'secondary',
+                    position: 'middle',
+                    duration: 4000,
+                    message: 'Modifiche registrate.',
+                  });
+                  await toast.present().then(()=>{
+                    this.preventBack = false;
+                    this.navController.back();
+                  });
                 });
               }
             }

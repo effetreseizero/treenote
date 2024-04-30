@@ -21,6 +21,31 @@
     <ion-list-header>
       <h1>
       <ion-chip outline color="secondary">
+        <ion-icon name="alert"></ion-icon>
+        <ion-label>{{sentSurveyList.length}} Segnalazioni senza foto</ion-label>
+      </ion-chip>
+      </h1>
+    </ion-list-header>
+    <ion-item *ngFor="let item of nophotoSurveyList" lines="inset" color="none">
+      <ion-label>
+        <h2>{{item.localita}}</h2>
+        <h3>{{item.short_date}}</h3>
+      </ion-label>
+      <ion-icon *ngIf="item.fromCache" ion-icon size="small" slot="icon-only" name="alert-circle-outline"></ion-icon>
+      <ion-button slot="end" shape="round" color="secondary" size="small" (click)="editSurvey(item.id)"> 
+        <ion-icon size="small" slot="icon-only" name="create"></ion-icon>
+      </ion-button>
+
+      <ion-button slot="end" shape="round" color="danger" size="small" (click)="deleteSurvey(item.id)">
+        <ion-icon size="small" slot="icon-only" name="trash"></ion-icon>
+      </ion-button>
+    </ion-item>
+  </ion-list>
+  
+  <ion-list class="bg-transparent">
+    <ion-list-header>
+      <h1>
+      <ion-chip outline color="secondary">
         <ion-icon name="mail"></ion-icon>
         <ion-label>{{sentSurveyList.length}} Segnalazioni inviate</ion-label>
       </ion-chip>

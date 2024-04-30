@@ -69,6 +69,18 @@ export class SurveysService {
 
   }
 
+  read_sent_nophoto_surveys_collection() {
+    console.log("read_sent_surveys_collection");
+    return this.firestore.collection(
+      this.collectionName,
+      //https://stackoverflow.com/questions/49026589/angular-firestore-where-query-returning-error-property-does-not-exist-on
+      //.where("userUID", "==", firebase.auth().currentUser.uid)
+      ref => ref.where("status", "==", "sent_nophoto")
+      )
+      .snapshotChanges();
+
+  }
+
   read_review_surveys_collection() {
     console.log("read_review_surveys_collection");
     return this.firestore.collection(
@@ -94,59 +106,58 @@ export class SurveysService {
   } 
 
   async create_surveys_document(data,photos) {
+
     data['user_uid']=this.user.uid;
     data['user_email']=this.user.email;
     data['deleted']=false;
-    data['status']="sent";
+    if(navigator.onLine){
+      data['status']="sent";
+    }else{
+      data['status']="sent_nophoto";
+    }
     //https://www.nuomiphp.com/eplan/en/2152.html
     let dt = new Date();
     data['created_time']=dt.getTime();
-    debugger;
+
     try {
-      
-
-      // If Online Upload the image to Cloud Storage.
-      if(navigator.onLine){
-        const messageRef = await this.firestore.collection(this.collectionName).add(data);
-        const promiseArray = [];
-        for (let i=0;i<photos.length; i++){
-          
-          let blob = await fetch(photos[i].webviewPath).then(r => r.blob());
-          //compress
-          //https://github.com/WangYuLue/image-conversion
-          //https://stackoverflow.com/questions/14672746/how-to-compress-an-image-via-javascript-in-the-browser
-
-          promiseArray.push(compress(blob,{
-              quality: 0.7,
-              height: 1080,
-          }))
-        }
-        await Promise.all(promiseArray).then((values)=>{
-          for(let i=0;i<values.length;i++){
-            var filePath = 'users_photo/'+this.user.uid + '/' + messageRef.id + '/' + i +"."+photos[i].filetype;
-            // Create file metadata including the content type
-            var metadata = {
-              contentType: 'image/'+photos[i].filetype,
-            };
-            this.firestorage.ref(filePath).put(values[i],metadata).then((fileSnapshot)=>{
-              fileSnapshot.ref.getDownloadURL().then((url)=>{
-                let imagedata = {};
-                imagedata["photo_"+i+"_imageurl"] = url;
-                imagedata["photo_"+i+"_storageuri"] = fileSnapshot.metadata.fullPath;
-                messageRef.update(imagedata);
-              });
-            });
+      this.firestore.collection(this.collectionName).add(data).then(async(messageRef)=>{
+        
+        // If Online Upload the image to Cloud Storage.
+        if(navigator.onLine){
+          const promiseArray = [];
+          for (let i=0;i<photos.length; i++){
+  
+            let blob = await fetch(photos[i].webviewPath).then(r => r.blob());
+            //compress
+            //https://github.com/WangYuLue/image-conversion
+            //https://stackoverflow.com/questions/14672746/how-to-compress-an-image-via-javascript-in-the-browser
+  
+            promiseArray.push(compress(blob,{
+                quality: 0.7,
+                height: 1080,
+            }))
           }
-        })
-      }
-      else{
-        /*
-        TO DO UPLOAD OFFILE PHOTO
-        */
-        this.firestore.collection(this.collectionName).add(data);
-      }
+          await Promise.all(promiseArray).then((values)=>{
+            for(let i=0;i<values.length;i++){
+              var filePath = 'users_photo/'+this.user.uid + '/' + messageRef.id + '/' + i +"."+photos[i].filetype;
+              // Create file metadata including the content type
+              var metadata = {
+                contentType: 'image/'+photos[i].filetype,
+              };
+              this.firestorage.ref(filePath).put(values[i],metadata).then((fileSnapshot)=>{
+                fileSnapshot.ref.getDownloadURL().then((url)=>{
+                  let imagedata = {};
+                  imagedata["photo_"+i+"_imageurl"] = url;
+                  imagedata["photo_"+i+"_storageuri"] = fileSnapshot.metadata.fullPath;
+                  messageRef.update(imagedata);
+                });
+              });
+            }
+          })
+        };
+      });      
     } catch (error) {
-      console.error('There was an error uploading a file to Cloud Storage:', error);
+      console.error('There was an error uploading to Cloud Storage:', error);
     }
   }
 
@@ -157,55 +168,70 @@ export class SurveysService {
   }
 
   async update_surveys_document(surveyID, data, photos) {
-    console.log("update_surveys_document");
-    await this.firestore.doc(this.collectionName + '/' + surveyID).update(data);
-    if(photos.length>0){
-      try {
-        // 2 - Upload the image to Cloud Storage.
 
-        //delete photo field
+    debugger;
+    
+    try {
+      console.log("update_surveys_document");
+      
 
-        let imagedata = {};
-        for(let i=0;i<3;i++){
-          imagedata["photo_"+i+"_imageurl"] = ""
-          imagedata["photo_"+i+"_storageuri"] = "";
-                
+      // If Online update the image to Cloud Storage.
+      if(!navigator.onLine){
+        await this.firestore.doc(this.collectionName + '/' + surveyID).update(data);
+      }else{
+        if(photos.length>0){
+
+            data['status']="sent";
+            await this.firestore.doc(this.collectionName + '/' + surveyID).update(data);
+            // 2 - Upload the image to Cloud Storage.
+
+            //delete photo field
+
+            let imagedata = {};
+            for(let i=0;i<3;i++){
+              imagedata["photo_"+i+"_imageurl"] = ""
+              imagedata["photo_"+i+"_storageuri"] = "";
+                    
+            }
+            await this.firestore.doc(this.collectionName + '/' + surveyID).update(imagedata);
+
+            //update new photo
+
+            const promiseArray = [];
+            for (let i=0;i<photos.length; i++){
+              
+              let blob = await fetch(photos[i].webviewPath).then(r => r.blob());
+              //compress
+              //https://github.com/WangYuLue/image-conversion
+              //https://stackoverflow.com/questions/14672746/how-to-compress-an-image-via-javascript-in-the-browser
+
+              promiseArray.push(compress(blob,{
+                  quality: 0.7,
+                  height: 1080,
+              }))
+            }
+            await Promise.all(promiseArray).then((values)=>{
+              for(let i=0;i<values.length;i++){
+                var filePath = 'users_photo/'+this.user.uid + '/' + surveyID + '/' + i +"."+photos[i].filetype;
+                // Create file metadata including the content type
+                var metadata = {
+                  contentType: 'image/'+photos[i].filetype,
+                };
+                this.firestorage.ref(filePath).put(values[i],metadata).then((fileSnapshot)=>{
+                  fileSnapshot.ref.getDownloadURL().then((url)=>{
+                    let imagedata = {};
+                    imagedata["photo_"+i+"_imageurl"] = url;
+                    imagedata["photo_"+i+"_storageuri"] = fileSnapshot.metadata.fullPath;
+                    this.firestore.doc(this.collectionName + '/' + surveyID).update(imagedata);
+                  });
+                });
+              }
+            })
         }
-        await this.firestore.doc(this.collectionName + '/' + surveyID).update(imagedata);
-        const promiseArray = [];
-        for (let i=0;i<photos.length; i++){
-          
-          let blob = await fetch(photos[i].webviewPath).then(r => r.blob());
-          //compress
-          //https://github.com/WangYuLue/image-conversion
-          //https://stackoverflow.com/questions/14672746/how-to-compress-an-image-via-javascript-in-the-browser
-
-          promiseArray.push(compress(blob,{
-              quality: 0.7,
-              height: 1080,
-          }))
-        }
-        await Promise.all(promiseArray).then((values)=>{
-          for(let i=0;i<values.length;i++){
-            var filePath = 'users_photo/'+this.user.uid + '/' + surveyID + '/' + i +"."+photos[i].filetype;
-            // Create file metadata including the content type
-            var metadata = {
-              contentType: 'image/'+photos[i].filetype,
-            };
-            this.firestorage.ref(filePath).put(values[i],metadata).then((fileSnapshot)=>{
-              fileSnapshot.ref.getDownloadURL().then((url)=>{
-                let imagedata = {};
-                imagedata["photo_"+i+"_imageurl"] = url;
-                imagedata["photo_"+i+"_storageuri"] = fileSnapshot.metadata.fullPath;
-                this.firestore.doc(this.collectionName + '/' + surveyID).update(imagedata);
-              });
-            });
-          }
-        })
-      } catch (error) {
-        console.error('There was an error uploading a file to Cloud Storage:', error);
       }
-    }
+    } catch (error) {
+      console.error('There was an error uploading a file to Cloud Storage:', error);
+    } 
   }
 
   async delete_surveys_document(surveyID) {
