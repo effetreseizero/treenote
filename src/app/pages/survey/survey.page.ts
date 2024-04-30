@@ -430,7 +430,7 @@ export class SurveyPage implements OnInit {
                   });
                   await toast.present().then(()=>{
                     this.preventBack = false;
-                    this.navController.back();
+                    this.router.navigate(['/surveys']);
                   }); 
                 });
               //edit survey
