@@ -65,6 +65,7 @@ import { LoadingController } from '@ionic/angular';
 import { OlMapComponentSurvey } from 'src/app/components/ol-map-survey/ol-map-survey.component';
 
 import { UserOptionsService } from '../../services/options/user-options.service';
+import { isNull } from 'mathjs';
 
 
 
@@ -235,7 +236,7 @@ export class SurveyPage implements OnInit {
         this.newsurvey = true;
         this.editable = true;
 
-        this.surveyForm.get('data_ora_osservazione').patchValue(this.formatDate(new Date()));
+        this.surveyForm.get('data_ora_osservazione').patchValue(new Date().toJSON());
         
         this.avanzateActivated = false;
 
@@ -744,24 +745,26 @@ export class SurveyPage implements OnInit {
     Geolocation.watchPosition(
       {maximumAge: 1000, timeout: 5000, enableHighAccuracy: true},
       (resp) => {
-        this.geoLocationWatchStarted = true;
-        if("coords" in resp){
-          this.coords.push({
-            latitude:resp.coords.latitude,
-            longitude:resp.coords.longitude,
-            altitude: resp.coords.altitude,
-            accuracy:resp.coords.accuracy,
-            timestamp:resp.timestamp
-          });
-          this.lastcoords = this.coords[this.coords.length-1];
-  
-          this.gpsPositionVectorSource.clear();
-          let gpsPositionFeature = new Feature();
-          gpsPositionFeature.setGeometry(new Point(fromLonLat([this.lastcoords.longitude, this.lastcoords.latitude])));
-          this.gpsPositionVectorSource.addFeature(gpsPositionFeature)
-          
-          if(this.newsurvey){
-            //this.olMapComponentSurvey.centerOn(this.lastcoords.longitude,this.lastcoords.latitude);
+        if(!isNull(resp)){
+          this.geoLocationWatchStarted = true;
+          if("coords" in resp){
+            this.coords.push({
+              latitude:resp.coords.latitude,
+              longitude:resp.coords.longitude,
+              altitude: resp.coords.altitude,
+              accuracy:resp.coords.accuracy,
+              timestamp:resp.timestamp
+            });
+            this.lastcoords = this.coords[this.coords.length-1];
+    
+            this.gpsPositionVectorSource.clear();
+            let gpsPositionFeature = new Feature();
+            gpsPositionFeature.setGeometry(new Point(fromLonLat([this.lastcoords.longitude, this.lastcoords.latitude])));
+            this.gpsPositionVectorSource.addFeature(gpsPositionFeature)
+            
+            if(this.newsurvey){
+              //this.olMapComponentSurvey.centerOn(this.lastcoords.longitude,this.lastcoords.latitude);
+            }
           }
         }
       }
