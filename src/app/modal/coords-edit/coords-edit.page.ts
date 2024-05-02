@@ -14,34 +14,36 @@ export class CoordsEditPage implements OnInit {
 
   isDisabled;
 
-  @Input() latitude;
-
-  @Input() longitude;
-
-  @Input() altitude;
-
-  @Input() accuracy;
-
-  @Input() status;  
+  latitude;
+  longitude;
+  altitude;
+  accuracy;
+  status;  
 
   constructor(
     private modalController: ModalController,
   ) {
-
+    debugger;
   }
 
   ngOnInit() {
-    this.isDisabled = this.status==="public"||this.status==="archive"
+    debugger;
+    this.isDisabled = this.status==="public"||this.status==="archive";
   }
 
-  async closeModal() {
-    await this.modalController.dismiss(
+  cancel() {
+    return this.modalController.dismiss(null, 'cancel');
+  }
+
+  confirm() {
+    this.modalController.dismiss(
       {
         latitude:this.latitude,
         longitude:this.longitude,
         altitude:this.altitude,
         accuracy:this.accuracy
-      }
+      },
+      'confirm'
     );
   }
 

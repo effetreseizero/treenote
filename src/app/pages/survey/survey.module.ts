@@ -10,6 +10,8 @@ import { SurveyPage } from './survey.page';
 
 import { MapModule } from '../../map.module';
 
+import { CoordsEditPageModule} from '../../modal/coords-edit/coords-edit.module';
+
 @NgModule({
   imports: [
     CommonModule,
@@ -17,7 +19,8 @@ import { MapModule } from '../../map.module';
     ReactiveFormsModule,
     IonicModule,
     SurveyPageRoutingModule,
-    MapModule
+    MapModule,
+    CoordsEditPageModule
   ],
   declarations: [
     SurveyPage,

@@ -187,6 +187,11 @@ export class SurveyPage implements OnInit {
 
     //https://ionicacademy.com/pass-data-angular-router-ionic-4/
     this.activatedRoute.queryParams.subscribe(params => {
+
+      //
+      // EDIT existing survey
+      //
+
       if (this.router.getCurrentNavigation().extras.state) {
 
         this.surveyId = this.router.getCurrentNavigation().extras.state.id;
@@ -230,6 +235,11 @@ export class SurveyPage implements OnInit {
           this.olMapComponentSurvey.centerOn(this.survey.longitudine,this.survey.latitudine);
           this.gpsPositionSetted=true;
         });
+
+      //
+      // NEW survey
+      //
+
       }else{
         this.surveyId = "0";
 
@@ -629,6 +639,16 @@ export class SurveyPage implements OnInit {
     });
   }
 
+
+  centerOnGPS(){
+    Geolocation.getCurrentPosition().then((resp) => {
+      this.olMapComponentSurvey.centerOn(resp.coords.longitude,resp.coords.latitude);
+      
+    }).catch((error) => {
+      console.log('Error getting location', error);
+    });
+  }
+
   async getMapPosition(){
     const toast = await this.toastController.create({
       cssClass:"basic-toast",
@@ -669,6 +689,7 @@ export class SurveyPage implements OnInit {
   }
 
   async editMapPosition(){
+
     const modal = await this.modalController.create({
       component: CoordsEditPage,
       cssClass: 'coords-edit-css',
@@ -678,22 +699,16 @@ export class SurveyPage implements OnInit {
         'longitude': this.surveyForm.value["longitudine"],
         'altitude': this.surveyForm.value["quota"],
         'accuracy': this.surveyForm.value["accuratezza"],
-
+        'status': this.newsurvey?"new":this.survey["status"]
       }
     });
     let model_inserted = false;
-    modal.onDidDismiss().then(async(modalDataResponse) => {
-      if (
-        modalDataResponse.data && 
-        modalDataResponse.data.latitude &&
-        modalDataResponse.data.longitude &&
-        modalDataResponse.data.altitude &&
-        modalDataResponse.data.accuracy 
-      ) {
-        this.surveyForm.value["latitudine"] = modalDataResponse.data.latitude;
-        this.surveyForm.value["longitudine"] = modalDataResponse.data.longitude;
-        this.surveyForm.value["quota"] = modalDataResponse.data.altitude;
-        this.surveyForm.value["accuratezza"] = modalDataResponse.data.accuracy;
+    modal.onDidDismiss().then(async({data,role}) => {
+      if (role==="confirm"){
+        this.surveyForm.value["latitudine"] = data.latitude;
+        this.surveyForm.value["longitudine"] = data.longitude;
+        this.surveyForm.value["quota"] = data.altitude;
+        this.surveyForm.value["accuratezza"] = data.accuracy;
 
         this.gpsPositionSetted = true;
 
@@ -759,7 +774,7 @@ export class SurveyPage implements OnInit {
     
             this.gpsPositionVectorSource.clear();
             let gpsPositionFeature = new Feature();
-            gpsPositionFeature.setGeometry(new Point(fromLonLat([this.lastcoords.longitude, this.lastcoords.latitude])));
+            gpsPositionFeature.setGeometry(this.lastcoords.longitudine&&this.lastcoords.latitudine ? new Point(fromLonLat([this.lastcoords.longitudine, this.lastcoords.latitudine])) : null);
             this.gpsPositionVectorSource.addFeature(gpsPositionFeature)
             
             if(this.newsurvey){
@@ -770,10 +785,6 @@ export class SurveyPage implements OnInit {
       }
     );
 
-  }
-
-  public centerOnGPS(){
-    this.olMapComponentSurvey.centerOn(this.lastcoords.longitude,this.lastcoords.latitude);
   }
 
   /**
