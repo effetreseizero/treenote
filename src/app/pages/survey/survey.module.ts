@@ -4,10 +4,9 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 
 import { IonicModule } from '@ionic/angular';
 
-import { SurveyNewPageRoutingModule } from './survey-new-routing.module';
+import { SurveyPageRoutingModule } from './survey-routing.module';
 
-import { SurveyNewPage } from './survey-new.page';
-
+import { SurveyPage } from './survey.page';
 
 import { MapModule } from '../../map.module';
 
@@ -17,12 +16,12 @@ import { MapModule } from '../../map.module';
     FormsModule,
     ReactiveFormsModule,
     IonicModule,
-    SurveyNewPageRoutingModule,
+    SurveyPageRoutingModule,
     MapModule
   ],
   declarations: [
-    SurveyNewPage,
-    //OlMapComponentSurvey
+    SurveyPage,
+    
   ]
 })
-export class SurveyNewPageModule {}
+export class SurveyPageModule {}

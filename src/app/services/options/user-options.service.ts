@@ -4,8 +4,7 @@ import { CoreState } from './core.state';
 import { Store } from './abstract.store';
 
 //https://capacitorjs.com/docs/guides/storage
-import { Plugins } from '@capacitor/core';
-const { Storage } = Plugins;
+import { Storage } from '@capacitor/storage';
 
 
 @Injectable({

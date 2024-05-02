@@ -49,12 +49,14 @@
                 <ion-input formControlName="localita"></ion-input>
               </ion-item>
 
-              <ion-item
-                [class.invalid]="!surveyForm.controls.data_ora_osservazione.valid && (surveyForm.controls.data_ora_osservazione.dirty || submitAttempt)">
-                <ion-label type="text" position="floating">Data osservazione</ion-label>
-                <ion-datetime formControlName="data_ora_osservazione" displayFormat="DD/MMM/YYYY HH:mm"
-                  cancelText="Annulla" doneText="Ok"
-                  monthShortNames="Gen, Feb, Mar, Apr, Mag, Giu, Lug, Ago, Set, Ott, Nov, Dic"></ion-datetime>
+              <ion-item>
+                <ion-label type="text" position="stacked">Data osservazione</ion-label>
+                <ion-datetime-button datetime="datetime"></ion-datetime-button>
+                <ion-modal [keepContentsMounted]="true">
+                  <ng-template>
+                    <ion-datetime formControlName="data_ora_osservazione" id="datetime" presentation="date-time" value="2023-11-02T01:22:00"></ion-datetime>
+                  </ng-template>
+                </ion-modal>
               </ion-item>
 
               <ion-item
@@ -279,6 +281,7 @@
     </ion-slide>
 
     <!--map slide-->
+    <!--map slide-->
 
     <ion-slide>
       <ion-fab horizontal="end" vertical="top" slot="fixed">
@@ -312,6 +315,8 @@
       </ion-fab>
 
     </ion-slide>
+
+    
 
   </ion-slides>
 </ion-content>

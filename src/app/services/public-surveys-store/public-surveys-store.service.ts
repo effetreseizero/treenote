@@ -6,7 +6,7 @@ import { Observable } from 'rxjs';
 
 
 //https://www.freakyjolly.com/ionic-firebase-crud-operations/#.X-mQOulKiEI
-import { AngularFireStorage } from '@angular/fire/storage';
+import { AngularFireStorage } from '@angular/fire/compat/storage';
 
 //https://www.techiediaries.com/angular-local-json-files/
 import { HttpClient } from "@angular/common/http";
@@ -19,7 +19,7 @@ import { SurveysService} from '../../services/firestore/surveys.service';
 import * as firebase from 'firebase/app';
 import 'firebase/firestore';
 import { TimeoutError } from 'rxjs';
-import { FirebaseApp } from '@angular/fire';
+import { FirebaseApp } from '@angular/fire/compat';
 
 
 @Injectable({
@@ -87,7 +87,7 @@ export class PublicSurveysStore extends Store<CoreState> {
           minute:"numeric"
       };
       
-      let short_date =  date.toLocaleDateString("it", options) //en is language option, you may specify..
+      let short_date =  date.toLocaleDateString("it") //en is language option, you may specify..
 
 
       let publicSurveyRecord= {

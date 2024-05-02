@@ -17,6 +17,7 @@ import { AlertController } from '@ionic/angular';
 export class SurveysPage implements OnInit {
 
   userSurveyList = [];
+  nophotoSurveyList = [];
   sentSurveyList = [];
   reviewSurveyList = [];
   publicSurveyList = [];
@@ -40,6 +41,9 @@ export class SurveysPage implements OnInit {
         let survey = {};
         //add id of syrvey
         survey["id"]=e.payload.doc.id;
+        //firestore offline cache info
+        survey["fromCache"] = e.payload.doc.metadata.fromCache
+        survey["hasPendingWrites"] = e.payload.doc.metadata.hasPendingWrites
         //add all other properties
         for (let key of Object.keys(e.payload.doc.data())){
           survey[key] = e.payload.doc.data()[key];
@@ -55,7 +59,7 @@ export class SurveysPage implements OnInit {
             minute:"numeric"
         };
         
-        survey["short_date"] =  date.toLocaleDateString("it", options) //en is language option, you may specify..
+        survey["short_date"] =  date.toLocaleDateString("it") //en is language option, you may specify..
         return survey;
       })
       .sort(
@@ -65,6 +69,8 @@ export class SurveysPage implements OnInit {
       );
 
       let notDeletedSurveys = this.userSurveyList.filter(x => (!x.deleted));
+
+      this.nophotoSurveyList = notDeletedSurveys.filter(x => (x.status=="sent_nophoto"));
 
       this.sentSurveyList = notDeletedSurveys.filter(x => (x.status=="sent"));
 
@@ -78,7 +84,7 @@ export class SurveysPage implements OnInit {
 
 
   async createSurvey() {
-    this.router.navigate(['/menu/survey-new']);
+    this.router.navigate(['/survey']);
   }
 
   async deleteSurvey(recordId) {
@@ -108,7 +114,7 @@ export class SurveysPage implements OnInit {
         id: recordId 
       }
     };
-      this.router.navigate(['/menu/survey-edit'],navigationExtras);
+      this.router.navigate(['/survey'],navigationExtras);
   }
 
 }

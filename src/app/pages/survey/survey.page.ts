@@ -65,14 +65,17 @@ import { LoadingController } from '@ionic/angular';
 import { OlMapComponentSurvey } from 'src/app/components/ol-map-survey/ol-map-survey.component';
 
 import { UserOptionsService } from '../../services/options/user-options.service';
+import { isNull } from 'mathjs';
+
 
 
 @Component({
-  selector: 'app-survey-new',
-  templateUrl: './survey-new.page.html',
-  styleUrls: ['./survey-new.page.scss'],
+  selector: 'app-survey',
+  templateUrl: './survey.page.html',
+  styleUrls: ['./survey.page.scss'],
 })
-export class SurveyNewPage implements OnInit,CanComponentDeactivate {
+export class SurveyPage implements OnInit {
+
   @ViewChild(IonContent) content: IonContent;
 
   private surveyId = "0";
@@ -138,8 +141,6 @@ export class SurveyNewPage implements OnInit,CanComponentDeactivate {
   lastcoords:any = {latitude:0,longitude:0,accuracy:0};
   gpsPositionSetted = false;
 
- 
-
   constructor(
     private activatedRoute:ActivatedRoute,
     private navController: NavController,
@@ -148,7 +149,6 @@ export class SurveyNewPage implements OnInit,CanComponentDeactivate {
     private surveysService:SurveysService,
     private alertController:AlertController,
     private toastController:ToastController,
-    private geolocation: Geolocation,
     public photoService: PhotoService,
     public modalController: ModalController,
     public loadingController: LoadingController,
@@ -180,16 +180,9 @@ export class SurveyNewPage implements OnInit,CanComponentDeactivate {
       quota: ['', []],
       accuratezza: ['', []],
     });
-
-    
-
-
-  }
-
-  
+   }
 
   ngOnInit() {
-
     this.geolocationInit();
 
     //https://ionicacademy.com/pass-data-angular-router-ionic-4/
@@ -243,32 +236,12 @@ export class SurveyNewPage implements OnInit,CanComponentDeactivate {
         this.newsurvey = true;
         this.editable = true;
 
-        this.surveyForm.get('data_ora_osservazione').patchValue(this.formatDate(new Date()));
+        this.surveyForm.get('data_ora_osservazione').patchValue(new Date().toJSON());
         
         this.avanzateActivated = false;
 
         this.surveyForm.get("avanzate").setValue(false);
         
-        /*
-        this.surveyForm.patchValue({
-          data_ora_osservazione: (new Date).toJSON(),
-          //DUMMY DATA
-          localita: "Trento",
-          tipologia: "010_gruppo",
-          identificazione: "010_conifera",      
-          nome_comune: "",
-          loc_problema: "010_chioma",
-          commenti: "",
-          specie: "010_pino",
-          nome_scientifico: "",
-          sintomo_0: "010_avvizzimento_fogliare",
-          sintomo_1: "010_avvizzimento_fogliare",
-          sintomo_2: "010_avvizzimento_fogliare",
-          diffusione_perc: "010_minore_20",
-          alberi_morti: "010_si",
-        });
-        */
-
         this.surveyForm.get("avanzate").valueChanges.subscribe(async (checked)=>{
           if(!checked){
             const alert = await this.alertController.create({
@@ -316,7 +289,6 @@ export class SurveyNewPage implements OnInit,CanComponentDeactivate {
         
   }
 
-
   ionViewDidEnter(){
     this.userOptionsService.readSurveyHelper().then((toshow)=>{
       if(!toshow.value){
@@ -345,6 +317,7 @@ export class SurveyNewPage implements OnInit,CanComponentDeactivate {
   
 
   formatDate(date) {
+    debugger;
     const d = new Date(date);
     let month = '' + (d.getMonth() + 1);
     let day = '' + d.getDate();
@@ -355,6 +328,8 @@ export class SurveyNewPage implements OnInit,CanComponentDeactivate {
     let minutes = ''+d.getMinutes();
     return [year, month, day].join('-')+' '+hours+":"+minutes;
   }
+
+  
 
   /**
    * Cancel survey button
@@ -393,18 +368,37 @@ export class SurveyNewPage implements OnInit,CanComponentDeactivate {
    * Save survey button
    */
   async saveSurvey() {
+
+    let online = navigator.onLine;
+
     this.submitAttempt = true;
 
+
     if(!this.surveyForm.valid){
-        this.surveySlider.slideTo(0);
-    } else if(this.photos.length==0){
-      this.surveySlider.slideTo(2);
+      this.surveySlider.slideTo(0);
     } else if(!this.gpsPositionSetted){
       this.surveySlider.slideTo(3);
-    }
-    else{
+    } else if(this.photos.length==0 && online){
+        this.surveySlider.slideTo(2);
+    } else{
+      if(!online){
+        const alert = await this.alertController.create({
+          header: 'Assenza connessione Internet!',
+          subHeader: 'La segnalazione verrà salvata sul dispositivo, ad eccezione delle foto',
+          message: 'Si consiglia di scattare le foto con la App del dispositivo e salvarle in memoria. La segnalazione sarà salavata in bozza e le foto potranno essere inserite successivamente quando si avrà una connessione ad Internet',
+          buttons: [
+                       {
+              text: 'Ok',
+              handler: () => {
+              }
+            }
+          ]
+        });
+        await alert.present();
+        await alert.onDidDismiss();
+      }
       const alert = await this.alertController.create({
-        header: 'Confermi modifiche?',
+        header: 'Confermi salvataggio segnalazione?',
         buttons: [
           {
             text: 'Cancel',
@@ -415,11 +409,17 @@ export class SurveyNewPage implements OnInit,CanComponentDeactivate {
           {
             text: 'Ok',
             handler: async () => {
+              
+              // TO DO FOR ALL Controller pop up !
+              // https://github.com/ionic-team/ionic-framework/issues/17450
+              //
+
               const loading = await this.loadingController.create({
                 cssClass: 'my-custom-class',
                 message: 'Invio dati ...',
               });
               await loading.present();
+              //new survey
               if(this.surveyId=="0"){
                 this.surveysService.create_surveys_document(this.surveyForm.value,this.photos).then(async()=>{
                   loading.dismiss();
@@ -431,14 +431,23 @@ export class SurveyNewPage implements OnInit,CanComponentDeactivate {
                   });
                   await toast.present().then(()=>{
                     this.preventBack = false;
-                    this.navController.back();
+                    this.router.navigate(['/surveys']);
                   }); 
                 });
+              //edit survey
               }else{
-                this.surveysService.update_surveys_document(this.surveyId, this.surveyForm.value,[]).then(()=>{
+                this.surveysService.update_surveys_document(this.surveyId, this.surveyForm.value,this.photos).then(async()=>{
                   loading.dismiss();
-                  this.preventBack = false;
-                  this.navController.back();
+                  const toast = await this.toastController.create({
+                    color: 'secondary',
+                    position: 'middle',
+                    duration: 4000,
+                    message: 'Modifiche registrate.',
+                  });
+                  await toast.present().then(()=>{
+                    this.preventBack = false;
+                    this.navController.back();
+                  });
                 });
               }
             }
@@ -465,7 +474,6 @@ export class SurveyNewPage implements OnInit,CanComponentDeactivate {
     toast.present();
   }
 
-
   async sintomiInfo(){
     const modal = await this.modalController.create({
       component: InfoListPage,
@@ -473,8 +481,6 @@ export class SurveyNewPage implements OnInit,CanComponentDeactivate {
     return await modal.present();
     
   }
-
-  
 
   /**
    * Slider managment
@@ -495,9 +501,24 @@ export class SurveyNewPage implements OnInit,CanComponentDeactivate {
     this.slideSelected = await this.surveySlider.getActiveIndex();
   }
 
-
   async addPhotoToGallery(position) {
     if(this.photos.length<3){
+      if(!navigator.onLine){
+        const alert = await this.alertController.create({
+          header: 'Assenza connessione Internet!',
+          subHeader: 'Le foto,anche se inserite, non verrano inviate in caso di assenza di connessione',
+          message: 'Si consiglia di scattare le foto con la App del dispositivo e salvarle in memoria. La segnalazione sarà salavata in bozza e le foto potranno essere inserite successivamente quando si avrà una connessione ad Internet',
+          buttons: [
+                       {
+              text: 'Ok',
+              handler: () => {
+              }
+            }
+          ]
+        });
+        await alert.present();
+        await alert.onDidDismiss();
+      }
       let role = "";
       if(this.platform.is("desktop")){
         role = "PHOTOS"
@@ -522,7 +543,7 @@ export class SurveyNewPage implements OnInit,CanComponentDeactivate {
         });
         await actionSheet.present();
     
-         role = await (await actionSheet.onDidDismiss()).role;
+        role = await (await actionSheet.onDidDismiss()).role;
       }
       const capturedPhoto = await this.photoService.addNewToGallery(role);
       if(position!=null){
@@ -530,6 +551,7 @@ export class SurveyNewPage implements OnInit,CanComponentDeactivate {
       }else{
         this.photos.push(capturedPhoto);
       }
+      
     }else{
       const toast = await this.toastController.create({
         color: 'dark',
@@ -688,7 +710,6 @@ export class SurveyNewPage implements OnInit,CanComponentDeactivate {
     return await modal.present();
   }
 
-
   /**
    * GPS detail data toat
    */
@@ -724,24 +745,26 @@ export class SurveyNewPage implements OnInit,CanComponentDeactivate {
     Geolocation.watchPosition(
       {maximumAge: 1000, timeout: 5000, enableHighAccuracy: true},
       (resp) => {
-        this.geoLocationWatchStarted = true;
-        if("coords" in resp){
-          this.coords.push({
-            latitude:resp.coords.latitude,
-            longitude:resp.coords.longitude,
-            altitude: resp.coords.altitude,
-            accuracy:resp.coords.accuracy,
-            timestamp:resp.timestamp
-          });
-          this.lastcoords = this.coords[this.coords.length-1];
-  
-          this.gpsPositionVectorSource.clear();
-          let gpsPositionFeature = new Feature();
-          gpsPositionFeature.setGeometry(new Point(fromLonLat([this.lastcoords.longitude, this.lastcoords.latitude])));
-          this.gpsPositionVectorSource.addFeature(gpsPositionFeature)
-          
-          if(this.newsurvey){
-            //this.olMapComponentSurvey.centerOn(this.lastcoords.longitude,this.lastcoords.latitude);
+        if(!isNull(resp)){
+          this.geoLocationWatchStarted = true;
+          if("coords" in resp){
+            this.coords.push({
+              latitude:resp.coords.latitude,
+              longitude:resp.coords.longitude,
+              altitude: resp.coords.altitude,
+              accuracy:resp.coords.accuracy,
+              timestamp:resp.timestamp
+            });
+            this.lastcoords = this.coords[this.coords.length-1];
+    
+            this.gpsPositionVectorSource.clear();
+            let gpsPositionFeature = new Feature();
+            gpsPositionFeature.setGeometry(new Point(fromLonLat([this.lastcoords.longitude, this.lastcoords.latitude])));
+            this.gpsPositionVectorSource.addFeature(gpsPositionFeature)
+            
+            if(this.newsurvey){
+              //this.olMapComponentSurvey.centerOn(this.lastcoords.longitude,this.lastcoords.latitude);
+            }
           }
         }
       }
@@ -856,4 +879,6 @@ export class SurveyNewPage implements OnInit,CanComponentDeactivate {
     toast.present();
   }
 
+  
 }
+

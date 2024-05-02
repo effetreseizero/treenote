@@ -12,7 +12,7 @@ import { HelperPopoverComponent } from '../../components/helper-popover/helper-p
 import { AuthenticationService } from "../../services/auth/authentication.service";
 import {CoreFacade} from "../../services/storage/core.facade"
 
-import { AngularFireStorage } from '@angular/fire/storage';
+import { AngularFireStorage } from '@angular/fire/compat/storage';
 
 import { SurveysService} from '../../services/firestore/surveys.service';
 
@@ -106,15 +106,15 @@ export class HomePage {
   
 
   public logIn(): void{
-    this.router.navigate(['/menu/login']);
+    this.router.navigate(['/login']);
   }
 
   public userAccout(): void{
-    this.router.navigate(['/menu/user-account']);
+    this.router.navigate(['/user-account']);
   }
 
   async createSurvey() {
-    this.router.navigate(['/menu/survey-new']);
+    this.router.navigate(['/survey']);
   }
 
   async surveyPreviewPopover(ev: any,survey) {
