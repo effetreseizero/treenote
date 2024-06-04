@@ -28,6 +28,10 @@ export class AppComponent {
       icon: 'albums'
     },
     {
+      name: 'Manuale',
+      path: '/guide',
+      icon: 'book'
+    },{
       name: 'Informazioni',
       path: '/contact',
       icon: 'mail'

@@ -50,6 +50,10 @@ const routes: Routes = [
     path: 'survey',
     loadChildren: () => import('./pages/survey/survey.module').then( m => m.SurveyPageModule),
     canActivate: [AuthGuard],
+  },
+  {
+    path: 'guide',
+    loadChildren: () => import('./pages/guide/guide.module').then( m => m.GuidePageModule)
   }
 
 
