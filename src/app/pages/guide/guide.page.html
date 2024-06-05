@@ -11,18 +11,50 @@
 </ion-header>
 
 <ion-content>
-  <ion-grid>
-    <ion-row class="ion-justify-content-center">
-     
-    </ion-row>
+  <ion-accordion-group>
+    <ion-accordion value="app-install">
+      <ion-item slot="header" color="light">
+        <ion-label>Installazione App</ion-label>
+      </ion-item>
+      <div class="ion-padding" slot="content">
+        <ion-card>
+          <ion-card-header>
+            <ion-card-title>Installa Silvacuore sullo smartphone</ion-card-title>
+          </ion-card-header>
+        
+          <ion-card-content>
+            <h3>Silvacuore può essere installato sul tuo smartphone</h3>
+            <p>Una volta installato potrai aprire Silvacuore dall'icona e potrai usarlo anche senza connessione Internet</p>
+          </ion-card-content>
+        </ion-card>
+        
+        <ion-card>
+          <ion-card-header>
+            <ion-card-title>Installa su Android</ion-card-title>
+          </ion-card-header>
+        
+          <ion-card-content>
+            <img src="./../../../assets/pwa/pwa_install_android_1.png"/>
+            <p>Apri il menu del browser Chrome</p>
+            <img src="./../../../assets/pwa/pwa_install_android_2.png"/>
+            <p>Seleziona Installa App</p>
+          </ion-card-content>
+        </ion-card>
 
-    <ion-row class="ion-justify-content-center">
-      
-    </ion-row>
-
-    <ion-row class="ion-justify-content-center">
-
-    </ion-row>
-    
-  </ion-grid>
+        <ion-card>
+          <ion-card-header>
+            <ion-card-title>Installa su iOS</ion-card-title>
+          </ion-card-header>
+        
+          <ion-card-content>
+            <img src="./../../../assets/pwa/pwa_install_ios_1.png"/>
+            <p>Premi il bottone per condividere</p>
+            <img src="./../../../assets/pwa/pwa_install_ios_2.png"/>
+            <p>Seleziona Aggiungi alla schermata Home</p>
+          </ion-card-content>
+        </ion-card>
+        
+      </div>
+    </ion-accordion>
+  </ion-accordion-group>
 </ion-content>
