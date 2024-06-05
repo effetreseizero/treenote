@@ -99,7 +99,20 @@
                 <ion-label type="text" position="floating">Commenti</ion-label>
                 <ion-input formControlName="commenti"></ion-input>
               </ion-item>
+
+              
+
             </ion-item-group>
+            <ion-accordion-group>
+              <ion-accordion value="exta-info">
+                <ion-item slot="header" color="light">
+                  <ion-label>Informazioni aggiuntive</ion-label>
+                </ion-item>
+                <div class="ion-padding" slot="content"> Id segnalazione: {{surveyId}}</div>
+                <div class="ion-padding" slot="content"> E-mail:  {{user_email}}</div>
+                <div class="ion-padding" slot="content"> Data creazione:  {{created_data}}</div>
+              </ion-accordion>
+            </ion-accordion-group>
           </ion-list>
         </form>
       </ion-grid>

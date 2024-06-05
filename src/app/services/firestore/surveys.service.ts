@@ -1,8 +1,9 @@
 // firebase.service.ts
 import { Injectable } from '@angular/core';
 
+
 //https://www.freakyjolly.com/ionic-firebase-crud-operations/#.X-mQOulKiEI
-import { FirebaseApp } from '@angular/fire/compat';
+import { FirebaseApp} from '@angular/fire/compat';
 import { AngularFirestore } from '@angular/fire/compat/firestore';
 import { AngularFireAuth } from '@angular/fire/compat/auth';
 import { AngularFireStorage } from '@angular/fire/compat/storage';
@@ -15,6 +16,7 @@ import 'firebase/firestore';
 import { from, TimeoutError } from 'rxjs';
 
 import {compress, compressAccurately} from 'image-conversion';
+import { Firestore } from 'firebase/firestore';
 
 
 @Injectable({
@@ -117,6 +119,8 @@ export class SurveysService {
     }
     //https://www.nuomiphp.com/eplan/en/2152.html
     let dt = new Date();
+    
+    //TO DO https://code.build/p/firestore-dates-and-timestamps-WjGiiQ
     data['created_time']=dt.getTime();
 
     try {
