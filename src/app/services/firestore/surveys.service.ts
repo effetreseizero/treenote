@@ -122,7 +122,7 @@ export class SurveysService {
     
     //TO DO https://code.build/p/firestore-dates-and-timestamps-WjGiiQ
     data['created_time']=dt.getTime();
-
+    data['modified_time']=dt.getTime();
     try {
       this.firestore.collection(this.collectionName).add(data).then(async(messageRef)=>{
         
@@ -177,6 +177,13 @@ export class SurveysService {
     
     try {
       console.log("update_surveys_document");
+
+      //https://www.nuomiphp.com/eplan/en/2152.html
+      let dt = new Date();
+      
+      //TO DO https://code.build/p/firestore-dates-and-timestamps-WjGiiQ
+      data['modified_time']=dt.getTime();
+    
       
 
       // If Online update the image to Cloud Storage.

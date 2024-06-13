@@ -141,8 +141,8 @@ export class SurveyPage implements OnInit {
   lastcoords:any = {latitude:0,longitude:0,accuracy:0};
   gpsPositionSetted = false;
   user_email: any;
-  created_data: any;
-
+  created_time: any;
+  modified_time: any;
   constructor(
     private activatedRoute:ActivatedRoute,
     private navController: NavController,
@@ -207,7 +207,8 @@ export class SurveyPage implements OnInit {
           this.survey=data.data();
 
           this.user_email = this.survey.user_email;
-          this.created_data = (new Date(this.survey.created_time)).toString();
+          this.created_time = (new Date(this.survey.created_time)).toString();
+          this.modified_time = (new Date(this.survey.modified_time)).toString();
 
           //https://angular.io/guide/deprecations#ngmodel-with-reactive-forms
           //https://ultimatecourses.com/blog/angular-2-form-controls-patch-value-set-value
