@@ -78,7 +78,7 @@ export class SurveyPage implements OnInit {
 
   @ViewChild(IonContent) content: IonContent;
 
-  private surveyId = "0";
+  surveyId = "0";
   private survey=null;
 
   private editable = true;
