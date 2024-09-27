@@ -55,7 +55,7 @@ export class SurveysManagerPage implements OnInit {
 
         //https://stackoverflow.com/questions/2388115/get-locale-short-date-format-using-javascript/31663241
         var date = new Date(survey["data_ora_osservazione"]);
-        var options = {
+        var options= {
             year: "numeric",
             month: "2-digit",
             day: "numeric",
@@ -63,7 +63,7 @@ export class SurveysManagerPage implements OnInit {
             minute:"numeric"
         };
         
-        survey["short_date"] =  date.toLocaleDateString("it", options) //en is language option, you may specify..
+        survey["short_date"] =  date.toLocaleDateString("it") //en is language option, you may specify..
         return survey;
       })
       .filter(x=>(!x["deleted"]))
@@ -94,7 +94,7 @@ export class SurveysManagerPage implements OnInit {
             minute:"numeric"
         };
         
-        survey["short_date"] =  date.toLocaleDateString("it", options) //en is language option, you may specify..
+        survey["short_date"] =  date.toLocaleDateString("it") //en is language option, you may specify..
         return survey;
       })
       .filter(x=>(!x["deleted"]))
@@ -125,7 +125,7 @@ export class SurveysManagerPage implements OnInit {
             minute:"numeric"
         };
         
-        survey["short_date"] =  date.toLocaleDateString("it", options) //en is language option, you may specify..
+        survey["short_date"] =  date.toLocaleDateString("it") //en is language option, you may specify..
         return survey;
       })
       .filter(x=>(!x["deleted"]))
@@ -157,7 +157,7 @@ export class SurveysManagerPage implements OnInit {
         id: recordId 
       }
     };
-      this.router.navigate(['/menu/survey-edit'],navigationExtras);
+      this.router.navigate(['/survey'],navigationExtras);
   }
 
   async deleteSurvey(recordId) {
@@ -198,7 +198,7 @@ export class SurveysManagerPage implements OnInit {
               status: "review"
             }
         
-            this.surveysService.update_surveys_document(recordId, data,[]).then(()=>{
+            this.surveysService.update_surveys_status(recordId, data).then(()=>{
               //this.segmentSelected = 1;
             });
           }
@@ -229,7 +229,7 @@ export class SurveysManagerPage implements OnInit {
               status: "sent"
             }
         
-            this.surveysService.update_surveys_document(recordId, data,[]).then(()=>{
+            this.surveysService.update_surveys_status(recordId, data).then(()=>{
               //this.segmentSelected = 1;
             });
           }
@@ -313,7 +313,7 @@ export class SurveysManagerPage implements OnInit {
               status: "archive"
             }
             
-            this.surveysService.update_surveys_document(recordId, data,[]).then(()=>{
+            this.surveysService.update_surveys_status(recordId, data).then(()=>{
               //this.segmentSelected = 3;
             });;
           }

@@ -22,7 +22,7 @@ export class LoginPage implements OnInit {
     this.authService.SignIn(email.value, password.value)
       .then((res) => {
         if(res.user.emailVerified) {
-          this.router.navigate(['/menu/home']);          
+          this.router.navigate(['/home']);          
         } else {
           window.alert('Email is not verified')
           return false;
@@ -33,14 +33,14 @@ export class LoginPage implements OnInit {
   }
 
   public registration(): void{
-    this.router.navigate(['/menu/registration']);
+    this.router.navigate(['/registration']);
   }
 
   public googleLogin(): void{
     this.authService.GoogleAuth()
     .then((res) => {
       if(res.user) {
-        this.router.navigate(['/menu/home']);          
+        this.router.navigate(['/home']);          
       } else {
         window.alert('Login failed')
         return false;

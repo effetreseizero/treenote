@@ -8,22 +8,23 @@ import { SurveyEditPageRoutingModule } from './survey-edit-routing.module';
 
 import { SurveyEditPage } from './survey-edit.page';
 
-//https://medium.com/runic-software/a-simple-guide-to-openlayers-in-angular-b10f6feb3df1
-import {OlMapComponentSurvey} from '../../components/ol-map-survey/ol-map-survey.component';
+import { MapModule } from '../../map.module';
 
 
 
 @NgModule({
   imports: [
+    //AppModule,
     CommonModule,
     FormsModule,
     ReactiveFormsModule,
     IonicModule,
     SurveyEditPageRoutingModule,
+    MapModule
   ],
   declarations: [
     SurveyEditPage,
-    OlMapComponentSurvey
+    
   ]
 })
 export class SurveyEditPageModule {}

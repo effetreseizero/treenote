@@ -1,8 +1,11 @@
 <ion-header color="tertiary">
   <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-button (click)="cancel()" color="secondary"><ion-icon size="large" name="close-circle-outline"></ion-icon></ion-button>
+    </ion-buttons>
     <ion-title>Modifica dati posizione</ion-title>
     <ion-buttons slot="end">
-      <ion-button (click)="closeModal()" color="primary"><ion-icon size="large" name="checkmark-circle-outline"></ion-icon></ion-button>
+      <ion-button (click)="confirm()" color="primary"><ion-icon size="large" name="checkmark-circle-outline"></ion-icon></ion-button>
     </ion-buttons>
   </ion-toolbar>
 </ion-header>

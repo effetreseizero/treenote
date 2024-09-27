@@ -1,4 +1,4 @@
-import { async, ComponentFixture, TestBed } from '@angular/core/testing';
+import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
 import { IonicModule } from '@ionic/angular';
 
 import { OlMapComponentSurvey } from './ol-map-survey.component';
@@ -7,7 +7,7 @@ describe('OlMapComponent', () => {
   let component: OlMapComponentSurvey;
   let fixture: ComponentFixture<OlMapComponentSurvey>;
 
-  beforeEach(async(() => {
+  beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
       declarations: [ OlMapComponentSurvey ],
       imports: [IonicModule.forRoot()]

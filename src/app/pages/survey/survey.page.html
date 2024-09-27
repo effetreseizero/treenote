@@ -1,0 +1,356 @@
+<!-- https://www.joshmorony.com/advanced-forms-validation-in-ionic-2/-->
+<ion-header [translucent]="true">
+  <ion-toolbar color="primary">
+
+    <ion-buttons slot="start">
+      <ion-button (click)="cancelEdit()">
+        <ion-icon size="large" name="close-circle-outline" color="light"></ion-icon>
+      </ion-button>
+      <ion-icon src="./../../../assets/silvacuore_small_white.svg" size="large" ></ion-icon>
+    </ion-buttons>
+
+    <ion-title color="light">  
+      Segnalazione
+    </ion-title>
+
+   
+
+    <ion-buttons slot="end">
+      <ion-button (click)="showNewSurveyHelper()">
+        <ion-icon size="large" name="help-circle-outline" color="light"></ion-icon>
+      </ion-button>
+    </ion-buttons>
+
+  </ion-toolbar>
+
+</ion-header>
+
+<ion-content fullscreen [fullscreen]="true" class="background" [scrollEvents]="true">
+  
+  <ion-slides [options]="slideOptsSurveySlider" id="surveySlider" #surveySlider
+    (ionSlideWillChange)="slideChange($event)">
+    <!--survey slide-->
+    <ion-slide>
+      
+      <ion-grid fixed>
+        <!--p>ID: {{surveyId}}</p-->
+        <form [formGroup]="surveyForm" (ngSubmit)="saveSurvey()">  
+
+          <ion-list>
+            <ion-item-group>
+              <ion-item-divider>
+                <ion-label color="primary">
+                  <h2>Informazioni base</h2>
+                </ion-label>
+              </ion-item-divider>
+              <ion-item
+                [class.invalid]="!surveyForm.controls.localita.valid && (surveyForm.controls.localita.dirty || submitAttempt)">
+                <ion-label type="text" position="floating">Località</ion-label>
+                <ion-input formControlName="localita"></ion-input>
+              </ion-item>
+
+              <ion-item>
+                <ion-label type="text" position="stacked">Data osservazione</ion-label>
+                <ion-datetime-button datetime="datetime"></ion-datetime-button>
+                <ion-modal [keepContentsMounted]="true">
+                  <ng-template>
+                    <ion-datetime formControlName="data_ora_osservazione" id="datetime" presentation="date-time" value="2023-11-02T01:22:00"></ion-datetime>
+                  </ng-template>
+                </ion-modal>
+              </ion-item>
+
+              <ion-item
+                [class.invalid]="!surveyForm.controls.tipologia.valid && (surveyForm.controls.tipologia.dirty || submitAttempt)">
+                <ion-label type="text" position="floating">Tipologia</ion-label>
+                <ion-select formControlName="tipologia" okText="Ok" cancelText="Annulla">
+                  <ion-select-option value="010_gruppo">Gruppo di alberi</ion-select-option>
+                  <ion-select-option value="020_intero">Bosco intero </ion-select-option>
+                </ion-select>
+              </ion-item>
+
+              <ion-item
+                [class.invalid]="!surveyForm.controls.identificazione.valid && (surveyForm.controls.identificazione.dirty || submitAttempt)">
+                <ion-label type="text" position="floating">Identificazione</ion-label>
+                <ion-select formControlName="identificazione" okText="Ok" cancelText="Annulla">
+                  <ion-select-option value="010_conifera">Conifera</ion-select-option>
+                  <ion-select-option value="020_latifoglia">Latifoglia</ion-select-option>
+                  <ion-select-option value="030_misto">Misto</ion-select-option>
+                </ion-select>
+              </ion-item>
+
+              <ion-item
+                [class.invalid]="!surveyForm.controls.nome_comune.valid && (surveyForm.controls.nome_comune.dirty || submitAttempt)">
+                <ion-label type="text" position="floating">Nome specie comune</ion-label>
+                <ion-input formControlName="nome_comune"></ion-input>
+              </ion-item>
+
+              <ion-item
+                [class.invalid]="!surveyForm.controls.loc_problema.valid && (surveyForm.controls.loc_problema.dirty || submitAttempt)">
+                <ion-label type="text" position="floating">Localizzazione del problema</ion-label>
+                <ion-select formControlName="loc_problema" okText="Ok" cancelText="Annulla">
+                  <ion-select-option value="010_chioma">Chioma</ion-select-option>
+                  <ion-select-option value="020_fusto">Fusto</ion-select-option>
+                  <ion-select-option value="030_entrambi">Entrambi</ion-select-option>
+                </ion-select>
+              </ion-item>
+
+              <ion-item
+                [class.invalid]="!surveyForm.controls.commenti.valid && (surveyForm.controls.commenti.dirty || submitAttempt)">
+                <ion-label type="text" position="floating">Commenti</ion-label>
+                <ion-input formControlName="commenti"></ion-input>
+              </ion-item>
+
+              
+
+            </ion-item-group>
+            <ion-accordion-group>
+              <ion-accordion value="exta-info">
+                <ion-item slot="header" color="light">
+                  <ion-label>Informazioni aggiuntive</ion-label>
+                </ion-item>
+                <div class="ion-padding" slot="content"> Id segnalazione: {{surveyId}}</div>
+                <div class="ion-padding" slot="content"> E-mail:  {{user_email}}</div>
+                <div class="ion-padding" slot="content"> Data creazione:  {{created_time}}</div>
+                <div class="ion-padding" slot="content"> Data ultima modifica:  {{modified_time}}</div>
+              </ion-accordion>
+            </ion-accordion-group>
+          </ion-list>
+        </form>
+      </ion-grid>
+    </ion-slide>
+
+    <!--avanzate slide-->
+    <ion-slide>
+      <ion-grid fixed>
+        <form [formGroup]="surveyForm" (ngSubmit)="saveSurvey()">
+        <ion-list>
+          <ion-item-group>
+            <ion-item-divider>
+              <ion-label color="primary">
+                <h2>Informazioni Avanzate</h2>
+              </ion-label>
+              <ion-toggle color="primary" formControlName="avanzate"></ion-toggle>
+            </ion-item-divider>
+            <ion-item *ngIf="this.avanzateActivated"
+              [class.invalid]="!surveyForm.controls.specie.valid && (surveyForm.controls.specie.dirty || submitAttempt)">
+              <ion-label type="text" position="floating">Specie forestale</ion-label>
+              <ion-select formControlName="specie" okText="Ok" cancelText="Annulla" interface="action-sheet">
+                <ion-select-option value='010_pino'>Pino</ion-select-option>
+                <ion-select-option value='020_larice'>Larice</ion-select-option>
+                <ion-select-option value='030_abete_rosso'>Abete rosso</ion-select-option>
+                <ion-select-option value='040_abete_bianco'>Abete bianco</ion-select-option>
+                <ion-select-option value='050_cipresso'>Cipresso</ion-select-option>
+                <ion-select-option value='060_faggio'>Faggio</ion-select-option>
+                <ion-select-option value='070_quercia'>Quercia</ion-select-option>
+                <ion-select-option value='080_castagno'>Castagno</ion-select-option>
+                <ion-select-option value='090_noce'>Noce</ion-select-option>
+                <ion-select-option value='100_salice'>Salice</ion-select-option>
+                <ion-select-option value='110_ontano'>Ontano</ion-select-option>
+                <ion-select-option value='120_frassino'>Frassino</ion-select-option>
+                <ion-select-option value='130_olmo'>Olmo</ion-select-option>
+                <ion-select-option value='140_pioppo'>Pioppo</ion-select-option>
+                <ion-select-option value='150_acero'>Acero</ion-select-option>
+                <ion-select-option value='900_conifere_miste'>Conifere miste</ion-select-option>
+                <ion-select-option value='910_latifoglie_miste'>Latifoglie miste</ion-select-option>
+                <ion-select-option value='930_macchia_mediterranea'>Macchia mediterranea</ion-select-option>
+                <ion-select-option value='999_altro'>Altro</ion-select-option>
+              </ion-select>
+            </ion-item>
+
+            <ion-item *ngIf="this.avanzateActivated"
+              [class.invalid]="!surveyForm.controls.nome_scientifico.valid && (surveyForm.controls.nome_scientifico.dirty || submitAttempt)">
+              <ion-label type="text" position="floating">Nome scientifico</ion-label>
+              <ion-input formControlName="nome_scientifico"></ion-input>
+            </ion-item>
+
+            <ion-item-divider *ngIf="this.avanzateActivated">
+              <ion-label>
+                <h2>Natura dei sintomi</h2>
+              </ion-label>
+              <ion-button slot="end" shape="round" fill="clear" (click)="sintomiInfo()">
+                <ion-icon slot="icon-only" name="information-circle" size="large"></ion-icon>
+              </ion-button>
+            </ion-item-divider>
+
+            <ion-item *ngIf="this.avanzateActivated"
+              [class.invalid]="!surveyForm.controls.sintomo_0.valid && (surveyForm.controls.sintomo_0.dirty || submitAttempt)">
+              <ion-label type="text" position="floating">Sintomo principale</ion-label>
+              <ion-select formControlName="sintomo_0" okText="Ok" cancelText="Annulla" interface="action-sheet">
+                <ion-select-option value='010_avvizzimento_fogliare'>Avvizzimento fogliare</ion-select-option>
+                <ion-select-option value='020_ingiallimento_fogliare'>Ingiallimento fogliare</ion-select-option>
+                <ion-select-option value='030_disseccamento_rami'>Disseccamento di rami</ion-select-option>
+                <ion-select-option value='040_microfillia'>Microfillia</ion-select-option>
+                <ion-select-option value='050_emissione_rami_epicormici'>Emissione rami epicormici</ion-select-option>
+                <ion-select-option value='060_fessurazione_longitudinale_corteccia'>Fessurazione longitudinale della
+                  corteccia</ion-select-option>
+                <ion-select-option value='070_colatura_mugillaginosa'>Colatura mugillaginosa</ion-select-option>
+                <ion-select-option value='900_altro'>Altro</ion-select-option>
+              </ion-select>
+            </ion-item>
+
+            <ion-item *ngIf="this.avanzateActivated"
+              [class.invalid]="!surveyForm.controls.sintomo_1.valid && (surveyForm.controls.sintomo_1.dirty || submitAttempt)">
+              <ion-label type="text" position="floating">Ulteriore sintomo</ion-label>
+              <ion-select formControlName="sintomo_1" okText="Ok" cancelText="Annulla" interface="action-sheet">
+                <ion-select-option value='010_avvizzimento_fogliare'>Avvizzimento fogliare</ion-select-option>
+                <ion-select-option value='020_ingiallimento_fogliare'>Ingiallimento fogliare</ion-select-option>
+                <ion-select-option value='030_disseccamento_rami'>Disseccamento di rami</ion-select-option>
+                <ion-select-option value='040_microfillia'>Microfillia</ion-select-option>
+                <ion-select-option value='050_emissione_rami_epicormici'>Emissione rami epicormici</ion-select-option>
+                <ion-select-option value='060_fessurazione_longitudinale_corteccia'>Fessurazione longitudinale della
+                  corteccia</ion-select-option>
+                <ion-select-option value='070_colatura_mugillaginosa'>Colatura mugillaginosa</ion-select-option>
+                <ion-select-option value='900_altro'>Altro</ion-select-option>
+              </ion-select>
+            </ion-item>
+
+            <ion-item *ngIf="this.avanzateActivated"
+              [class.invalid]="!surveyForm.controls.sintomo_2.valid && (surveyForm.controls.sintomo_2.dirty || submitAttempt)">
+              <ion-label type="text" position="floating">Ulteriore sintomo</ion-label>
+              <ion-select formControlName="sintomo_2" okText="Ok" cancelText="Annulla" interface="action-sheet">
+                <ion-select-option value='010_avvizzimento_fogliare'>Avvizzimento fogliare</ion-select-option>
+                <ion-select-option value='020_ingiallimento_fogliare'>Ingiallimento fogliare</ion-select-option>
+                <ion-select-option value='030_disseccamento_rami'>Disseccamento di rami</ion-select-option>
+                <ion-select-option value='040_microfillia'>Microfillia</ion-select-option>
+                <ion-select-option value='050_emissione_rami_epicormici'>Emissione rami epicormici</ion-select-option>
+                <ion-select-option value='060_fessurazione_longitudinale_corteccia'>Fessurazione longitudinale della
+                  corteccia</ion-select-option>
+                <ion-select-option value='070_colatura_mugillaginosa'>Colatura mugillaginosa</ion-select-option>
+                <ion-select-option value='900_altro'>Altro</ion-select-option>
+              </ion-select>
+            </ion-item>
+
+            <ion-item *ngIf="this.avanzateActivated"
+              [class.invalid]="!surveyForm.controls.diffusione_perc.valid && (surveyForm.controls.diffusione_perc.dirty || submitAttempt)">
+              <ion-label type="text" position="floating">Percentuale di diffusione del fenomeno</ion-label>
+              <ion-select formControlName="diffusione_perc" okText="Ok" cancelText="Annulla">
+                <ion-select-option value='010_minore_20'>meno del 20%</ion-select-option>
+                <ion-select-option value='020_compreso_20_50'>tra il 20% e il 50%</ion-select-option>
+                <ion-select-option value='050_maggiore_50'>maggiore del 50%</ion-select-option>
+              </ion-select>
+            </ion-item>
+
+            <ion-item *ngIf="this.avanzateActivated"
+              [class.invalid]="!surveyForm.controls.alberi_morti.valid && (surveyForm.controls.alberi_morti.dirty || submitAttempt)">
+              <ion-label type="text" position="floating">Presenza di alberi morti</ion-label>
+              <ion-select formControlName="alberi_morti" okText="Ok" cancelText="Annulla">
+                <ion-select-option value='010_si'>Si</ion-select-option>
+                <ion-select-option value='020_no'>No</ion-select-option>
+              </ion-select>
+            </ion-item>
+          </ion-item-group>
+        </ion-list>
+      </form>
+      <ion-row *ngIf="!this.avanzateActivated">
+        <ion-col size=12>
+          <ion-card>
+            <label>Questa sezione permette di specificare dettagli della segnalazione per i quali servono specifiche competenze forestali, non preoccuparti di lasciarla disattivata se non sai come compilarla</label>
+          </ion-card>
+        </ion-col>
+      </ion-row>
+      </ion-grid>
+    </ion-slide>
+    <!--photo slide-->
+
+    <ion-slide>
+
+      <ion-grid fixed>
+        <ion-row>
+          <ion-col size=12>
+            <ion-card>
+              <h3 *ngIf="photos.length==0">Puoi aggiungere fino a tre foto</h3>
+            </ion-card>
+          </ion-col>
+        </ion-row>
+        <ion-row *ngIf="photos.length>0">
+          <ion-col *ngFor="let photo of photos; index as position">
+            <ion-card>
+              <ion-img [src]="photo.webviewPath"></ion-img>
+              <ion-icon *ngIf="position==0" [class.badge-one]="true" name="refresh-circle" color="danger" size="large"
+                (click)="addPhotoToGallery(position);">
+              </ion-icon>
+              <ion-icon *ngIf="position>0" [class.badge-one]="true" name="trash" color="danger" size="large"
+                (click)="removePhoto(position);">
+              </ion-icon>
+            </ion-card>
+          </ion-col>
+        </ion-row>
+        <ion-row>
+          
+          <ion-col size=12>
+            <ion-button *ngIf="photos.length==0"  (click)="addPhotoToGallery(0)" color = "danger" shape="round"><ion-icon name="camera" size="large"></ion-icon><ion-label>Aggiungi una foto panoramica</ion-label></ion-button>
+            <ion-button *ngIf="photos.length==1"  (click)="addPhotoToGallery(1)" color = "danger" shape="round"><ion-icon name="camera" size="large"></ion-icon><ion-label>Aggiungi un dettaglio</ion-label></ion-button>
+            <ion-button *ngIf="photos.length==2"  (click)="addPhotoToGallery(2)" color = "danger" shape="round"><ion-icon name="camera" size="large"></ion-icon><ion-label>Aggiungi un ulteriore dettaglio</ion-label></ion-button>
+          </ion-col>
+        </ion-row>
+        <ion-row>
+          <ion-col size=12>
+            <ion-card>
+              <label>Si consiglia di inquadrare il fenomeno osservato facendo attenzione a non riprendere minorenni o altre persone, targhe di veicoli o altri dati sensibili. Per motivi legati alla privacy lo staff può comunque riservarsi di non pubblicare le foto relative alla segnalazione</label>
+            </ion-card>
+          </ion-col>
+        </ion-row>
+      </ion-grid>
+
+    </ion-slide>
+
+    <!--map slide-->
+    <!--map slide-->
+
+    <ion-slide>
+      <ion-fab horizontal="end" vertical="top" slot="fixed">
+        <ion-fab-button color="primary">
+          <ion-icon name="navigate-circle-outline" (click)="getGpsPosition()"></ion-icon>
+        </ion-fab-button>
+        <ion-fab-button color="danger">
+          <ion-icon name="pin-outline" (click)="getMapPosition()"></ion-icon>
+        </ion-fab-button>
+        <ion-fab-button color="secondary">
+          <ion-icon name="options-outline" (click)="editMapPosition()"></ion-icon>
+        </ion-fab-button>
+      </ion-fab>
+      <app-ol-map-survey class="map_survey" [center]="[12.5,42]" [zoom]="5.5" (mapReady)="onMapReady($event)" #app_ol_map_survey>
+      </app-ol-map-survey>
+      <ion-fab horizontal="end" vertical="bottom" slot="fixed">
+        <ion-fab-button color="primary">
+          <ion-icon md="caret-back" ios="chevron-back-circle-outline" color="light"></ion-icon>
+        </ion-fab-button>
+        <ion-fab-list side="start">
+          <ion-fab-button (click)="switchBaseMap()" color="light">
+            <ion-icon name="map-outline"></ion-icon>
+          </ion-fab-button>
+          <ion-fab-button (click)="centerOnGPS()" color="light">
+            <ion-icon name="locate-outline"></ion-icon>
+          </ion-fab-button>
+          <ion-fab-button color="light" (click)="showMapAttributions()">
+            <ion-icon name="information-circle-outline"></ion-icon>
+          </ion-fab-button>
+        </ion-fab-list>
+      </ion-fab>
+
+    </ion-slide>
+
+    
+
+  </ion-slides>
+</ion-content>
+
+<ion-footer>
+  <ion-toolbar>
+    
+    <ion-buttons slot="start">
+      <ion-button *ngIf="!slideDisablePrevBtn" (click)="surveySlider.slidePrev()" >
+        <ion-icon size="large"  name="chevron-back-circle-outline"></ion-icon>
+      </ion-button>
+    </ion-buttons>
+
+    <ion-title class="ion-text-center">{{slideNameArray[slideSelected]}}</ion-title>
+    
+    <ion-buttons slot="end">
+      <ion-button *ngIf="!slideDisableNextBtn" (click)="surveySlider.slideNext()" >
+        <ion-icon size="large" name="chevron-forward-circle-outline"></ion-icon>
+      </ion-button>
+      <ion-button *ngIf="slideDisableNextBtn" (click)="saveSurvey()" fill="outline" color="danger">Invia</ion-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-footer>

@@ -4,7 +4,7 @@ import { CoreState } from './core.state';
 import { CoreStore } from './core.store';
 
 import { Injectable } from '@angular/core';
-import { Observable, BehaviorSubject } from 'rxjs';
+import { Observable } from 'rxjs';
 
 import {User} from './user';
 
@@ -25,10 +25,8 @@ export class CoreFacade {
   }
 
   public setUser(user:User): void{
-    this._store.setUser(user)
-        .finally(() => console.log("corefacade: "+this._store.state.user));
+    this._store.setUser(user);
   
-    
   }
 
 }

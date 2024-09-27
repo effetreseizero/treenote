@@ -8,9 +8,8 @@ import { SurveyNewPageRoutingModule } from './survey-new-routing.module';
 
 import { SurveyNewPage } from './survey-new.page';
 
-//https://medium.com/runic-software/a-simple-guide-to-openlayers-in-angular-b10f6feb3df1
-import {OlMapComponentSurvey} from '../../components/ol-map-survey/ol-map-survey.component';
 
+import { MapModule } from '../../map.module';
 
 @NgModule({
   imports: [
@@ -18,10 +17,12 @@ import {OlMapComponentSurvey} from '../../components/ol-map-survey/ol-map-survey
     FormsModule,
     ReactiveFormsModule,
     IonicModule,
-    SurveyNewPageRoutingModule
+    SurveyNewPageRoutingModule,
+    MapModule
   ],
   declarations: [
     SurveyNewPage,
-    OlMapComponentSurvey]
+    //OlMapComponentSurvey
+  ]
 })
 export class SurveyNewPageModule {}

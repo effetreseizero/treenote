@@ -27,7 +27,7 @@ export class HomeHelperPage implements OnInit {
   }
 
   public logIn(): void{
-    this.router.navigate(['/menu/login']);
+    this.router.navigate(['/login']);
     this.dismissModal();
   }
 }

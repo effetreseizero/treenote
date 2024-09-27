@@ -51,7 +51,7 @@ import IconOrigin from 'ol/style/IconOrigin';
 
 
 //https://dev.to/saviosantos0808/real-time-localization-using-ionic-framework-and-google-spreadsheets-35pe
-import { Geolocation } from '@ionic-native/geolocation/ngx';
+import { Geolocation } from '@capacitor/geolocation';
 
 //https://firebase.google.com/docs/firestore/solutions/geoqueries
 import{ geohashForLocation } from 'geofire-common';
@@ -81,7 +81,7 @@ export class SurveyNewPage implements OnInit,CanComponentDeactivate {
   private editable = true;
   private newsurvey = false;
 
-  private avanzateActivated = false;
+  public avanzateActivated = false;
 
   public surveyForm: FormGroup;
   public submitAttempt: boolean = false;
@@ -157,7 +157,7 @@ export class SurveyNewPage implements OnInit,CanComponentDeactivate {
     private userOptionsService: UserOptionsService,
     public platform: Platform
   ) {
-
+    debugger;
 
     this.surveyForm = this.formBuilder.group({
       data_ora_osservazione: ['', [Validators.required]],
@@ -334,7 +334,7 @@ export class SurveyNewPage implements OnInit,CanComponentDeactivate {
     });
   }
 
-  private async showNewSurveyHelper(){
+  async showNewSurveyHelper(){
   
     const modal = await this.modalController.create({
       component: NewSurveyHelperPage,
@@ -344,7 +344,7 @@ export class SurveyNewPage implements OnInit,CanComponentDeactivate {
   }
   
 
-  private formatDate(date) {
+  formatDate(date) {
     const d = new Date(date);
     let month = '' + (d.getMonth() + 1);
     let day = '' + d.getDate();
@@ -563,7 +563,7 @@ export class SurveyNewPage implements OnInit,CanComponentDeactivate {
   }
 
   async getGpsPosition(){
-    this.geolocation.getCurrentPosition().then(async(resp) => {
+    Geolocation.getCurrentPosition().then(async(resp) => {
       this.surveyForm.value["latitudine"]=resp.coords.latitude;
       this.surveyForm.value["longitudine"]=resp.coords.longitude;
       this.surveyForm.value["quota"]=resp.coords.altitude||0;
@@ -721,29 +721,31 @@ export class SurveyNewPage implements OnInit,CanComponentDeactivate {
    */
 
   public geolocationInit(){
-    this.geoLocationWatch = this.geolocation.watchPosition({maximumAge: 1000, timeout: 5000, enableHighAccuracy: true});
-    this.geoLocationWatch.subscribe((resp) => {
-      this.geoLocationWatchStarted = true;
-      if("coords" in resp){
-        this.coords.push({
-          latitude:resp.coords.latitude,
-          longitude:resp.coords.longitude,
-          altitude: resp.coords.altitude,
-          accuracy:resp.coords.accuracy,
-          timestamp:resp.timestamp
-        });
-        this.lastcoords = this.coords[this.coords.length-1];
-
-        this.gpsPositionVectorSource.clear();
-        let gpsPositionFeature = new Feature();
-        gpsPositionFeature.setGeometry(new Point(fromLonLat([this.lastcoords.longitude, this.lastcoords.latitude])));
-        this.gpsPositionVectorSource.addFeature(gpsPositionFeature)
-        
-        if(this.newsurvey){
-          //this.olMapComponentSurvey.centerOn(this.lastcoords.longitude,this.lastcoords.latitude);
+    Geolocation.watchPosition(
+      {maximumAge: 1000, timeout: 5000, enableHighAccuracy: true},
+      (resp) => {
+        this.geoLocationWatchStarted = true;
+        if("coords" in resp){
+          this.coords.push({
+            latitude:resp.coords.latitude,
+            longitude:resp.coords.longitude,
+            altitude: resp.coords.altitude,
+            accuracy:resp.coords.accuracy,
+            timestamp:resp.timestamp
+          });
+          this.lastcoords = this.coords[this.coords.length-1];
+  
+          this.gpsPositionVectorSource.clear();
+          let gpsPositionFeature = new Feature();
+          gpsPositionFeature.setGeometry(new Point(fromLonLat([this.lastcoords.longitude, this.lastcoords.latitude])));
+          this.gpsPositionVectorSource.addFeature(gpsPositionFeature)
+          
+          if(this.newsurvey){
+            //this.olMapComponentSurvey.centerOn(this.lastcoords.longitude,this.lastcoords.latitude);
+          }
         }
       }
-    });
+    );
 
   }
 

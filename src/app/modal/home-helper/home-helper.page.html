@@ -33,20 +33,54 @@
     </ion-slide>
 
     <ion-slide>
-      <img src="./../../../assets/images/survey_woman.jpg"/>
-      <h2>Contribuisci alla ricerca</h2>
-      <p>E' sufficiente registrarsi con una mail per poter facilmente inviare una segnalazione di un sito in deperimento</p>
-      <p>Bastano poche informazioni, una foto e l'indicazione della posizione per poter contribuire ad un progetto importante per tutti.</p>
+
+      <ion-card>
+        <img src="./../../../assets/images/survey_woman.jpg"/>
+        <ion-card-header>
+          <ion-card-title>Contribuisci alla ricerca</ion-card-title>
+        </ion-card-header>
+      
+        <ion-card-content>
+          <p>E' sufficiente registrarsi con una mail per poter facilmente inviare una segnalazione di un sito in deperimento</p>
+          <p>Bastano poche informazioni, una foto e l'indicazione della posizione per poter contribuire ad un progetto importante per tutti.</p>
+        </ion-card-content>
+      </ion-card>
+
     </ion-slide>
 
     <ion-slide>
-      <img src="./../../../assets/silvacuore_logo.png"/>
+
+      <ion-card>
+        <img src="./../../../assets/images/survey_pwa.jpg"/>
+        <ion-card-header>
+          <ion-card-title>Installa Silvacuore</ion-card-title>
+        </ion-card-header>
       
-      <h2>Registrati e invia una segnalazione</h2>
-      <p>Fai click sul bottone Partecipa e inviaci una segnalazione quando individui un potenziale sito forestale in deperimento </p>
-      <ion-button *ngIf="!(user!=null)" (click)="logIn()" fill="outline" color="danger">Partecipa</ion-button>
-      <p>Maggiori informazioni sul sito:</p>
-      <p><a href="https://www.silvacuore.org"><ion-button color="primary">Silvacuore.it</ion-button></a></p>
+        <ion-card-content>
+          <p>Silvacuore può essere installato sul tuo smartphone</p>
+          <p>Una volta installato potrai aprire Silvacuore dall'icona e potrai usarlo anche senza connessione Internet</p>
+          <p>Segui le istruzioni accedendo al Manuale dal menù</p>
+        </ion-card-content>
+      </ion-card>
+
+    </ion-slide>
+
+    <ion-slide>
+      <ion-card>
+        <img src="./../../../assets/silvacuore_logo.png"/>
+        <ion-card-header>
+          <ion-card-title>Registrati e invia una segnalazione</ion-card-title>
+        </ion-card-header>
+      
+        <ion-card-content>
+          <p>Fai click sul bottone Partecipa e inviaci una segnalazione quando individui un potenziale sito forestale in deperimento </p>
+          <ion-button fill="outline" color="danger">Partecipa</ion-button>
+          <p>Maggiori informazioni sul sito:</p>
+          <p><a href="https://www.silvacuore.org"><ion-button color="primary">Silvacuore.it</ion-button></a></p>
+        </ion-card-content>
+      </ion-card>
+
+    
     </ion-slide>
 
   </ion-slides>
