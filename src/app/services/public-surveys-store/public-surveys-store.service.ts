@@ -118,7 +118,7 @@ export class PublicSurveysStore extends Store<CoreState> {
         let data = {
           status: "public"
         }
-        this.surveysService.update_surveys_document(surveyId, data,[]);
+        this.surveysService.update_surveys_status(surveyId, data);
       });
     });
   }
@@ -137,7 +137,7 @@ export class PublicSurveysStore extends Store<CoreState> {
         let data = {
           status: newStatus
         }
-        this.surveysService.update_surveys_document(surveyId, data,[]);
+        this.surveysService.update_surveys_status(surveyId, data);
       });
     });
   }

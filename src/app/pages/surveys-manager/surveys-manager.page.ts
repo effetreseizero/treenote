@@ -198,7 +198,7 @@ export class SurveysManagerPage implements OnInit {
               status: "review"
             }
         
-            this.surveysService.update_surveys_document(recordId, data,[]).then(()=>{
+            this.surveysService.update_surveys_status(recordId, data).then(()=>{
               //this.segmentSelected = 1;
             });
           }
@@ -229,7 +229,7 @@ export class SurveysManagerPage implements OnInit {
               status: "sent"
             }
         
-            this.surveysService.update_surveys_document(recordId, data,[]).then(()=>{
+            this.surveysService.update_surveys_status(recordId, data).then(()=>{
               //this.segmentSelected = 1;
             });
           }
@@ -313,7 +313,7 @@ export class SurveysManagerPage implements OnInit {
               status: "archive"
             }
             
-            this.surveysService.update_surveys_document(recordId, data,[]).then(()=>{
+            this.surveysService.update_surveys_status(recordId, data).then(()=>{
               //this.segmentSelected = 3;
             });;
           }
