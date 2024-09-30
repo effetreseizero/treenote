@@ -40,35 +40,52 @@ export class ExportDataService {
     this.firestore.doc(this.collectionName + '/' + surveyID).get().toPromise().then((document) => 
     {
       this.data = document.data();
-      const ws: XLSX.WorkSheet = XLSX.utils.json_to_sheet(
-        [{
-          accuratezza: this.data.accuratezza,
-          //alberi_morti: data.alberi_morti,
-          //avanzate:false,
-          commenti: this.data.commenti,
-          created_time: this.data.created_time,
-          data_ora_osservazione: this.data.data_ora_osservazione,
-          //diffusione_perc:"",
-          identificazione:this.data.identificazione,
-          latitudine: this.data.latitudine,
-          loc_problema: this.data.loc_problema,
-          localita: this.data.localita,
-          longitudine: this.data.longitudine,
-          modified_time: this.data.modified_time,
-          nome_comune: this.data.nome_comune,
-          //nome_scientifico:"",
-          photo_0_imageurl: this.data.photo_0_imageurl,
-          photo_1_imageurl: this.data.photo_1_imageurl,
-          photo_2_imageurl: this.data.photo_2_imageurl,
-          quota: this.data.quota,
-          //sintomo_0:"",
-          //sintomo_1:"",
-          //sintomo_2:"",
-          //specie:"",
-          status: this.data.status,
-          tipologia: this.data.tipologia,
+      let export_data = {
+        localita: this.data.localita,
+        data_ora_osservazione: this.data.data_ora_osservazione,
+        status: this.data.status,
+
+        tipologia: this.data.tipologia,
+        identificazione:this.data.identificazione,
+        nome_comune: this.data.nome_comune,
+        loc_problema: this.data.loc_problema,
+        commenti: this.data.commenti,
+
+        specie:this.data.specie,
+        nome_scientifico:this.data.nome_scientifico,
+        sintomo_0:this.data.sintomo_0,
+        sintomo_1:this.data.sintomo_1,
+        sintomo_2:this.data.sintomo_2,
+        diffusione_perc:this.data.diffusione_perc,
+        alberi_morti: this.data.alberi_morti,
+        
+        photo_0_imageurl: this.data.photo_0_imageurl,
+        photo_1_imageurl: this.data.photo_1_imageurl,
+        photo_2_imageurl: this.data.photo_2_imageurl,
+        
+        created_time: new Date(this.data.created_time).toLocaleString(),
+        modified_time: new Date(this.data.modified_time).toLocaleString(),
+        
+        latitudine: this.data.latitudine,
+        longitudine: this.data.longitudine,
+        quota: this.data.quota,         
+        accuratezza: this.data.accuratezza,
+        
+      }
+
+      /*if (this.data.avanzate){
+        let avanzate = {
           
-        }]
+        }
+          
+        export_data = {
+          ...export_data,
+          ...avanzate
+        }
+      }*/
+
+      const ws: XLSX.WorkSheet = XLSX.utils.json_to_sheet(
+        [export_data]
       );
       /*
       const wm: XLSX.WorkSheet = XLSX.utils.json_to_sheet(
