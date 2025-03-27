@@ -73,39 +73,77 @@ export class ExportDataService {
         
       }
 
-      /*if (this.data.avanzate){
-        let avanzate = {
-          
-        }
-          
-        export_data = {
-          ...export_data,
-          ...avanzate
-        }
-      }*/
 
       const ws: XLSX.WorkSheet = XLSX.utils.json_to_sheet(
         [export_data]
       );
-      /*
-      const wm: XLSX.WorkSheet = XLSX.utils.json_to_sheet(
-        modelList.map((model)=>{
-          return {
-            name: model.name,
-            specie: model.specie,
-            h_model: model.h_model,
-            v_model: model.v_model
-          }
-        }),
-        {header:["name","specie","h_model","v_model"]});
-      const wt: XLSX.WorkSheet = XLSX.utils.json_to_sheet(treeList,{header:["specie","d1","d2","h","v","lat","lng"]});
-      */
+
       const wb: XLSX.WorkBook = XLSX.utils.book_new();
       
       XLSX.utils.book_append_sheet(wb, ws, "Survey");
-      //XLSX.utils.book_append_sheet(wb, wm, "Models");
-      //XLSX.utils.book_append_sheet(wb, wt, "Tree List");
+
       XLSX.writeFile(wb, "silvacuore_survey.xlsx");
     });
+  }
+
+  exportSurveyListToExcel(surveyList) {
+    debugger;
+
+    surveyList = surveyList.map(s=>{
+      return {
+        id:s.id,
+        user_email:s.user_email,
+        localita:s.localita,
+        data_osservazione: new Date(s.data_ora_osservazione).toLocaleDateString(),
+        ora_osservazione: new Date(s.data_ora_osservazione).toLocaleTimeString(),
+        status:s.status,
+        tipologia:s.tipologia,
+        identificazione:s.identificazione,
+        nome_comune:s.nome_comune,
+        loc_problema:s.loc_problema,
+        commenti:s.commenti,
+        avanzate:s.avanzate,
+        specie:s.specie,
+        nome_scientifico:s.nome_scientifico,
+        sintomo_0:s.sintomo_0,
+        sintomo_1:s.sintomo_1,
+        sintomo_2:s.sintomo_2,
+        diffusione_perc:s.diffusione_perc,
+        alberi_morti:s.alberi_morti,
+        photo_0_imageurl:s.photo_0_imageurl,
+        photo_1_imageurl:s.photo_1_imageurl,
+        photo_2_imageurl:s.photo_2_imageurl,
+        latitudine:s.latitudine,
+        longitudine:s.longitudine,
+        quota:s.quota,
+        accuratezza:s.accuratezza,
+        user_uid:s.user_uid,
+        data_ora_osservazione:s.data_ora_osservazione,
+        created_time:new Date(s.created_time).toLocaleString(),
+        modified_time:new Date(s.modified_time).toLocaleString()
+      }
+    }
+    )
+
+    
+    let fields = [
+      "id","user_email","localita","data_osservazione","ora_osservazione","status",
+      "tipologia","identificazione","nome_comune","loc_problema","commenti",
+      "avanzate","specie","nome_scientifico","sintomo_0","sintomo_1","sintomo_2","diffusione_perc","alberi_morti",
+      "photo_0_imageurl","photo_1_imageurl","photo_2_imageurl",
+      "latitudine","longitudine","quota","accuratezza",
+      "user_uid","data_ora_osservazione","created_time","modified_time",
+    ];
+    
+    
+    const ws: XLSX.WorkSheet = XLSX.utils.json_to_sheet(
+      surveyList,{header: fields}
+    );
+
+    const wb: XLSX.WorkBook = XLSX.utils.book_new();
+    
+    XLSX.utils.book_append_sheet(wb, ws, "Survey");
+
+    XLSX.writeFile(wb, "silvacuore_survey.xlsx");
   }
 }

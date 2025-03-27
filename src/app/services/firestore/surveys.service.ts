@@ -107,6 +107,18 @@ export class SurveysService {
 
   }
 
+  read_public_surveys_collection() {
+    console.log("read_public_surveys_collection");
+    return this.firestore.collection(
+      this.collectionName,
+      //https://stackoverflow.com/questions/49026589/angular-firestore-where-query-returning-error-property-does-not-exist-on
+      //.where("userUID", "==", firebase.auth().currentUser.uid)
+      ref => ref.where("status", "==", "public")
+    )
+      .snapshotChanges();
+
+  }
+
   async create_surveys_document(data, photos) {
 
     data['user_uid'] = this.user.uid;

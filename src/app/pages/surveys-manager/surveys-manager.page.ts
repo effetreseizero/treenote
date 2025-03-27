@@ -2,6 +2,7 @@ import { Component, OnInit, ViewChild } from '@angular/core';
 
 import { SurveysService} from '../../services/firestore/surveys.service';
 import { PublicSurveysStore } from '../../services/public-surveys-store/public-surveys-store.service'
+import { ExportDataService } from '../../services/export-data/export-data.service';
 
 
 import { Router, NavigationExtras } from "@angular/router";
@@ -37,7 +38,8 @@ export class SurveysManagerPage implements OnInit {
     private surveysService: SurveysService,
     private router: Router,
     private alertController: AlertController,
-    private publicSurveysStore: PublicSurveysStore
+    private publicSurveysStore: PublicSurveysStore,
+    private exportDataService: ExportDataService
   ) {
     
   }
@@ -137,11 +139,37 @@ export class SurveysManagerPage implements OnInit {
     });
 
 
-    
-    this.publicSurveysStore.subscribePublicSurveys().subscribe((data)=>{
-      this.publicSurveyList = data.features;
+    this.surveysService.read_public_surveys_collection().subscribe(data => {
+      this.publicSurveyList = data.map(e => {
+        let survey = {};
+        //add id of syrvey
+        survey["id"]=e.payload.doc.id;
+        //add all other properties
+        for (let key of Object.keys(e.payload.doc.data())){
+          survey[key] = e.payload.doc.data()[key];
+        }
+
+        //https://stackoverflow.com/questions/2388115/get-locale-short-date-format-using-javascript/31663241
+        var date = new Date(survey["data_ora_osservazione"]);
+        var options = {
+            year: "numeric",
+            month: "2-digit",
+            day: "numeric",
+            hour: "numeric",
+            minute:"numeric"
+        };
+        
+        survey["short_date"] =  date.toLocaleDateString("it") //en is language option, you may specify..
+        return survey;
+      })
+      .filter(x=>(!x["deleted"]))
+      .sort(
+        (itemA, itemB) => {
+          return itemB["created_time"] - itemA["created_time"];
+        }
+      );
     });
-          
+
   }
 
   doInfinite(infiniteScroll) {
@@ -341,7 +369,6 @@ export class SurveysManagerPage implements OnInit {
           text: 'Ok',
           handler: () => {
             this.publicSurveysStore.removePublicSurvey(recordId,"archive").then(()=>{
-              //this.segmentSelected = 3;
             });;
           }
         }
@@ -351,6 +378,12 @@ export class SurveysManagerPage implements OnInit {
     await alert.present();
 
     
+  }
+
+  exportSurveyList(){
+    debugger;
+    let surveyList = this.sentSurveyList.concat(this.reviewSurveyList).concat(this.publicSurveyList).concat(this.archiveSurveyList);
+    this.exportDataService.exportSurveyListToExcel(surveyList);
   }
 
   /**
