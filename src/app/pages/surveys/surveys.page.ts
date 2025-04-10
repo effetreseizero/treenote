@@ -2,7 +2,9 @@
 
 import { Component, OnInit } from '@angular/core';
 
-import { SurveysService} from '../../services/firestore/surveys.service';
+import { SurveysService } from '../../services/firestore/surveys.service';
+
+import { ExportDataService } from '../../services/export-data/export-data.service';
 
 import { Router, ActivatedRoute, NavigationExtras } from "@angular/router";
 
@@ -25,6 +27,7 @@ export class SurveysPage implements OnInit {
 
   constructor(
     private surveysService: SurveysService,
+    private exportDataService: ExportDataService,
     private router: Router,
     private alertController: AlertController,
     private activatedRoute: ActivatedRoute
@@ -115,6 +118,10 @@ export class SurveysPage implements OnInit {
       }
     };
       this.router.navigate(['/survey'],navigationExtras);
+  }
+
+  exportSurvey(recordId){
+    this.exportDataService.exportSurveyToExcel(recordId);
   }
 
 }
